@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+
+  <title>Chapter 5: Blur &amp; Aberrations</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+  </script>
+  
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/popouts.js'></script>
+
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 5
+  </div>
+
+  <h1 id="blur-aberrations">Blur and Aberrations</h1>
+
+  <p>The thin lens equation tells us where a sharp image of an object forms. For example, if an object is placed \(0.8{\text{m}}\) in front of a lens with power \(8D\), the vergence leaving the lens is \(V_{out}=1/(-0.8)+8=6.75{\text{D}}\), so a sharp image will form at \(1/6.75 = 0.148{\text{m}}\) from the lens. If we put an image screen at exactly \(0.148{\text{m}}\) from the lens, we will see the sharp image.</p>
+
+  <p>But if we put the image screen somewhere else, the image will be blurred. This is demonstrated in <a href='#Figure1'>Figure 1</a>. If the screen is moved anywhere but the point of convergence, the image is not a point, but a circle, called the blur disc.</p>
+  
+  <figure id="Figure1">
+    <div class='canvas-div' id='figure1img'></div>
+
+    <figcaption>
+      <span class='figno'>Figure 1.</span> A point object sends divergent light into a lens which converges it. If a screen (grey vertical line) is placed where all the rays converge, the image is a sharp point, as shown in the black inset to the right. If the screen is moved anywhere else, however, the image becomes blurred in the shape of a disc. It also dims, as the same amount of light from the point object is spread over a larger area.
+    </figcaption>
+  </figure>
+  <script src='scripts/figure1.js'></script>
+  
+  <p>Here we will work out how much blur is created when the image is not sharply focused. There are two cases of blur to consider: when the screen is placed in front of the focused image, and when it is placed behind. </p>
+  
+  <h2>Screen in Front of Sharp Image</h2>
+  <a href='#Figure2'>Figure 2</a> shows a blurred image being formed because the image screen is too close to the lens. In this case, the converging light from the lens has not come to a point before it hits the image screen. Instead, it forms a disc with width equal to \(b\).</p>
+
+<script>
+
+function toggle2(s) {
+	let d = document.getElementById("figure2img")
+	if (d.src.indexOf(s)==-1) {
+		d.src = 'media/'+s
+	} else {
+		d.src = 'media/figure2.svg'
+	}
+}
+
+</script>
+
+ <p><a href='#Figure2'>Figure 2</a> is an enlarged view of <a href='#Figure1'>Figure 1</a> with some added dimensions. There are two triangles hidden in <a href='#Figure2'>Figure 2</a>. The 
+ <a onclick='toggle2("figure2a.svg")' style='cursor:pointer'>larger one (click)</a> 
+ is formed by the lens and the sharp image point. This triangle has a base with width \(a\) (called the aperture) and a length of \(d\). The second 
+ <a onclick='toggle2("figure2b.svg")' style='cursor:pointer'>smaller triangle (click)</a>
+ is formed by the blur disc and the sharp image point. This triangle has a base with width \(b\) and a length of \(d-s\). </p>
+ 
+  <figure id="Figure2">
+    <img id='figure2img' src='media/figure2.svg' />
+
+    <figcaption>
+      <p><span class='figno'>Figure 2.</span> A simplified view of <a href='#Figure1'>Figure 1</a> with dimensions added. The dashed lines show where the converging light rays would converge to if the screen was not in the way. \(b\) is the width of the blur disc, \(d\) is the distance from the lens to the point of convergence, and \(s\) is the distance from the lens to the screen. There are two triangles hidden in this figure (see text). </p>
+    </figcaption>
+  </figure>
+
+ <p>These two triangles are <em>similar</em>; that is, they have the same shape, but different sizes. One property of two similar triangles is that the ratio of base to length is the same for both triangles. The ratio of base to length for the large triangle is \(a/d\) and the ratio of base to length for the small triangle is \(b/(d-s)\). Since these two ratios are equal,</p>
+
+  <div>
+    \[\frac{b}{d-s} = \frac{a}{d}\]
+  </div>
+
+  <p>Solving for the blur disc diameter \(b\) gives</p>
+
+  <div>
+    \[b = a\left(\frac{d-s}{d}\right) = a\left(1-\frac{s}{d}\right)\]
+  </div>
+
+  <p>However, if the vergence leaving the lens is \(V_{out}\), then the distance \(d\) to the point of convergence is \(d=1/V_{out}\), and so
+
+  <div>
+    \[b = a\left(1-\frac{s}{1/V_{out}}\right)=a\left(1-s V_{out}\right)\tag{1}\]
+  </div>
+  
+  <h3 id="example">Example</h3>
+
+  <p>A point object is placed \(0.8{\text{m}}\) in front of a lens with power \(+8D\) and aperture of \(40\)mm. An image screen is placed at a distance of \(0.13{\text{m}}\) from the lens. How blurred is the image?</p>
+
+  <h4 id="answer">Answer</h4>
+
+  <ul>
+    <li>
+      <p>The vergence entering the lens is \(V_{in}=1/(-0.8)=-1.25{\text{D}}\). The vergence leaving the lens is \(V_{out}=-1.25+8=6.75{\text{D}}\).</p>
+    </li>
+
+    <li>
+      <p>The distance to the image screen is \(d=0.13{\text{m}}\). Using Equation (1), the blur disc \(b\) is 
+<div>\[b = 40\times (1-0.13\times 6.75) = 4.9{\text{mm}}\]</div></p>
+    </li>
+
+    <li>
+      <p>Note that the blur disc \(b\) is given in mm because the aperture \(a\) is in mm. In Equation (1), the term \((1-d V_{out})\) has no units, so the units of \(b\) are the same as the units for \(a\).</p>
+    </li>
+  </ul>
+
+  <h2 id="another-blur-case">Screen Behind Sharp Image</h2>
+
+  <p>Equation (1) above says what happens when the image screen is placed too close to the lens. What happens when it is placed too far away? This is shown in <a href='#Figure3'>Figure 3</a>. Here, the rays of light come to a point at a distance of \(d\) as before, but there is no image screen there to stop them, and they continue onwards from that point, spreading out as they go. They finally hit the image screen at a distance \(s\), and form a blur disc with diameter \(b\).</p>
+<script>
+
+function toggle3(s) {
+	let d = document.getElementById("figure3img")
+	if (d.src.indexOf(s)==-1) {
+		d.src = 'media/'+s
+	} else {
+		d.src = 'media/figure3.svg'
+	}
+}
+
+</script>  
+
+  <p><a href='#Figure3'>Figure 3</a> also has two similar triangles. The 
+  <a onclick='toggle3("figure3a.svg")' style='cursor:pointer'>first (click)</a>
+  is formed by the lens aperture and the sharp image point. This triangle thus has a height of \(a\) and a length of \(d\). The 
+  <a onclick='toggle3("figure3b.svg")' style='cursor:pointer'>second (click)</a>
+  triangle is formed by the blur disc and the sharp image point. This triangle thus has a height of \(b\) and a length of \(s-d\). (Why is it \(s-d\) here but \(d-s\) in the previous case?)</p>
+
+  <figure id="Figure3">
+    <img id='figure3img' src='media/figure3.svg' />
+
+    <figcaption>
+      <span class='figno'>Figure 3.</span> Another blurred image. A lens with diameter \(a\) converges light from an object. The vergence leaving the lens is \(V_{out}\) and so a sharp image will form at a distance of \(1/V_{out}\) from the lens. The light rays spread out from their until they hit the image screen. The diameter of the spread is \(b\).
+    </figcaption>
+  </figure>
+
+<p>As before, the ratio of the height to the length of both triangles is the same, because they are similar triangles, so we can write</p>
+
+  <div>
+    \[\frac{b}{s-d} = \frac{a}{d}\]
+  </div>
+
+  <p>Following the same set of steps as in the previous blur case, we can work out that the blur disc diameter is</p>
+
+  <div>
+    \[b=a\,\frac{s-d}{d}=a\left(\frac{s}{d}-1\right)\]
+  </div>
+
+  <p>The distance \(d\) is just \(1/V_{out}\) as before, so this can be written as 
+
+  <div>
+    \[b=a\left(\frac{s}{1/V_{out}}-1\right)=a\left(s V_{out}-1\right)\tag{2}\]
+  </div>
+ 
+  
+  <p>Comparing Equations (1) and (2), the only difference is that the ordering of the subtraction has been switched around. Both Equations (1) and (2) can be combined into one equation which works for both cases of blur by taking the absolute value of the difference \(1-d V_{out}\) as follows:</p>
+
+  <div>
+    \[b=a\,\left|1-d V_{out}\right|\tag{3}\]
+  </div>
+  
+  <h2 >Blur and Aperture</h2>
+  
+  <p>One thing that affects the amount of blur is the aperture of the lens (\(a\) in the above equations). This means that blur can be reduced by reducing the lens aperture, and alternatively increased by increasing it. Lenses, however, don't usually change their size, but we can cover up part of a lens to achieve the same effect. In cameras, these things that cover part of the lens are called aperture stops. In the eye, the aperture stop is called the iris.</p>
+  
+  <figure id="Figure4">
+    <div class='canvas-div' id='figure4img'></div>
+
+    <figcaption>
+      <span class='figno'>Figure 4.</span> Changing the amount of blur by changing the aperture. This figure duplicates <a href='#Figure1'>Figure 1</a> with the addition of an aperture stop behind the lens. You can use the slider to change the size of the aperture stop. When the stop is small, few rays get through the lens and the blur circle is small. Note that the aperture stop doesn't change the brightness of the blur circle, only the size. </span>
+    </figcaption>
+  </figure>
+  <script src='scripts/figure4.js'></script>
+  
+  <h2 id="angular-size-and-blur">Angular Size and Blur</h2>
+
+  <p>The most obvious way of measuring the size of an object or an image is just to use millimeters, metres, or whatever convenient measurement you want. These are called <em>linear</em> measures, since they measure how far apart two points are on a line.</p>
+
+  <p>Another useful measure of size is <em>angular</em>. The angular size of an object, measured at a lens, can be worked out as follows:</p>
+
+  <ol>
+    <li>Draw a line from the centre of the lens to the top of the object</li>
+
+    <li>Draw a line from the centre of the lens to the bottom of the object</li>
+
+    <li>Measure the angle between these lines.</li>
+  </ol>
+
+  <p>For a thin lens, the angular size of an object (at the lens) is also the angular size of the image. This is because a line through the centre of a thin lens does not change direction.</p>
+
+  <figure id="Figure5">
+    <img src='media/figure5.svg' />
+
+    <figcaption>
+      <span class='figno'>Figure 5.</span> Angular size of objects and images. The angular size of an object (seen from a thin lens) is the angle \(\theta\) between two lines drawn from the centre of the lens to the top and bottom of the object. This is also the angular size of the image. From the diagram, \(\tan\theta = h/d\).
+    </figcaption>
+  </figure>
+
+  <p>If we measure blur by the angular size of the blur circle, the blur formulae become even simpler than before. An image with height \(h\) at a distance \(d\) from the lens has an angular size \(\theta\) given by \(\tan \theta = h/d\). If we’re measuring the angular size of a blur disc, with height \(b\), then the angular size of blur is \(\tan\theta_b=b/s\). From Equation (3), we have 
+  
+  <div>
+  \[\tan \theta_b = \frac{b}{s} = \frac{a\,\left|1-s V_{out}\right|}{s} = a\, \left|1/s-V_{out}\right|\]
+  </div>
+
+  <p>Now, \(1/s\) is the vergence you would <em>need</em> to form a sharp image at a distance \(s\) where the image screen has been placed, which we will call \(V_{need}\). The blur angle formula becomes</p>
+
+  <div>
+    \[\tan \theta_b = a \left| V_{need}-V_{out}\right|\tag{4}\]
+  </div>
+
+  <p>When the angle \(\theta_b\) is very small, however (say less than 5 degrees), \(\tan(x)\approx x/57\), so the formula can be simplified to 
+  <div>\[\theta_b \approx 57a\, |V_{need}-V_{out}|\label{eq:blur-4}\]</div>
+  
+  Thus, the angular size of blur \(\theta_b\) (in degrees) is just 57 times the aperture times the difference between the vergence needed \(V_{need}\) and the vergence \(V_{out}\) that actually occurs. Note that the aperture \(a\) must be measured in metres to get the angle in degrees, using this formula, because the units of \(|V_{need}-V_{out}|\) are dioptres, or \({\text{m}}^{-1}\).</p>
+
+  <h3 id="example-1">Example</h3>
+
+  <p>As before, a point object is placed \(0.8{\text{m}}\) in front of a lens with power \(+8D\) and aperture of \(40\)mm. An image screen is placed at a distance of \(0.13{\text{m}}\) from the lens. What is the blur angle, in degrees?</p>
+
+  <h4 id="answer-1">Answer</h4>
+
+  <ul>
+    <li>
+      <p>As before, \(V_{out}=6.75{\text{D}}\). The vergence needed to form a sharp image when the screen is \(0.13{\text{m}}\) from the lens is \(V_{need}=1/0.13 = 7.69{\text{D}}\). From Equation (4) the blur angle \(\theta_b\) is \(57\times0.04\times |7.69-6.75|=2.14^o\)</p>
+    </li>
+
+    <li>
+      <p>You can also work out the blur angle without using Equation (4). From before, we know the blur disc size is \(b=4.86{\text{m}}{\text{m}}\), and the distance from lens to screen is \(d=130{\text{m}}{\text{m}}\). Thus the blur angle is \(\tan \theta_b = 4.86/130\). From this, \(\theta_b = \tan^{-1}(4.86/130) = 2.13^o\). This is slightly different from the answer we got above, because Equation (4) is an approximation to the true blur angle.</p>
+    </li>
+  </ul>
+
+  <h2 id="depth-of-field">Depth of Field</h2>
+
+  <p>When an image screen and a lens are fixed in place, only objects at a specific distance from the lens will be in focus. Objects closer than this, or further away, will be blurred (<a href='#Figure6'>Figure 6</a>). For example, suppose we have a lens with power \(F=+20D\) and which is \(10\)mm wide (the aperture \(a\)). An image screen is placed \(0.08{\text{m}}\) from the lens. In this case, the vergence leaving the lens that yields a sharp image is \(1/0.08=12.5{\text{D}}\). That is, the vergence needed to create a sharp image is \(V_{need}=12.5{\text{D}}\). From the thin lens equation, to get a vergence of \(12.5{\text{D}}\) leaving the lens, we need \(V_{in}=-7.5{\text{D}}\), and so an object has to be \(13.33\)cm from the lens in order to produce a sharp image.</p>
+
+  <figure id="Figure6">
+    <div class='canvas-div' id='figure6img'></div>
+
+    <figcaption>
+      <span class='figno'>Figure 6.</span> A lens can only focus at one distance at a time. This lens is looking at three different coloured point objects at different distances. Initially the screen is set to focus on the nearest (orange) object, but in that case, the images of the other two are blurred. If you move the screen to focus on the middle (white) object, it blurs the orange one. Only one distance can be in focus at a time.
+    </figcaption>
+  </figure>
+<script src='scripts/figure6.js'></script>
+
+  <p>However, a small amount of blur is not usually noticeable, and so some objects that are closer, and some that are further away, will still appear to be in focus. The range of distances over which objects appear to be in focus is called the depth of field. An example of depth of field is shown in <a href='#Figure7'>Figure 7</a>.</p>
+
+  <figure id="Figure7">
+    <img src="media/dominos.jpg" />
+
+    <figcaption>
+      <span class='figno'>Figure 7.</span> A lens can only focus at one distance at a time. Here, the camera is focussed on the nearby dominos, so the distant dominos are blurred.
+    </figcaption>
+  </figure>
+
+  <p>We can calculate depth of field fairly easily from the blur equation given above, once we know the lens power, lens aperture, and the distance from lens to image screen. Suppose we think that an acceptable angular blur is \(0.1^o\) for the above example (\(a=10{\text{m}}{\text{m}}\), \(d=0.08{\text{m}}\), \(F=+20D\)) where \(V_{need}=1/0.08 = 12.5{\text{D}}\). Putting these values into Equation (4) gives</p>
+
+  <div>
+    \[0.1 = 57\times0.01\times|V_{out}-12.5|\]
+  </div>
+
+  <p>Thus, the difference \(|V_{out}-V_{need}|\) must be less than \(0.1/(57\times0.01)=0.175\):</p>
+
+  <div>
+    \[|V_{out}-12.5|&lt;0.175\]
+  </div>
+
+  <p>That means \(V_{out}\) must be no more than \(0.175\) different from \(V_{need}=12.5\); so the maximum \(V_{out}\) is \(12.675\) and the minimum is \(12.325\) to keep things sharp enough.</p>
+
+  <p>Now, \(V_{out}=V_{in}+F\), so that means \(V_{in}=V_{out}-F\) must be in the range \(-7.675{\text{D}}...-7.325{\text{D}}\) (because \(F\) is \(20\text{D}\)). This happens when objects are between \(0.137{\text{m}}\) and \(0.130{\text{m}}\) in front of the lens. Any object within this narrow range will appear to be sharp, since its blur is less that or equal to the acceptable blur. The depth of field is the difference between these, or \(0.007{\text{m}}\).</p>
+
+  <p>Depth of field is influenced by the aperture (smaller apertures give larger depths of field, since they reduce blur overall) and by the needed vergence \(V_{needed}\) (larger vergences, generally from higher powered lenses, produce larger depths of field). The depth of field is also larger the further away the focussed object is.</p>
+
+  <h2 id="spherical-aberration.">Spherical Aberration.</h2>
+
+  <p>The above sections dealt with blur caused by defocus, which is called <em>dioptric blur</em> (because it is related to the vergences involved). This blur can always be removed by refocussing the image. However, some types of blur are less easy to get rid of. These sources of blur are called aberrations.</p>
+
+  <p>As we shall see in a later chapter, the paraxial equation or the thin lens equation is based on the assumption that (a) all rays of light are close to the optic axis, and (b) are nearly parallel with it. When these assumptions are wrong, the paraxial equation stops being correct, and the image no longer forms where the paraxial equation says it will. Since the thin lens equation is based on the paraxial equation, the thin lens equation will also stop being correct. Rays that don’t obey the paraxial equation give rise to aberrations. There are a number of different aberrations; we will consider only spherical aberration, coma, and chromatic aberration.</p>
+
+  <figure id="Figure8">
+   <div class='canvas-div' id='figure8img'></div>
+    <figcaption>
+      <span class='figno'>Figure 8.</span> Spherical aberration can be reduced by blocking the peripheral rays (rays that are a long way from the centre of the lens).
+    </figcaption>
+  </figure>
+  <script src='scripts/figure8.js'></script>
+  
+  <p>Spherical aberration is due to rays of light that are parallel with the optic axis, but hit the lens a long way from the centre (breaking assumption (a) of the paraxial equation). These rays are focussed at a different place from the rays that are close to the optic axis. <a href='#Figure8'>Figure 8</a> shows spherical aberration in a refracting surface. The rays that hit the surface a long way above or below the optic axis are bent to arrive at a point different from the rays close to the optic axis (the paraxial rays). This difference in focal power between central and peripheral rays leads to blur.</p>
+
+  <p>Spherical aberration can be positive or negative. In positive spherical aberration, the marginal rays (those rays away from the optic axis and thus towards the margins of the lens) focus closer than the paraxial rays. In a sense, the margins of the lens behave like they have more focal power than the centre. Negative spherical aberration occurs when the marginal rays focus further away than the paraxial rays.</p>
+
+  <p>Spherical aberration can be reduced in a number of ways:</p>
+
+  <ol>
+    <li>
+      <p>Use a non-spherical (aspheric) surface: Spherical aberration is specifically caused by using a spherical refracting surface. We can get rid of spherical aberration by using a surface of a different shape. For example, if the lens has positive spherical aberration, as in <a href='#Figure8'>Figure 8</a>, we can reduce this by making the lens less powerful at the edges; this is easiest done by making the lens less curved at the edges.</p>
+    </li>
+
+    <li>
+      <p>Block any rays of light that aren’t paraxial. In (<a href='#Figure8'>Figure 8</a>), this can be dine by reducing the aperture with the slider. In our eye, the iris does this, so that most of the light rays that are heading for the fovea must pass close to the optic centre of the eye. This ensures that at least the foveal image has less spherical aberration.</p>
+    </li>
+  </ol>
+
+  <h2 id="coma">Coma</h2>
+
+  <p>The paraxial equation is built on the assumption that rays of light are (a) close to the optic axis, and (b) are nearly parallel with it. Coma occurs when rays of light hit a lens at large angles relative to the optic axis, breaking assumption (b) (<a href='#Figure9'>Figure 9</a>). The main solution to coma is the same as for spherical aberration: block many of the rays entering the lens (or eye) with a small aperture.</p>
+
+  <figure id="Figure9">
+    <div class='canvas-div' style='width:100%' id='figure9img'></div>
+    <figcaption>
+      <span class='figno'>Figure 9.</span> Rays that strike a refracting surface obliquely do not come to a single focus point, even if they strike the surface near the centre. This is called coma. However, if you move these rays so that they travel horizontally and so hit the surface at a lesser angle, they <b>will</b> focus at a single point.</span>
+    </figcaption>
+  </figure>
+  <script src='scripts/figure9.js'></script>
+  
+  <p>Coma has the same cause as spherical aberration. In both cases, light rays are striking the surface at a large angle. In spherical aberration, the large angle results from the shape of the sphere. In coma, the large angle results from the angle the rays are approaching. Changing the surface to a non-spherical shape may reduce spherical aberration, but it won't, therefore, reduce coma. 
+  <h2 id="scatter.">Scatter.</h2>
+
+  <p>Scatter isn’t usually thought of as an aberration, but like the aberrations we’ve discussed, it also causes light rays to travel in unintended directions. Scattering occurs when a photon interacts with some object in an essentially random way; for example when it reflects off some discarded cell floating in the vitreous, or reflects off cloudiness in the crystalline lens, or a scratch in the cornea. The main effect of scattering is to take some light out of the image and spread it randomly all over the place. This reduces image contrast. If scattering is severe, as in cataract, so much light is spread randomly that the image is no longer visible.</p>
+
+  <h2 id="chromatic-aberration.">Chromatic Aberration.</h2>
+
+  <p>Chromatic aberration occurs because the refractive index of glass (and other refracting substances) depends on the wavelength, or colour<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, of the light. The wavelengths of visible light are from about 400nm (violet) to 700nm (red). For example, the refractive index for crown glass varies from about 1.52 for violet light to 1.50 for red light. This variation in refractive index can be clearly seen when shining a white light beam through a prism – the beam of light is split into different colours, as each wavelength is bent a different amount by the glass (<a href='#Figure10'>Figure 10</a>). Although this dispersion of light yields some pretty effects, it has a serious downside when trying to form sharp images with lenses.</p>
+
+  <figure id="figure10">
+    <img src="media/prism.jpg" />
+
+    <figcaption>
+      <span class="figno">Figure 10.</span> Dispersion of light by a prism. White light is split into constituent wavelengths because each wavelength bends a different amount.
+    </figcaption>
+  </figure>
+
+  <p>Recall that the focal power \(F_{surface}\) of a refracting surface of radius \(r\) is given by \(F_{surface}=(n_{out} - n_{in})/r\), where \(n_{out}\) and \(n_{in}\) are refractive indices to the right and left of the surface. If we make a single refracting surface out of crown glass, with a radius of curvature of, say, \(r =0.05{\text{m}}\), then the surface power is going to be \((1.5-1)/0.05 = 10{\text{D}}\) for red light (700nm) and \((1.52-1)/0.05 =10.4{\text{D}}\) for violet light (400nm). This means that a distant red object will form a clear image 0.150m from the lens<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, while a distant blue object will form a clear image at 0.1462m from the lens, a difference of nearly 4mm. A white object, which emits light across the entire spectrum, will thus have its image spread out over 4mm of space, so it will be impossible to get a single clear image – if one wavelength is in focus, the others will not be.</p>
+
+  <figure id="Figure11">
+    <div class='canvas-div' id='figure11img'></div>
+    <figcaption>
+      <span class='figno'>Figure 11.</span> Chromatic aberration from a thin lens. The refractive index varies with wavelength, causing each wavelength to come to a focus at a different distance. Here only three wavelengths are represented, coloured blue, green and red. Blue comes into focus first, then green, then red last. The image is a mixture of the blur discs of these three wavelengths. In reality, with more wavelengths, the blur would look like concentric rainbows.</span>
+    </figcaption>
+  </figure>
+  <script src='scripts/figure11.js'></script>
+
+  <p>One way to reduce the effect of chromatic aberration is simply to reduce the lens aperture. Reducing the aperture doesn’t change the refractive indices at all, but it does reduce the amount of blur due to the defocus of one wavelength compared to others. The downside to reducing the aperture is a lot of light reaching the eye is not used, but in daylight this isn’t such a problem. </p>
+  <!--
+  <p>The dispersion of optical materials is summarized by the <em>Abbe number</em>, defined as 
+<div>\[\text{Abbe} =\frac{n_{587.6} - 1}{n_{486.1} - n_{656.3}}\]</div> Where \(n_{\text{xxx}}\) is the refractive index of the material at wavelength \(\text{xxx}\). The odd wavelengths in this definition (587.6, 486.1, and 656.3nm) are called Fraunhofer lines, which are specific marks in the spectrum of sunlight, and so can be easily picked out in a lab using a prism. A low Abbe number indicates a high dispersion; a high Abbe number indicates low dispersion. The Abbe number for both crown glass and CR-39 is 58, whereas for polycarbonate (a transparent plastic) it is 30; so polycarbonate is highly dispersive compared to glass.</p>
+  -->
+
+  <div class="footnotes">
+    <hr />
+
+    <ol>
+      <li id="fn1">
+        <p>This is imprecise; while wavelengths have colours, most colours are the result of many wavelengths added together<a href="#fnref1">↩</a></p>
+      </li>
+
+      <li id="fn2">
+        <p>Remember that the focal length is \(n_{out}/F_{surface}\) for a single refracting surface.<a href="#fnref2">↩</a></p>
+      </li>
+    </ol>
+  </div>
+</body>
+
+</html>
