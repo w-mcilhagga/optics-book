@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+
+  <title>Chapter 2: Negative Lenses &amp; Virtual Images</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+  </script> 
+ <!-- the p5 & optics simulation -->
+ 
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.svg.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing/optical_simulation.js'></script>
+<script src='../scripts/raytracing/optical_simulation_draw_p5.js'></script>
+
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 2
+  </div>
+
+  <h1 id="negative-lenses-virtual-images">Negative Lenses and Virtual Images</h1>
+
+  <p>The lenses discussed in Chapter 1 added convergence to the light passing through them, but not all lenses do this.  Negative powered lenses add <em>divergence</em> to the light that passes through them. The light leaving a negative lens is thus <em>more</em> divergent than the light entering it (see <a href='#Figure1'>Figure 1</a>). Because the light leaving a negative lens is divergent, negative lenses don’t create images in the way positive lenses do. Nonetheless, negative lenses are useful, particularly for correcting myopia.</p>
+
+  <figure id="Figure1">
+    <img src="media/figure1.svg" />
+
+    <figcaption>
+      <span class='figno'>Figure 1.</span> A negative lens increases the divergence of the light passing through it. The rays leaving this negative lens are diverging even more than the rays entering the lens. (A diverging lens is drawn as a double-headed arrow, with the arrowheads pointing inwards. A positive lens has the arrows pointing outwards.)
+	  <p>Here, a point object is placed \(0.5\text{m}\) to the left of a negative lens with power \(-4\text{D}\). The distance \(0.167\) is discussed in the text.</p>
+    </figcaption>
+  </figure>
+
+  <p>Negative lenses (naturally) obey the thin lens equation. For example, suppose there is an object \(0.5\text{m}\) to the left of a lens whose power is \(F=-4{\text{D}}\) (i.e. a negative lens), as in <a href='#Figure1'>Figure 1</a>. The paraxial equation is 
+  
+  <div class="math display">
+    \[V_{in} + F = V_{out}\]
+  </div> 
+  
+  <p>In this case, \(V_{in} = 1/(-0.5)= - 2{\text{D}}\) and \(F=-4{\text{D}}\), so \(V_{out}=-6\text{D}\). This is diverging light, because it’s negative, and it is diverging <em>more</em> than the incoming light \(V_{in}\).</p>
+  
+  <p>Chapter 1 says the distance to the image is 
+    <div class="math display">
+    \[\text{distance from lens to the image} = \frac{1}{\text{convergence}}\]
+  </div>
+  
+  <p>Since \(V_{out}=-6\text{D}\), according to this formula the image should form at \(1/(-6)=-0.167\text{m}\) from the lens. Being negative, this is to the left of the lens (because the light in the figure travels from left to right). However, if we look at this point in <a href='#Figure1'>Figure 1</a>, we can see that there is absolutely nothing there &mdash; just the light diverging from the object.</p>
+
+  <h2 id="the-images-made-by-negative-lenses">The “Images” made by Divergent Light</h2>
+
+  <p>In Chapter 1, images were created by convergent light coming to a point on a screen. However, negative lenses typically create divergent light. The other thing that creates divergent light are objects, as we saw in Chapter 1. That suggests some sort of similarity between the divergent light leaving a negative lens and that coming from an object.</p>
+  
+  <p>The point is that divergent light is just divergent light &mdash; you <em>just can't tell</em> whether it is coming from an object, or whether it has been produced by a negative lens. This is demonstrated in <a href='#Figure2'>Figure 2</a>. Here, we see divergent light coming from behind a curtain. Is the divergent light from a negative lens or from an object? Try your luck!</p>
+  
+  <figure id="Figure2">
+  
+	<div id = 'Figure2 image' class='canvas-div'></div>
+	<script src='scripts/figure2.js'></script>
+    <figcaption >
+      <span class='figno'>Figure 2.</span> Divergent light comes from behind a rectangular curtain, but what causes it? 
+	  It could either be an object, or it could be divergent light from a negative lens. Click the button to make your choice and see if you are correct.
+	  
+    </figcaption>
+  </figure>
+
+  <p>Of course, the game is rigged. The point is, without peeking behind the curtain you can’t tell from just the diverging light whether it comes from an object, or a negative lens, and that's what makes it easy to rig - the computer just puts in the opposite of what you chose before it raises the curtain, and the divergent light doesn't change. </p>
+  <p>If we can’t distinguish these two cases without looking behind the screen, then they are <strong>equivalent</strong>: that is, the divergent light leaving the negative lens is completely indistinguishable from divergent light leaving an object, even though the causes of the divergent light are quite different.</p>
+  
+  <p>When we have a negative lens, the image distance \(1/V_{out}\) isn't where an image actually is; it's where you could put an object and get exactly the same amount of divergence. In other words, it is where the divergent light leaving the lens <em>seems to be</em> coming from, if you can't spot the negative lens. The point where the divergent light seems to come from is called a <strong>virtual image</strong>. This is a misleading name for what is really happening, but unfortunately it is very standard. </p>
+  <p>The reason it is called a virtual <em>image</em> is because the point where the light seems to diverge from is calculated from \(1/V_{out}\), which usually tells us where the image is. Really, as shown in <a href='#Figure3'>Figure 3</a> it is optically more like an object. The word “virtual” indicates that there's nothing actually there, unlike the images from positive lenses in Chapter 1 (which are called “real” images).</p>
+
+  <p><a href='#Figure3'>Figure 3</a> below shows the same situation as <a href='#Figure1'>Figure 1</a> initially, but you can switch from negative lens to the equivalent object. The equivalent object is \(-0.167\text{m}\) to the left of the lens position when the actual object is \(0.5\text{m}\) from the lens, but you can change this if you want.</p>
+
+  <figure id="Figure3">
+  
+	<div id = 'Figure3 image' class='canvas-div'></div>
+    <figcaption >
+      <span class='figno'  >Figure 3.</span> This figure looks like <a href='#Figure1'>Figure 1</a>, with the same dimensions: The object is \(-0.5\text{m}\) from the lens, and \(1/V_{out}=-0.167\text{m}\) to the left of the lens. Dashed lines have been added to show where the virtual image is: these lines simply follow back the divergent rays leaving the lens until they meet at a point.</p>
+	  <p>You can drag the point object to different distances, and \(1/V_{out}\) is recalculated according to the thin lens equation and marked on the arrow at the bottom.</p>
+	  <p>If you click the button marked "Switch", the picture switches to divergent light coming from an object placed exactly where the virtual image is. Note that nothing changes to the right hand side of where the lens was (which is shown as a faded symbol), so demonstatign again that a virtual image acts more like an object than anything else. </p>
+<div id='fig3handle' class="decorate"></div>
+    </figcaption>
+	<script src='scripts/figure3.js'></script>
+  </figure>
+
+  <p>Although a virtual image doesn’t actually exist you can still see it. Since the virtual image is the result of diverging light leaving the lens, exactly the same as diverging light from a real object, we can see the virtual image in the same way as we can see any real object. A photograph of a virtual image is shown in the inset in <a href='#Figure4'>Figure 4</a>. The virtual image created by a negative lens is closer than the object (as in <a href='#Figure3'>Figure 3</a>), and is always smaller than the object. 
+
+  <figure id="Figure4">
+    <img src="media/negative_virtual.png" width=370/>
+
+    <figcaption>
+      <span class='figno'>Figure 4.</span> The image shows what you would see when you looked through a negative lens. Inside the lens, a smaller virtual image of the letters is visible.
+    </figcaption>
+  </figure>
+
+  <h3 id="example">Example</h3>
+
+  <p>This example shows how to use the thin lens equation to work out the position of the virtual image formed by a negative lens. Suppose an object is placed 150cm to the left of a negative lens with power \(-7{\text{D}}\). Where does the (virtual) image form?</p>
+
+  <h4 id="answer">Answer</h4>
+
+  <ul>
+    <li>
+      <p>The sketch for this problem would look something like this:</p>
+
+      <figure>
+        <img src="media/sketch1.jpg" alt="image" />
+      </figure>
+    </li>
+
+    <li>
+      <p>The distance from the lens to the object is negative; so the distance is \(-1.5\)m. The vergence of the light going into the lens is \(V_{in}=1/(-1.5)=-0.67{\text{D}}\).</p>
+    </li>
+
+    <li>
+      <p>The thin lens equation says \(V_{out}=V_{in}+F\), so \(V_{out}=-0.67+(-7)=-7.67{\text{D}}\).</p>
+    </li>
+
+    <li>
+      <p>The “image” forms at a distance of \(1/V_{out}=1/(-7.67) = -0.13\)m from the lens. Because it is negative, it is to the left of the lens. So the image forms as in the sketch below:</p>
+
+      <figure>
+        <img src="media/sketch2.jpg" alt="image" />
+      </figure>
+    </li>
+  </ul>
+
+  <h2 id="the-focal-length-of-a-negative-lens.">The Focal Length of a Negative Lens.</h2>
+
+  <p>In Chapter 1, the focal length of a lens was defined as the distance from the lens to the image when parallel light (\(V_{in}=0\)) enters the lens. Exactly the same definition is used with negative lenses, except the focal length will be the distance from the lens to the <em>virtual</em> image. When parallel light with vergence \(V_{in} = 0\) hits a negative lens with (negative) power \(F\),<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> the vergence of the light leaving the lens \(V_{out}\) is negative. This situation is shown in <a href='#Figure5'>Figure5</a>. The vergence of the light leaving the lens is \(V_{out} = F\). This is exactly the same as in Chapter 1.</p>
+
+  <p>The diverging light \(V_{out}\) leaving the lens seems to be coming from a point which is \(1/V_{out}\) metres away from the lens (the virtual image). Since \(F=V_{out}\) when parallel light (\(V_{in}=0\)) enters the lens, the distance to the virtual image is also \(1/F\). The distance from the lens to the virtual image is the focal length \(f\). The focal power of the lens is given by \(F = 1/f\). Because \(f\) is a negative distance, this gives us a negative power. However, unlike positive lenses, it is impossible to measure the focal length of a negative lens directly.</p>
+
+
+  <figure id="Figure5">
+	<div class='canvas-div' id='Figure5 image'></div>
+
+    <figcaption>
+      <span class='figno'>Figure 5.</span> When the object is very far away, rays of light entering the lens are parallel, with a vergence \(V_{in}\) equal to zero. The dashed lines continue the divergent rays back to where they meet at the virtual image, coloured in yellow here. The distance to the (virtual) image when \(V_{in}=0\) is the Focal Length. You can use the slider to change the lens power, and see how focal length varies.</p>
+	  <p>The focal point of a negative lens is to the left of the lens, so the focal length of a negative lens is negative.</p>
+    </figcaption>
+  </figure>
+  <script src='scripts/figure5.js'></script>
+
+  <p>The other focal length (the object focal length) is the distance from lens to object when parallel light leaves the lens. From the paraxial equation \(V_{in} + F = V_{out}\), if the light leaving the lens is in parallel, then \(V_{out} = 0\). That means that \(V_{in} + F = 0\), or \(V_{in} = -F\). Since the value of \(F\) is negative<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, the value of \(-F\) is positive, and so the incoming vergence \(V_{in}\) must be positive. That is, we need to send <em>converging</em> light into a negative lens to make parallel light leave it. This is shown in <a href='#Figure6'>Figure 6</a>.</p>
+
+  <figure id="Figure6">
+	<div class='canvas-div' id='Figure6 image'></div>
+
+    <figcaption>
+      <span class='figno'>Figure 6.</span> When the object is placed so that light leaving the lens is in parallel, the distance to the object is another focal length. However, no real object can produce parallel light from a negative lens. Instead, we must send converging light into a negative lens to yield parallel light. The place that the light would converge to if not changed by the lens is the object focal point. This focal point is marked as a yellow dot, and the focal length is given in yellow. Dashed yellow lines show that the incoming rays would converge on the focal point, if the lens were not there.</p>
+	<p>You can use the slider to change the focal length of the lens.</p>
+    </figcaption>
+  </figure>
+  <script src='scripts/figure6.js'></script>
+
+  <p>The incoming light, with vergence \(V_{in}\), would have converged to a point a distance of \(1/V_{in}\) metres to the right of the lens, if the negative lens was not there. The point where the light would have converged to is the object focal point of the lens, and the distance from the lens to the object focal point is the focal length \(f\).</p>
+
+  <h2 id="positive-lenses-can-also-form-virtual-images.">Positive Lenses Can Also Form Virtual Images.</h2>
+
+  <p>It’s easy to get the mistaken idea that positive lenses always create converging light and negative lenses always create diverging light, but that’s a massive oversimplification: it is simple to create diverging light with a positive lens. For example, suppose an object is put \(0.125{\text{m}}\) to the left of a \(+5{\text{D}}\) lens. The vergence of the light from the object when it hits the lens is \(V_{in} = 1/(-0.125) = -8{\text{D}}\). Applying the thin lens equation, the vergence of the light leaving the lens, \(V_{out}\), is equal to \(V_{in} + F\), which is \(-8 + 5 = -3{\text{D}}\). This is divergent light.</p>
+
+  <p>What has happened is that even though the positive lens has converged the light a bit (\(V_{out}=-3{\text{D}}\) is not as divergent as \(V_{in}=-8{\text{D}}\)), the light entering the lens was more divergent than the lens power, so the lens couldn&#39;t produce convergent light. The distance to the image is \(1/V_{out}\), which is \(1/(-3) = -0.333{\text{m}}\). This is a negative distance, so the image is a virtual image. See <a href='#Figure 7'>Figure 7</a> below.</p>
+
+  <figure id="Figure7">
+	<div class='canvas-div' id='Figure7 image'></div>
+
+    <figcaption>
+      <span class='figno'>Figure 7.</span> In this diagram, a point object is placed \(1 \text{m}\) from a lens with power \(1.25 \text{D}\). The lens is sufficiently powerful to converge this light. However, if we move the object closer (by clicking and dragging it) there comes a point when the light leaving the lens is diverging. When this happens, the virtual image created is shown in yellow. The virtual image created by a positive lens is always further away than the object.
+<div id='fig7handle' class="decorate"></div>
+    </figcaption>
+  </figure>
+  <script src='scripts/figure7.js'></script>
+
+  <p>There are two differences between the virtual image created by a positive lens and the virtual image created by the negative lens in <a href='#Figure3'>Figure 3</a>. In <a href='#Figure3'>Figure 3</a>, the virtual image closer than the object, and smaller. In <a href='#Figure8'>Figure 8</a>, the virtual image is formed further away than the object, and is larger.</p>
+
+  <figure id="Figure8">
+   <img src="media/positive_virtual.png" width=370/>
+
+    <figcaption>
+      <span class='figno'>Figure 8.</span> The image shows what you would see when you looked through a positive lens that is creating a virtual image. Inside the lens, a larger virtual image of the letters is visible.
+    </figcaption>
+  </figure>
+
+
+  <h2 id="the-uses-of-virtual-images">The Uses of Virtual Images</h2>
+
+  <p>Real images, the kind that we talked about in Chapter 1, are incredibly useful; eyes, cameras, and projectors all depend on them. It might seem that virtual images, given that they don’t physically exist, are not so useful. Not so, however: there are two important uses for virtual images:</p>
+
+  <ol>
+    <li>
+      <p>Virtual images created by positive lenses are bigger than the object. That is, they <em>magnify</em> the object, so this is useful when the object is small or your eyesight is poor. Magnifying glasses are simply powerful positive lenses, which you hold close enough to the object to create a large virtual image that you can see (just as in <a href='#Figure?'>Figure ?</a>). We’ll come back to this in a later chapter.</p>
+    </li>
+
+    <li>
+      <p>Virtual images created by negative lenses are closer than the object. Myopia is a condition of the eye which means that the person cannot see distant objects clearly, but can see closer objects. A negative lens creates a virtual image that is closer than the object, and the virtual image is, optically at least, indistinguishable from a real object. By choosing the right negative lens, we can create virtual images of distant objects that are close enough for a myopic person to see them clearly. Again, we’ll come back to this in a later chapter.</p>
+    </li>
+  </ol>
+
+  <div class="footnotes">
+    <hr />
+
+    <ol>
+      <li id="fn1">
+        <p>Note that when \(F\) is negative, we <em>don’t</em> write it as \(-F\). You can maybe think of \(F\) as a box into which we can put any number. Sometimes the number we put in the box is positive, and sometimes it is negative. But either way, the box itself (which we labelled \(F\)) isn’t changed.<a href="#fnref1">↩</a></p>
+      </li>
+
+      <li id="fn2">
+        <p>The symbol \(-F\) doesn’t mean that \(F\) is negative. It means that whatever value \(F\) has, you take the negative of it.<a href="#fnref2">↩</a></p>
+      </li>
+    </ol>
+  </div>
+
+</body>
+</html>
