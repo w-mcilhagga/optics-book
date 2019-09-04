@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+  <title>Chapter 8: Optics of the Eye</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+  </script>
+
+  <script src='../scripts/p5/p5.js'></script>
+  <script src='../scripts/p5/p5.dom.js'></script>
+  <script src='../scripts/p5/p5.util.js'></script>
+  <script src='../scripts/p5/p5.yup.js'></script>
+  <script src='../scripts/vec2d.js'></script>
+  <script src='../scripts/raytracing-2/optical_simulation.js'></script>
+  <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+  <script src='../scripts/popouts.js'></script>
+  <script src='scripts/eyes.js'></script>
+  <style>
+  .rule {
+        margin-left: 2em;
+        margin-right: 2em;
+        padding-left: 1em;
+        padding-right: 1em;
+        background-color: rgb(220,220,220);
+  }
+  </style>
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 8
+  </div>
+
+  <h1 id="optics-of-the-eye">Optics of the Eye</h1>
+
+  <p>The purpose of the eye is to create an image of the world on the back of the eyeball. The back of the eyeball is covered with an outgrowth of the brain, called the retina, which absorbs the light in the image and turns it into a pattern of electrical signals. The cells which absorb the light are called <em>photoreceptors</em>. The signals produced by the photoreceptors are then transmitted via a network of neurons along the optic nerve to the brain, which tries to figure out what is in front of us. </p>
+  
+  <p>The limiting feature of vision is the quality of the image that the eye creates. Without a good (or good enough) image, it can be very difficult to work out what we are looking at. Unfortunately, the quality of the image produced by the eye is mostly awful, apart from a small area near the centre of the retina. However, considering it is made from water and jelly, the eye does not do all that bad a job.</p>
+
+  <figure id="Figure1">
+    <img src="media/image1.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 1.</span> A cross-section of the right eye as seen from above, showing the main optical structures (after Erin Silversmith, downloaded from <a href='http://commons.wikimedia.org/wiki/File:Schematic_diagram_of_the_human_eye.svg'>wikipedia</a>). The eye has two optical elements: the cornea and crystalline lens. The gap between the cornea and lens is filled with a fluid called the aqueous. The gap between the lens and the retina is filled with a jelly called the vitreous. The retina is coloured red.
+    </figcaption>
+  </figure>
+
+  <p>A diagram of the eye is shown in <a href='#Figure1'>Figure 1</a>, with the main optical elements labelled. The eye has four (or depending how you count them, five) refracting surfaces:</p>
+
+  <ol>
+    <li>
+      <p>The first refracting surface is the convex front of the cornea, which has a positive power. However, the cornea is covered with a thin film of tear fluid (which is another refracting surface, if you count it that way), which provides a smooth surface for the cornea.</p>
+    </li>
+
+    <li>
+      <p>The second refracting surface is the concave back of the cornea. The back surface has a negative power.</p>
+    </li>
+
+    <li>
+      <p>The third refracting surface is the convex front of the crystalline lens, which has a positive power. The gap between the cornea and the lens is filled with a fluid called the aqueous (which means “watery”) or aqueous humor (“humor” means fluid). The iris, which controls the aperture (i.e. pupil) of the eye, is in this gap. </p>
+    </li>
+
+    <li>
+      <p>The last refracting surface is the convex back of the lens, which also has a positive power. The space between the lens and the retina is filled with a jelly-like substance called the vitreous (which means “glassy”) or vitreous humor.</p>
+    </li>
+  </ol>
+
+  <p>The purpose of the cornea and lens is to focus a sharp image on the retina (or as sharp as possible). The cornea has a fixed power of about \(+40\text{D}\), but the power of the lens can vary, under the control of the brain, from about \(+20\text{D}\) up to about \(+30\text{D}\). This variation in lens power, called <em>accommodation</em> lets us focus on objects at different distances.</p>
+
+  <p>Another important optical element of the eye is the iris. The iris is a thin structure lying between the crystalline lens and the cornea. It has a hole in the middle, called the pupil. The iris controls the size of the pupil. The pupil has two functions. One is to alter the amount of light entering the eye (a small pupil admits little light, and a large pupil admits a lot). The main function, however, is to alter the aperture of the eye (that is, the amount of the crystalline lens which refracts light) to control the quality and blur of the image formed on the retina.</p>
+
+  <h2 id="central-and-peripheral-vision">Central and Peripheral Vision</h2>
+
+  <p>The eye is roughly rotationally symmetrical. The (rough) axis of symmetry is called the optic axis (<a href='#Figure2'>Figure 2</a>). The term “central Vision” means the image on the retina which is near the optic axis, and so is created by rays of light travelling close to the optic axis - that is, the paraxial rays. Central vision, then, can be mostly analyzed using the paraxial optics that have been covered in Chapters 1 to 6.</p>
+
+  <figure id="Figure2">
+    <img src='media/image2.svg' />
+
+    <figcaption>
+      <span class="figno">Figure 2.</span> There are two main axes in the human eye. The optic axis is the (approximate) axis of symmetry of the cornea and lens. The visual axis runs from the centre of the lens to the fovea, which is the area of the retina with the highest density of photoreceptors.
+    </figcaption>
+  </figure>
+
+  <p>The image around where the axis hits the retina has the highest image quality. For that reason, the retinal photoreceptors are tightly packed near the central retina. However, the area of greatest photoreceptor density (the fovea) actually sits a little off to one side of the centre of the retina. The <em>visual axis</em> is defined as a line from the fovea through the centre of the crystalline lens. This is about \(5^o\) off the optic axis.</p>
+
+  <p>The retinal image gets progressively worse as we move away from the optic axis. This area of relatively poor vision is called “Peripheral Vision”. A smaller part of the brain is given over to analyzing the peripheral image, because it is of such low quality.</p>
+
+  <h3 id="model-eyes">Model Eyes</h3>
+
+  <p>A <em>Model Eye</em> is a simplified eye which captures some of the important optical properties of a real eye. A number of model eyes have been proposed over the years. One such is LeGrand’s Full Theoretical Eye. This model eye is drawn in <a href='#Figure3'>Figure 3</a>. This model eye ignores the tear film, and treats the crystalline lens as an object with a single refractive index. In reality, the refractive index of the lens varies from surface to centre (called a <em>graded index</em>) which gives the real crystalline lens a bit more power.</p>
+
+  <figure id="Figure3">
+    <img src="media/figure3.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 3.</span> The LeGrand Full Theoretical Eye. All dimensions are millimetres. The radii of the refracting surfaces are along the top of the figure. The distance between each surface is given along the bottom of the figure. The length of the eye is accurate but the shape isn't necessarily a sphere of this size.
+    </figcaption>
+  </figure>
+
+  <p>The optical properties of the refracting surfaces of the LeGrand eye are given in <a href='#Table1'>Table 1</a>. Powers are calculated using the surface power formula given in Chapter 3. Most of the power of the eye is in the cornea (about \(40\text{D}\) in total), and the lens contributes roughly \(20\text{D}\). </p>
+
+  <table id="Table1">
+    <thead>
+      <tr class="header">
+        <th style="text-align: left;">Element</th>
+
+        <th style="text-align: right;width:15%">Radius</th>
+
+        <th style="text-align: right;">Index to left</th>
+
+        <th style="text-align: right;">Index to right</th>
+
+        <th style="text-align: right;">Surface power</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr class="odd">
+        <td style="text-align: left;">Front surface of cornea</td>
+
+        <td style="text-align: right;">7.8 mm</td>
+
+        <td style="text-align: right;">1 (air)</td>
+
+        <td style="text-align: right;">1.377</td>
+
+        <td style="text-align: right;">+48.33 D</td>
+      </tr>
+
+      <tr class="odd">
+        <td style="text-align: left;">Back surface of cornea</td>
+
+        <td style="text-align: right;">6.5 mm</td>
+
+        <td style="text-align: right;">1.377</td>
+
+        <td style="text-align: right;">1.337</td>
+
+        <td style="text-align: right;">-6.15 D</td>
+      </tr>
+
+      <tr class="even">
+        <td style="text-align: left;">Front surface<br />
+        of lens</td>
+
+        <td style="text-align: right;">10.2 mm</td>
+
+        <td style="text-align: right;">1.337</td>
+
+        <td style="text-align: right;">1.42</td>
+
+        <td style="text-align: right;">+8.14 D</td>
+      </tr>
+
+      <tr class="odd">
+        <td style="text-align: left;">Back surface<br />
+        of lens</td>
+
+        <td style="text-align: right;">-6 mm</td>
+
+        <td style="text-align: right;">1.42</td>
+
+        <td style="text-align: right;">1.336</td>
+
+        <td style="text-align: right;">+14.00 D</td>
+      </tr>
+    </tbody>
+
+    <caption>
+      <span class="figno">Table 1.</span> Dimensions of refractive surfaces of the LeGrand eye
+    </caption>
+  </table>
+
+  <h2 id="the-image-shell">The Image Shell</h2>
+
+  <p>In previous chapters, we've thought of the image formed by a thin lens or a paraxial refracting surface as being flat (at least when all the objects are at the same distance) as in <a href='#Figure4'>Figure 4</a>. In real optical systems, rather than simplified paraxial ones, the image is only flat close to the centre of the image, and is usually a different shape away from the centre.</p>
+  
+  <p>Quite a lot of careful engineering goes into making sure that the image formed by a camera lens is as flat as possible, because the sensor in a camera (a CCD array or a chemical film) is flat. If the image is flat, then it will be in focus everywhere on the sensor.</p>
+
+  <figure id="Figure4">
+    <div class='canvas-div' style='width:100%' id='figure4img'></div>
+
+    <figcaption>
+      <span class="figno">Figure 4.</span> The shape of the image for a thin lens. Parallel light from a distant point enters the lens and is focused to the right. If you grab the parallel light beam and move it up and down, the focal point also moves up and down. The focal point traces out the <em>image shell</em> for the lens, which in this case is a straight line (or in three dimensions, a flat plane). 
+    </figcaption>
+  </figure><script src='scripts/figure4.js'>
+</script>
+
+  <p>However, the sensor in our eye - the retina - is far from flat, so a flat image isn't desirable for the eye. The shape of the image formed by the eye is called the <em>image shell</em>. The image shell is where all the sharp image points are, when looking at objects that are all the same distance away.</p>
+
+  <p>Working out the precise shape of the image shell for a real eye (or even a complicated model eye) can't be done using the paraxial equation, because that is only valid for light rays near the optic axis of the eye. Instead, the image shell must be calculated by simulation, as in <a href='#Figure5'>Figure 5</a>. Here, a beam of parallel light from a distant point enters the eye and is focused onto the retina. If you grab the light beam and move it up and down, the focused point traces out a curve. Note that the curve only touches the retina around the back of the eyeball, and moves away from it as the parallel light hits the eye at greater angles. This means the peripheral image is blurred.</p>
+
+  <figure id="Figure5">
+    <div class='canvas-div' style='width:100%' id='figure5img'></div>
+
+    <figcaption>
+      <span class="figno">Figure 5.</span> Image shell for the Legrand model eye. If you grab the parallel light beam and move it up and down, the focal point curves around. The focal point traces out the <em>image shell</em> for the eye. The iris (in black) is set to give a \(3\text{mm}\) pupil.
+    </figcaption>
+  </figure><script src='scripts/figure5.js'>
+</script>
+
+  <h3>Accommodation</h3>
+
+  <p>It is only possible to have objects at one distance in focus, and objects at all other distances must inevitably be blurred (see Chapter 5). For example, suppose we have a camera made with a \(+60\text{D}\) lens. When we point the camera at a distant object, the vergence \(V_{in}\) hitting the lens is essentially zero. Thus \(V_{out}=60\text{D}\), and we need to put the image screen at exactly \(1/60=16.667\text{m}\text{m}\) from the lens to catch a sharp image (<a href='#Figure6'>Figure 6</a>).</p>
+
+  <p>If we point this camera at an object which is only 0.5m away, then \(V_{in}=-2\text{D}\), and \(V_{out}=58\text{D}\). This means that the sharp image forms at a distance of \(1/58=17.24\text{m}\text{m}\) away. This is behind the image screen, so the image on the screen will be blurred (<a href='#Figure6'>Figure 6</a>). The only way to make the image sharp is to increase the distance between the image screen and the lens (<a href='#Figure6'>Figure 6</a>). This is how cameras focus, usually under the control of a small computer whose job is to move one or more lens components until the image is sharp. You can occasionally see this happen when you take a photo. If the focusing task is a little difficult for the computer, the image will sometimes get blurred, sharpen, blur a bit, until it settles down.</p>
+
+  <figure id="Figure6">
+    <div class='canvas-div' style='width:100%' id='figure6img'></div>
+
+    <figcaption>
+      <span class="figno">Figure 6.</span> How a simple camera focuses. The lens can be moved left or right. Initially the object is \(10\text{m}\) away, and this can be changed with the slider. As the object gets closer, the lens must be moved further from the vertical screen to get a sharp image on the screen. The eye does not focus this way, because the lens and the cornea can't move away from the retina.
+    </figcaption>
+  </figure>
+  <script src='scripts/figure6.js'></script>
+  
+  <p>However, the human eye <em>can’t</em> focus like a camera. The length of the eye is fixed, so moving the retina further away to focus on near objects is out of the question. Instead, the eye increases its power - specifically the power of the crystalline lens - to focus on near objects.</p>
+
+  <p>The natural shape of the crystalline lens in the eye is rather bulged and rounded. The lens is held in place by strands of tissue called suspensory ligaments, which are attached to a ring of muscle attached to the inside of the eye called the ciliary muscle. When this muscle is relaxed, the suspensory ligaments pull on the lens so that it is flatter, and has a low power. This is rather like a trampoline, where the fabric in the middle is held in tension by the springs connected to the circular frame. When the ciliary muscle ring tightens, the width of the muscle ring gets smaller, so the suspensory ligaments can’t pull on the lens quite so hard, and it settles into its natural more rounded shape. The more rounded the lens, the more curved the lens surfaces are, so this increases the power of the lens (<a href='#Figure7'>Figure 7</a>).</p>
+
+  <figure id="Figure7">
+    <div class='canvas-div' style='width:100%' id='figure7img'></div>
+
+    <figcaption>
+      <span class="figno">Figure 7.</span> Accommodation Simulation. 
+	  <ol>
+	  <li>The slider at the top lets you set the accommodation level for this eye. Move it about and see how the shape of the crystalline lens changes. At full accommodation (100%), the lens is wider and more curved.</li>
+	  <li>Next, turn on the light source by clicking the checkbox. The light source starts \(10\text{m}\) away from the eye. The small circle shows where the image is in focus, which may be in front of or behind the retina. Move the accommodation slider to bring the point onto the retina. The image is now in focus on the retina.</li>
+	  <li>Move the object to about \(0.5\text{m}\) away. How much accommodation do you need to focus the image on the retina? Repeat for different distances. You can try and increase <em>or</em> decrease the distance. You may notice that at very close distances, you cannot bring the image into focus on the retina, because you have run out of accommodative power.</li>
+	  </ol>
+    </figcaption>
+  </figure>
+  <script src='scripts/figure7.js'></script>
+
+  <h4>Measuring Accommodation.</h4>
+  
+  <p>The amount of accommodation in <a href='#Figure7'>Figure 7</a> doesn't have any units; instead it is just expressed as a percentage of full accommodation. This is because the shape of the lens surfaces doesn't relate in a simple way to the amount of extra power the lens or eye has. For this reason, we measure the amount of accommodation by the divergence hitting the cornea, rather than the change in lens power.</p>
+  
+  <p>For example, if an object is placed \(0.333\text{m}\) from a person, the light from the object has a vergence of \(-3\text{D}\) when it hits the person's cornea. If the person can see the object clearly, we say that the person's eye has accommodated by \(3\text{D}\), since  at places along the path of the light through the eye, it has added a total of \(3\text{D}\) of convergence to the light rays. Note that \(3\text{D}\) of accommodation <em>does not</em> mean that the lens has increased its power by that amount.</p> 
+
+  <p>There is a limit to the amount of accommodation that an eye has. You can find this limit by finding the closest point to the eye you can place an object and still see a sharp image. This is called the <strong>near point</strong>. For example, if a person can see an object placed \(0.16\text{m}\) in front of their eye, and no closer, then their eye can cope with a divergence of \(1/(-0.16)=-6.25\text{D}\). The maximum amount of accommodation the patient has is thus \(6.25\text{D}\). The near point of the eye in <a href='#Figure7'>Figure 7</a> is about \(0.143\text{m}\) (try it!), so the maximum amount of accommodation that eye has is \(1/0.143 = 7\text{D}\). The maximum amount of accommodation is called the <em>Amplitude of Accommodation</em>. </p>
+
+  <h4>Presbyopia</h4>
+
+  <p>Presbyopia is the progressive loss of accommodation as the eye ages. Accommodation is caused by muscles pulling on the crystalline lens to change its shape, and depends on the strength of the muscles and the flexibility of the lens. Unfortunately, as we age, the lens loses its flexibility, and the amplitude of accommodation reduces. The name presbyopia means “old sight” since everyone above about 45 years notices its effects, although it starts younger than that.</p>
+  
+  <p> If the eye loses accommodation, this means that the near point moves further away from the eye (since the near point relates to the total accommodation available). The first sign of presbyopia, then, is when you have to hold objects further away in order to see them clearly; in effect, you have to move the object so it is further away than your near point.</p>
+
+  <h4 id="reading-glasses">“Reading” Glasses</h4>
+
+  <p>When a patient can no longer see near objects clearly, they will probably want reading glasses. These glasses simply lend additional power to the eye to compensate for the  lack of accommodation that comes with age.</p>
+
+  <p>Suppose, for example, a patient has a reading distance of \(45\text{cm}\). The vergence of the light leaving the pages of a book at that distance is \(1/(-0.45) = -2.22\text{D}\). If they were young, they could easily accommodate by \(2.22\text{D}\) to counteract the divergence, and so see the pages of the book clearly. If they are very old, however, that accommodation is gone, and they will not be able to focus the pages of the book. However, if we gave them spectacles with power around \(+2\text{D}\), they would then be able to read the book again. </p>
+
+  <p>You can find such spectacles in pound stores or supermarkets, marked with the power (e.g. \(+1\), \(+2\), although this is sometimes incorrectly called magnification). However, the centres of these cheap lenses may not line up very well with the centres of the patient’s eyes, and the lens quality is substantially worse than spectacles sold by an optometrist; nonetheless, for a cash-strapped patient, they are far better than nothing.</p>
+
+  <p>If the presbyopic patient has no remaining accommodation at all, the power of reading glasses is just one over the distance they will be reading at (or whatever near work they want them for). However, if the presbyopic patient has some remaining accommodation, a calculation of the power of the reading glasses is not straightforward. When an object is brought near to us, our eyes automatically swivel inwards so that both eyes point directly at it. This swivelling (called <em>convergence</em>, but nothing to do with the convergence of light) automatically triggers a certain amount of accommodation. This automatic accommodation should be taken into account when figuring the power of reading glasses. There are formulas for this but really, the best way of working out the correct power for reading glasses is subjective refraction at the working distance.</p>  
+  
+ 
+  <h3 id="aberrations">Aberrations</h3>
+
+  <p>The eye, like all optical systems, suffers from the aberrations covered in Chapter 5. The eye reduces the blur caused by aberration by reducing the pupil size when needed. It also reduces aberrations in ways unique to the eye:</p>
+
+  <dl>
+    <dt>Chromatic Aberration</dt>
+
+    <dd>
+      <p>This affects the quality of the image over the entire retina. The eye deals with chromatic aberration by simply ignoring many wavelengths. The retina is most sensitive to light of about 580 nanometres (yellow), and is very insensitive to light at the red and blue ends of the visible spectrum. Thus, while the image formed from blue wavelengths (at say 450nm) is quite blurred compared to that formed by yellow (580nm) wavelengths, the retina simply cannot see blue very well, and doesn’t notice the blue blur much. In addition, the fovea, which has the best resolution of the retina, is covered by a yellowish filter, which screens out much of the blue and red ends of the visible spectrum.</p>
+    </dd>
+
+    <dt>Spherical Aberration</dt>
+
+    <dd>
+      <p>The eye deals with spherical aberration in two ways. First, the cornea is not spherical, but flattens at the edges, so it has a lower power than a spherical surface at the edges. The second way the eye deals with spherical aberration is to ignore the aberrant rays. The rays from the edge of a lens that form the blurred aberrant image will hit the retina at a shallower angle than the unaberrated (central) rays. The photoreceptors in the fovea are most sensitive to light rays hitting the retina at a particular angle, depending on where the photoreceptor is located. The aberrated rays tend to hit at a different angle from the preferred angle of the photoreceptor, and so get ignored a little bit. </p>
+    </dd>
+
+    <dt>Coma</dt>
+
+    <dd>
+      <p>This is only a problem in peripheral vision. The eye deals with this by not paying much attention to peripheral vision. </p>
+    </dd>
+  </dl><!--
+  <h2 id="emmetropia-and-ametropia">Emmetropia and Ametropia</h2>
+
+  <p>For clear vision, the power of the eye has to match the length of the eye, so that a sharp image is formed on the retina. For example, the Emsley eye has a power of \(+60\text{D}\) and a length of \(22.167\text{mm}\), which are matched for viewing distant objects. This situation is called <strong>emmetropia</strong> (Greek for <em>proportionate vision</em>). Given the incredibly close tolerances needed for emmetropia, it’s something of a surprise that it is so common. Emmetropia comes about in the developing eye by a process called <strong>emmetropization</strong> (appropriately enough). While the exact mechanics of emmetropization are unknown, it is thought that a blurred retinal image causes a change in the growth rate of the eye, so that it adjusts its length to match its power.</p>
+
+  <p>When an eye is not emmetropic, it is called <strong>ametropic</strong> (Greek for <em>irregular vision</em>). Ametropic eyes can be divided into <strong>myopic</strong> and <strong>hyperopic</strong> (also called hypermetropic) eyes. Note that the ametropias are defined and diagnosed according to what happens when the eye is viewing distant objects with no accommodation (that is, the crystalline lens is at its lowest power).</p>
+
+  <figure id="Figure8">
+    <img src="media/image8.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 8.</span> Emmetropia and ametropia: The top image shows an emmetropic eye looking at a distant object. Parallel light from a distant point converges to a point on the retina and so a sharp image is formed there. The bottom left image shows a myopic eye. The optical power of this eye is greater than is needed so parallel light is converged too quickly. The light converges to a point in front of the retina, and then spreads out again to form a blur spot on the retina. The bottom right image shows a hyperopic eye. Here the optical power is less than is needed to form a sharp image. Parallel light entering the eye is not converged enough and so has not come to a point before it hits the retina. Again, a blur spot is produced.
+    </figcaption>
+  </figure>
+
+  <h3 id="myopia">Myopia.</h3>
+
+  <p>A myopic eye is one where the eye’s optics are too powerful for the length of the eye. Myopia can come about in two ways. First, the power of the eye could be normal but the eye could be a little too long. This is called <em>axial myopia</em>, and is the most common sort. Another way an eye can be myopic is if the eye is the normal length, but the cornea or lens could simply be too curved, and have a power greater than normal. Then a sharp image will again form in front of the retina, and the image that forms on the retina will be blurred. This is called <strong>refractive myopia</strong>.</p>
+
+  <p>Myopia can also be caused from both an increase in power and a lengthening of the eye, although the refractive error will be predominantly due to one of the causes. Myopia will be dealt with in more depth in a later chapter.</p>
+
+  <h3 id="hyperopia">Hyperopia.</h3>
+
+  <p>A hyperopic eye is one where the power of the eye is too low for the length of the eye. Like myopia, we can think of hyeropia as occurring in two ways. First, the eye could be the normal length, but the cornea and lens could have an overall power less than \(60\text{D}\). Then, they will form a sharp image further away than the retina, and the image that forms on the retina will be blurred. This is called <strong>refractive hyperopia</strong>. Another way an eye could become hyperopic is if the eye is too short for the power. This is called <strong>axial hyperopia</strong>. An eye could also have both axial and refractive hyperopia at the same time, to varying degrees. Hyperopia will be dealt with in more depth in a later chapter.</p>
+-->
+</body>
+</html>

@@ -1,0 +1,29 @@
+<link rel="stylesheet" type="text/css" href="../styles/popout.css" />
+<script src="../MathJax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/popouts.js'></script>
+<script src='scripts/eyes.js'></script>
+
+<body>
+  <figure id="Figure7">
+    <div class='canvas-div' style='width:100%' id='figure7img'></div>
+    <figcaption>
+      <span class="figno">Figure 7.</span> Accommodation Simulation. 
+	  <ol>
+	  <li>The slider at the top lets you set the accommodation level for this eye. Move it about and see how the shape of the crystalline lens changes. At full accommodation (100%), the lens is wider and more curved.</li>
+	  <li>Next, turn on the light source by clicking the checkbox. The light source starts \(10\text{m}\) away from the eye. The small circle shows where the image is in focus, which may be in front of or behind the retina. Move the accommodation slider to bring the point onto the retina. The image is now in focus on the retina.</li>
+	  <li>Move the object to about \(0.5\text{m}\) away. How much accommodation do you need to focus the image on the retina? Repeat for different distances. You can try and increase <em>or</em> decrease the distance. You may notice that at very close distances, you cannot bring the image into focus on the retina, because you have run out of accommodative power.</li>
+	  </ol>
+    </figcaption>
+  </figure>
+  <script>popout.openButton=()=>true</script>
+  <script src='scripts/figure7.js'></script>
+  <p class='closer'  onclick='window.close()'>Close this Window</p>
+
+</body>
