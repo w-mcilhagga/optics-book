@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+
+  <title>Chapter 3: Refraction, or How Lenses Work</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+  </script>
+ <!-- the p5 & optics simulation -->
+ 
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.svg.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='scripts/snellius.js'></script>
+<script src='scripts/refract.js'></script>
+<script src='scripts/fresnel.js'></script>
+<script src='scripts/curved.js'></script>
+<script src='scripts/spherical.js'></script>
+<script src='/scripts/raytracing/optical_simulation.js'></script>
+<script src='/scripts/raytracing/optical_simulation_draw_p5.js'></script>
+
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 3
+  </div>
+
+  <h1 id="refraction.">Refraction and Lenses</h1>
+
+  <p>Light always travels through something, be it air, water, glass, or even empty space. The stuff that light travels through is called a <em>medium</em>. If a light ray stays in the same medium, it travels in a straight line, but when a light ray travels from one medium to a different medium, it changes direction. This is called <strong>refraction</strong> (<a href='#Figure1'>Figure 1</a>).</p>
+
+  <figure id="Figure1">
+    <div id='Figure1 image' class='canvas-div'></div>
+	<script>
+	let f1_actions = {
+		decorate: function(state, decoration) {
+			state.decorate = decoration
+		}
+	}	
+	new p5(refract({n_in:1, n_out:1.5,theta_in:-32,annotate:"",controls:false}, f1_actions), 
+		document.getElementById('Figure1 image')
+	)
+	</script>
+    <figcaption>
+      <span class='figno'>Figure 1.</span> A ray of light travelling from air (coloured grey) into glass (coloured blue) bends when it strikes the glass surface. You can click and drag the incoming ray on the left hand side to see how much the passage from air to glass changes the direction of the ray. (Note that at extreme glancing angles, there is also a small reflected ray.)
+
+      <p>What angle of the light ray causes <em>no</em> bending?</p>
+	  <div id='fig1handle' class="decorate"></div>
+
+    </figcaption>
+  </figure>
+  <script>
+  d = document.getElementById('fig1handle')
+  d.onmousedown = function() {f1_actions.decorate('ui')}
+  d.onmouseup = f1_actions.decorate
+  d.addEventListener("touchstart", ()=>f1_actions.decorate('ui'), false);
+  d.addEventListener("touchend", f1_actions.decorate, false);
+  </script>
+  
+  <h2 id="snells-law.">Snell’s Law.</h2>
+
+  <p>The ray in <a href='#Figure1'>Figure 1</a> bends as it passes from air into glass. The amount of bending is described by <em>Snell&#39;s Law</em>, named after the Dutch scientist Willebrord Snellius, who developed the formula in 1621. (The amount of bending was first described by Ibn Sahl, a Persian mathematician who lived in Baghdad, around 984CE, but he did not give a formula.)</p>
+
+  <p>Snell&#39;s law needs some definitions. The first is the <em>surface normal</em>. This is an imaginary line which is at right angles to the surface where the incoming (or incident) ray of light hits it. This normal then lets us define two angles. The first is the <em>angle of incidence</em>, which is the angle between the incoming ray and the surface normal. The second is the <em>angle of refraction</em>, which is the angle between the outgoing (or refracted) ray and the surface normal. The normal and the angles are shown in <a href='#Figure2'>Figure 2</a></p>
+
+  <figure id="Figure2">
+    <span id='Figure2 image' class='canvas-div'></span>
+	<script>
+	let f2_actions = {
+		decorate: function(state, decoration) {
+			state.decorate = decoration
+		}
+	}
+	new p5(refract({n_in:1, n_out:1.5,theta_in:-32,annotate:"normal arcs angles",controls:false},f2_actions), 
+		document.getElementById('Figure2 image')
+	)
+	</script>
+
+    <figcaption >
+      <span class='figno'>Figure 2.</span> The <em>surface normal</em> is an imaginary line at right angles to the refracting surface. Here the surface normal is drawn as a dotted line. The <em>angle of incidence</em> is the angle between the incident ray and the surface normal. Here it is drawn as a red wedge. The <em>angle of refraction</em> is the angle between the refracted ray and the surface normal. Here it is drawn as a green wedge.
+
+      <p>You can click and drag the incoming ray to see how the angles of incidence and refraction change. What can you say, in general terms, about the relationship between the angle of incidence and the angle of refraction?</p>
+<div id='fig2handle' class="decorate"></div>
+
+    </figcaption>
+  </figure>
+  <script>
+  d = document.getElementById('fig2handle')
+  d.onmousedown = function() {f2_actions.decorate('ui')}
+  d.onmouseup = f2_actions.decorate
+  d.addEventListener("touchstart", ()=>f2_actions.decorate('ui'), false);
+  d.addEventListener("touchend", f2_actions.decorate, false);
+  </script>
+  <p>When a ray of light travels from air into glass (as in <a href='#Figure2'>Figure 2</a>), the relation between the angle of incidence and the angle of refraction is</p>
+
+  <div class="math display">
+    \[\sin(\text{angle of incidence}) = 1.52 \times \sin(\text{angle of refraction})\tag{1}\]
+  </div>
+
+  <p>The notation <span class="math inline">\(\sin( x )\)</span> means the sine of the angle <span class="math inline">\(x\). If you don&#39;t know what a sine is, read the trigonometry appendix. The number 1.52 is called the <strong>index of refraction</strong> or the <strong>refractive index</strong>. Using this formula, we can work out the angle of refraction if we know the angle of incidence. For example, if the angle of incidence is \(45^\circ\), the angle of refraction is \(28^\circ\), because \(\sin(45)=1.52\sin(28)\)</span></p>
+
+  <p><span class="math inline">Glass isn&#39;t the only medium that light can be refracted by. If, for example, a ray of light travels from air into water, the relationship is instead</span></p>
+
+  <div class="math display">
+    <span class="math inline">\[\sin( \text{angle of incidence}) = 1.33 \times \sin(\text{angle of refraction})\tag{2}\]</span>
+  </div>
+
+  <p>The number \(1.33\) is the refractive index for water. Each substance has its own refractive index, and some indices of refraction are given in the <a href='#Table1'>table</a> below. There is no simple reason why a substance has a particular index of refraction, but in general denser substances have higher indices. The index of refraction is never less than \(1\), and rarely more than \(2\).</span></p>
+
+  <table id='Table1'>
+    <tr>
+      <th>Medium</th>
+
+      <th>Index of Refraction</th>
+    </tr>
+
+    <tr>
+      <td>Empty Space</td>
+
+      <td>1.0</td>
+    </tr>
+
+    <tr>
+      <td>Air</td>
+
+      <td>1.0003</td>
+    </tr>
+
+    <tr>
+      <td>Water</td>
+
+      <td>1.333</td>
+    </tr>
+
+    <tr>
+      <td>CR39</td>
+
+      <td>1.498</td>
+    </tr>
+
+    <tr>
+      <td>Crown Glass</td>
+
+      <td>1.52</td>
+    </tr>
+
+    <tr>
+      <td>Polycarbonate</td>
+
+      <td>1.585</td>
+    </tr>
+
+    <tr>
+      <td>Sapphire Glass</td>
+
+      <td>1.77</td>
+    </tr>
+
+    <tr>
+      <td>Diamond</td>
+
+      <td>2.42</td>
+    </tr>
+  </table>
+
+  <p><span class="math inline">The index of refraction for air is \(1\) (or nearly so), so Equation (2) for a ray of light passing from air into water can also be written as</span></p>
+
+  <div >
+    \[1\times \sin(\text{angle of incidence}) = 1.33 \times \sin(\text{angle of refraction})\]
+  </div>
+
+  <p>That is, each \(\sin( )\) is multiplied by the refractive index of the medium that the light ray is in, air on the left and water on the right. Generally, for a ray travelling from one medium to another medium, Snell’s law says</p>
+
+  <div>
+    \[n_{in} \times \sin(\text{angle of incidence}) = n_{out} \times \sin(\text{angle of refraction})\tag{3}\]
+  </div>
+
+  <p>where \(n_{in}\) is the refractive index of the medium that the incident ray is travelling in, and \(n_{out}\) is the refractive index of the medium that the refracted ray is in, as it travels out from the surface. For example, if a ray of light travels from water (refractive index \(1.33\)) to glass (index \(1.52\)), Snell’s law says</p>
+
+  <div>
+    \[1.33 \times \sin(\text{angle of incidence}) = 1.52 \times \sin(\text{angle of refraction})\]
+  </div>
+
+  <h2 id="critical-angle-and-total-internal-reflection.">Critical Angle and Total Internal Reflection.</h2>
+
+  <p>So far, we've only considered light travelling from a low index medium (e.g. air) to a high-index medium (e.g. glass). In these cases, the angle of refraction is always <em>smaller</em> than the angle of incidence, as you can in <a href='#Figure2'>Figure 2</a>.</p>
+
+  <p>However, when light travels from a high-index medium to a low-index medium, the angle of refraction is always <em>bigger</em> than the angle of incidence (<a href='#Figure3'>Figure 3</a>). This introduces a new phenomenon of refraction. To introduce this new phenomenon, consider a ray of light travelling from water (index=\(1.33\)) into air, with an angle of incidence equal to \(65^\circ\). Snell's law then says </p>
+  
+  <div class="math display">
+    \[1.33\sin{(65)}=\sin{(\text{angle of refraction})}\]
+  </div>
+ 
+  <p>from which \(\sin{(\text{angle of refraction})} = 1.205\). However, if we try and work out the angle of refraction on a calculator by typing \(\sin^{-1}(1.205)\) we get an error, because the sine of any angle cannot be bigger than \(1\). Thus, Snell's law doesn't work in this case. What happens instead is that, when the angle of incidence is big enough, the light ray does not escape the denser medium and instead gets reflected. This is called <em>total internal reflection</em>. You can see total internal reflection by dragging the incident ray in <a href='#Figure3'>Figure 3</a>. At high enough angles, the ray is reflected instead of being refracted.
+  
+  <figure id="Figure3">
+    <div id='Figure3 image' class='canvas-div'></div>
+	<script>
+	let f3_actions = {
+		decorate: function(state, decoration) {
+			state.decorate = decoration
+		}
+	}	
+	new p5(refract({n_in:1.33, n_out:1,theta_in:30,annotate:"normal arcs angles",controls:false}, f3_actions), 
+		document.getElementById('Figure3 image')
+	)
+	</script>
+    <figcaption>
+      <span class='figno'>Figure 3.</span> Here a ray of light travels from a medium with high refractive index (water in this case) to one with lower refractive index (air). If you click and slowly drag the incident ray, you can see the amount of reflection increases until the ray goes past the critical angle of about \(49^\circ\). At that point, no light escapes into the air and all the light is reflected. This is called <em>total internal reflection</em>.
+ <div id='fig3handle' class="decorate"></div>
+   </figcaption>
+  </figure>
+  <script>
+  d = document.getElementById('fig3handle')
+  d.onmousedown = function() {f3_actions.decorate('ui')}
+  d.onmouseup = f3_actions.decorate
+  d.addEventListener("touchstart", ()=>f3_actions.decorate('ui'), false);
+  d.addEventListener("touchend", f3_actions.decorate, false);
+  </script>
+  <p>The <em>critical angle</em> is the biggest angle of incidence that allows refraction to occur. Since the biggest possible angle of refraction is \(90^\circ\), the critical angle is defined as
+
+  <div class="math display">
+    \[n_{in}\sin{(\text{critical angle})}=n_{out}\sin{(90)}=n_{out}\]
+  </div>
+
+  <p>because \(\sin{(90)}=1\). For example, when a ray travels from water (\(n_{in}=1.33\)) to air \((n_{out}=1)\) as in <a href='#Figure3'>Figure 3</a>, the critical angle is given by </p>
+
+  <div>
+    \[1.33\sin{(\text{critical angle})} = 1\]
+  </div>
+
+  <p>Solving this gives a critical angle of \(\sin^{-1}{(1/1.33)}=48.8^o\). You can confirm this using <a href='#Figure3'>Figure 3</a>: angles of incidence less than \(48.8^\circ\) yield refraction (and some reflection); angles greater than this yield only reflection. Usually, a critical angle is measured when <span class="math inline">\(n_{out}\)</span> is <span class="math inline">\(1\)</span> (i.e. air), as this is guaranteed to be less than <span class="math inline">\(n\)</span> and so total internal reflection is pretty certain to occur.</p>
+
+  <h2>Lenses</h2>
+
+  <p>Light changes direction when it passes through a refracting surface. This means we can use refracting surfaces to control the direction of light rays, and that's the basis for how lenses work. In Figures 1 to 3 above, the refracting surface has always been fixed vertically and we have moved the light ray. In <a href='Figure4'>Figure 4</a>, however, the light ray is fixed, but you can change the angle of the refracting surface. By moving the refracting surface, you can redirect the light ray almost anywhere you want to.</p>
+
+  <figure id="Figure4">
+    <div id='Figure4 image' class='canvas-div'></div>
+	<script>
+	let f4_actions = {
+		decorate: function(state, decoration) {
+			state.decorate = decoration
+		}
+	}	
+	new p5(refract({n_in:1, n_out:1.8,theta_in:0,annotate:"normal arcs",drag:'surface',controls:false},f4_actions), 
+		document.getElementById('Figure4 image')
+	)
+	</script>
+    <figcaption>
+      <span class='figno'>Figure 4.</span> If you click and drag on this figure, you can tilt the refracting surface. When you do, the light ray is bent by refraction to travel in a different direction. You can choose the direction of the light by moving the surface.
+<div id='fig4handle' class="decorate"></div>
+    </figcaption>
+  </figure>
+  <script>
+  d = document.getElementById('fig4handle')
+  d.onmousedown = function() {f4_actions.decorate('ui')}
+  d.onmouseup = f4_actions.decorate
+  d.addEventListener("touchstart", ()=>f4_actions.decorate('ui'), false);
+  d.addEventListener("touchend", f4_actions.decorate, false);
+  </script>
+  
+  <h3 id="fresnel-lenses">Fresnel Lenses</h3>
+
+  <p>We can bend rays of light in almost any direction simply by changing the angle between the ray and the refracting surface it hits. Now suppose that we have a set of parallel rays, as in <a href='#Figure5'>Figure 5</a>. We can bend all these rays to travel towards a single point if we have a glass surface which has a different orientation for each rays. No single flat glass block can do this of course, but if the glass block is faceted, as in <a href='#Figure5'>Figure 5</a>, and each facet can have a different orientation, then we can make the light rays converge to a point. A lens with this sort of design is called a <em>Fresnel lens</em> (pronounced “fraynel” or “freznel”). </p>
+
+  <figure id="Figure5">
+    <div id='Figure5 image' class='canvas-div'></div>
+	<script>
+	new p5(fresnel(), document.getElementById('Figure5 image'))
+	</script>
+    <figcaption>
+      <span class='figno'>Figure 5.</span> A Fresnel Lens Builder. The refracting surface is broken up into 5 facets which can be independently tilted by the sliders on the right. Use them to alter the angle of each facet so each ray passes through the point shown by the yellow dot.</p>
+	  <p>What shape is the final Fresnel surface?</p>
+    </figcaption>
+  </figure>
+
+  <p>The problem with this kind of lens is that the sharpness of the image is limited by the width of the facets. A distant point has thousands of parallel rays leaving it. All of the parallel rays that hit one facet are bent by the same amount, so they all remain parallel, and thus they <em>can't</em> converge on a single point (<a href='#Figure5'>Figure 6</a>). However, Fresnel lenses are still useful when the shaprness of the image doesn't matter so much, and they have the advantage that they can be made very flat. Fresnel lenses are thus commonly used when one needs a large lens but wants the lens to be thin and light, e.g. in overhead projectors, or large searchlights, or page-sized magnifiers. </p>
+  
+  <figure id="Figure6">
+    <img src="media/fresnel_bundle.png" />
+
+    <figcaption>
+      <span class='figno'>Figure 6.</span> The problem with Fresnel lenses is that the rays that hit a facet are not all bent towards the same point. Here, parallel rays (from the same distant point) hitting the centre three facets are all bent by the same amount, and so remain parallel. That means they <em>can't</em> all converge on the yellow point, and so the image of the point is blurred. The amount of blur can be reduced by making the facets smaller, but it can't be eliminated.
+    </figcaption>
+  </figure>
+  
+  <h3>Curved Surfaces.</h3>
+  
+  <p>If we want <em>all</em> of the parallel rays from a distant point to converge on a single focus, each ray has to be bent by a different amount. The only way this can be achieved is by using a smoothly curved surface. However, to apply Snell’s law to a curved surface, we have to be able to draw a surface normal on a curve (because all the angles in Snell’s law are measured from a surface normal). A surface normal on a flat surface is easy, it’s just at right angles to the surface. A surface normal on a curved surface is a little more subtle. To get the surface normal of a curve, we hold a flat surface against the curve so that it just touches the curve, and draw the normal at right angles to that flat surface (<a href='#Figure7'>Figure 7</a>).</p>
+
+  <figure id="Figure7">
+    <img src="media/image5.svg" />
+
+    <figcaption>
+      <span class='figno'>Figure 7.</span> The surface normal to a curved surface (thick curve) is defined by first holding a flat surface against the curve so that it just touches, and then drawing the normal at right angles to the flat surface.
+    </figcaption>
+  </figure>
+  
+  <p><a href='#Figure8'>Figure 8</a> below allows you to design a curved surface which focuses light. For simplicity, this figure only lets you adjust the curve at five places (rather like <a href='#Figure5'>Figure 5</a>). If we were really designing a curved surface to focus light, we would have more control over its shape. </p>
+  
+  <figure id="Figure8">
+    <div id='Figure8 image' class='canvas-div'></div>
+	<script>
+	new p5(curved(), document.getElementById('Figure8 image'))
+	</script>
+
+    <figcaption>
+      <span class='figno'>Figure 8.</span> The Curved Surface Game. The surface shape is controlled by 5 points which can be independently moved. Use the sliders on the right to reshape the surface so the rays pass through the focus point shown by the yellow dot. The surface normals are drawn as short dotted lines. </p>
+	  <p>Roughly what shape is the final curved surface?</p>
+    </figcaption>
+  </figure>
+
+  <h3 id="spherical-surfaces">Spherical Surfaces</h3>
+
+  <p>A curved surface could potentially have a very complicated shape, and may be extremely difficult or expensive to make. However, spherical curved surfaces are fairly easy and cheap to manufacture, and for that reason we tend to use spherical surfaces in optics. Another advantage is they are easier to analyze mathematically. Spherical surfaces are quite good at focussing light to a point, although not perfect. <a href='#Figure9'>Figure 9</a> allows you to converge or diverge light rays from a single distant point by adjusting the radius of the curved surface in the middle.</p>
+  
+  <figure id="Figure9">
+    <!--<iframe src='scripts/spherical.html' width="450" height="300"></iframe>
+-->
+    <div id='Figure9 image' class='canvas-div'></div>
+	<script>
+	new p5(spherical(), document.getElementById('Figure9 image'))
+	</script>
+    <figcaption>
+      <span class='figno'>Figure 9.</span> Spherical Surfaces. Use the slider at the bottom to change the sphere's  radius and look at how the rays converge or diverge. Moving the slider right gives a positive radius; moving it left gives a negative radius. The yellow arrow (marked \(r\)) points towards the centre of the sphere. The centre only comes on screen at extreme values of the slider. The refractive indices \(n_{in}\) and \(n_{out}\)  refer to Equation (4).</p>
+    </figcaption>
+  </figure>
+  
+  In <a href='#Figure9'>Figure 9</a> the parallel rays can be made to converge to a single point (or appear to diverge from a point). That is, the spherical surface has a <em>power</em>. The power depends on the radius of the sphere and the refractive indices, and is given by the formula</p>
+
+  <div class="math display">
+    \[F_{surface} = \frac{n_{out} - n_{in}}{r}\tag{4}\]
+  </div>
+
+  <p>where <span class="math inline">\(r\)</span> is the radius of the surface in metres, and \(n_{in}\) and \(n_{out}\) are the refractive indices for the incident and refracted rays. In <a href='#Figure9'>Figure 9</a>, <span class="math inline">\(n_{in}\)</span> is the refractive index to the left of the spherical surface; <span class="math inline">\(n_{out}\)</span> is the refractive index to the right of the surface; and <span class="math inline">\(r\)</span> is the distance measured from the spherical surface to the centre of the sphere. The distance <span class="math inline">\(r\)</span> follows the sign convention, so in <a href='#Figure9'>Figure 9</a>, radii pointing to the right are positive, and radii pointing to the left are negative, because the light in the figure travels from right to left.</p>
+
+  <p>This formula gives rise to four different situations, depending on whether <span class="math inline">\(\ n_{out} - n_{in}\)</span> is positive or negative, and whether <span class="math inline">\(r\)</span> is positive or negative. These four situations are shown in <a href='#Figure10'>Figure 10</a>.</p>
+
+  <figure id="Figure10">
+    <img src="media/image7.svg" />
+
+    <figcaption>
+      <span class='figno'>Figure 10.</span> Spherical surfaces. The shading shows which side of the sphere has the higher refractive index. The light is always travelling from left to right. The refractive indices <span class="math inline">\(n_{in}\)</span> and <span class="math inline">\(n_{out}\)</span> refer to the refractive indices to the left and the right of the surface respectively. The surfaces on the left both have positive power; those on the right both have negative power.
+	  <p>The top two cases can be created in <a href='#Figure9'>Figure 9</a>.
+    </figcaption>
+  </figure>
+
+  <h3 id="the-paraxial-equation">The Paraxial Equation</h3>
+
+  <p>The thin lens equation (given in Chapter 1) is</p>
+
+  <div class="math display">
+    \[V_{in}+F=V_{out}\]
+  </div>
+
+  <p>There are no refractive indices in this equation because the vergences <span class="math inline">\(V_{in}\)</span> and <span class="math inline">\(V_{out}\)</span> are for light in air, which has a refractive index of <span class="math inline">\(1\)</span>. If we put in the refractive indices, the thin lens equation would look like</p>
+
+  <div class="math display">
+    \[1\times V_{in}+F=1\times V_{out}\]
+  </div>
+
+  <p>There is a similar formula which is used to work out the change in vergence as light travels across a spherical surface, called the the <strong>paraxial</strong> equation:</p>
+
+  <div class="math display">
+    \[\left( n_{in} \times V_{in} \right) + F_{surface} = (n_{out}{\times V}_{out})\]
+  </div>
+
+  <p>In this equation <span class="math inline">\(n_{in}\)</span> and <span class="math inline">\(n_{out}\)</span> are the refractive indices to the left and right of the surface (assuming the light travels from left to right as in <a href='#Figure6'>Figure 6</a>) and <span class="math inline">\(F_{surface}\)</span> is the surface power, given by Equation (4). We can use the paraxial equation in much the same way as we used the thin lens equation, as shown in the example below.</p>
+  
+  <p>The reason this equation is called the <em>paraxial</em> equation is because it is only valid for light rays that are near to (<em>par</em>) the optic axis (<em>axial</em>) of a refracting surface. The optic axis of a surface is the line of rotational symmetry; if more than one such line, we choose one. A paraxial ray has to do two things:</p>
+  <ol>
+  <li>It must hit the surface close to the optic axis</li>
+  <li>It must make a small angle with the optic axis</li>
+  </ol>
+  <p>These two rules essentially ensure that the angle of incidence of the ray is small. <a href='Figure11'>Figure 11</a> shows examples of two paraxial rays (in green) and two non-paraxial rays (in red). The paraxial equation applies to bundles of converging or diverging paraxial rays; if the rays aren't paraxial, the paraxial equation becomes very inaccurate. Mostly, we will only be dealing with paraxial rays.</p>
+  
+    <figure id="Figure11">
+    <img src="media/figure11.svg" />
+
+    <figcaption>
+      <span class='figno'>Figure 11. Paraxial and non-paraxial rays. </span> The two rays in green are paraxial because they hit the refracting surface close to the optic axis (dashed line) and there is only a small angle between the optic axis and the ray. The two rays in red are non-paraxial. The one at the top hits the surface far from the optic axis, and the one coming from the bottom has a large angle between the ray and the optic axis. </p>
+	  <p>The paraxial equation can only be used on rays like those in green.</p>
+	  
+    </figcaption>
+  </figure>
+
+  <h3 id="example">Example</h3>
+
+  <p>Let's use the paraxial equation to work out where a refracting surface forms an image. An object in air has been placed 0.8m to the left of a refracting surface made of glass. The glass surface has a radius of 25cm, and the centre of the surface is to the right. The glass has a refractive index of 1.5 and, as always, air has a refractive index of 1. Where does the image form?</p>
+
+  <h4 id="answer">Answer</h4>
+
+  <ul>
+    <li>
+      <p>As always, it is a good idea to draw a sketch of the situation. Here is one:</p>
+
+      <figure>
+        <img src="media/diagram1.jpg" />
+      </figure>
+
+      <p>To figure out which way the surface is curved, draw the radius line in first, then the surface bends in the same direction as the radius is pointing.</p>
+    </li>
+
+    <li>
+      <p>The first thing we need to do is work out the surface power. This is <span class="math inline">\((n_{out}-n_{in})/r = ( 1.5 - 1 )/0.25 = + 2D\)</span>.</p>
+    </li>
+
+    <li>
+      <p>The vergence of the light hitting the surface is <span class="math inline">\(1 - 0.8 = - 1.25D\)</span> Substituting the quantities that we know into the paraxial equation, we have <span class="math display">\[1 \times (-1.25) + 2 = 1.5 \times V_{out}\]</span> Thus <span class="math inline">\(V_{out} = 0.75/1.5 = 0.5\)</span>. The image therefore forms at <span class="math inline">\(1/V_{out}=2{\text{m}}\)</span> to the right of the surface.</p>
+    </li>
+  </ul>
+
+  <h3 id="focal-lengths">Focal Lengths</h3>
+
+  <p>The image focal length and object focal length are defined exactly as for a lens. The image focal length is the distance from surface to image when parallel light (<span class="math inline">\(V_{in}=0\)</span>) strikes the surface, and the object focal length is the distance from the surface to an object which causes parallel light (<span class="math inline">\(V_{out}=0\)</span>) to leave the surface. For a refracting surface, the focal lengths involve the refractive indices. Thus</p>
+
+  <div class="math display">
+    \[f_{\text{img}} = \frac{n_{out}}{F_{surface}}\]
+  </div>
+
+  <p>and</p>
+
+  <div class="math display">
+    \[f_{\text{obj}} = \frac{n_{in}}{F_{surface}}\]
+  </div>The difference between these focal lengths and the ones given in Chapter 1 is the involvement of the refractive indices to the left and right of the surface.
+
+  <h2 id="apparent-dist">Apparent Distances.</h2>
+
+  <p>If you look into a swimming pool, you may notice that it appears shallower than it really is. That is, the <em>apparent</em> depth is less than the true depth. This is a consequence of the paraxial equation that was introduced just above.</p>
+  
+  <figure id="Figure12">
+	<div id='Figure11 image' class='canvas-div'></div>
+	<script src='scripts/figure12.js'></script>
+    <figcaption>
+      <span class='figno'>Figure 12.</span> This diagram shows what happens to the vergence of light as it leaves a medium of high refractive index to one of low (here, from water to air). The rays leaving the surface are diverged more. If followed backwards, they create a virtual image. The distance of the virtual image from the surface is less than the distance of the object from the surface.
+	  <p>However, if you move the object to the other side, in the less dense medium, the situation is reversed: the virtual image is now further away than the object.</p>
+<div id='fig12handle' class="decorate"></div>
+    </figcaption>
+  </figure>
+  <script>
+  d = document.getElementById('fig12handle')
+  d.onmousedown = function() {f11_actions.decorate('ui')}
+  d.onmouseup = f11_actions.decorate
+  d.addEventListener("touchstart", ()=>f11_actions.decorate('ui'), false);
+  d.addEventListener("touchend", f11_actions.decorate, false);
+  </script>
+
+  <p>Take a flat surface, with a high refractive index to the left, and air to the right, as in <a href='#Figure12'>Figure 12</a>. The surface power of the flat surface is simply zero. Next, place an object somewhere to the left of the flat surface. By the time the rays of light from the object strike the flat surface, they have some vergence <span class="math inline">\(V_{in}\)</span> which is one over the distance from the surface to the object. By the paraxial equation, <span class="math display">\[\left( n_{in} \times V_{in} \right) + F_{surface} = (n_{out}{\times V}_{out})\]</span> But since <span class="math inline">\(F_{surface} = 0\)</span>, this becomes</p>
+
+  <div class="math display">
+    \[n_{in} \times V_{in} = n_{out}{\times V}_{out}\]
+  </div>
+
+  <p>or, rearranging,</p>
+
+  <div class="math display">
+    \[V_{out}=\frac{n_{in}}{n_{out}}V_{in}\]
+  </div>
+
+  <p>so the vergence has changed because of the different refractive indices. However, unlike a lens which <em>adds</em> vergence, the refracting surface has <em>scaled</em> the vergence. In the case of <a href='#Figure11'>Figure 11</a>, the light leaving the surface is diverging more than the light entering it, and this is always the case when light goes from a more dense to a less dense medium. If the increase in divergence reminds you a little of a negative lens, it should, because the divergent light leaving the surface creates a virtual image of the object which happens to be closer than the object itself. The distance from the surface to the virtual image is just <span class="math inline">\(1/V_{out}\)</span>, which is the apparent distance given in <a href='#Figure8'>Figure 8</a>. If we looked at the diverging light leaving the surface, we would see the object at the location of the virtual image, and not at its true location.</p>
+
+  <p>For example, let&#39;s figure out how deep a <span class="math inline">\(2 \text{m}\)</span> pool appears to be. Most swimming pools have lines painted on the bottom. The light from one of these lines has a vergence of <span class="math inline">\(V_{in}=1/2 = 0.5\text{D}\)</span> by the time it hits the pool&#39;s surface. From the above equation, <span class="math inline">\(V_{out}= (1.33/1)V_{in}=0.665\text{D}\)</span>. The virtual image formed by the divergent light <span class="math inline">\(V_{out}\)</span> appears to be <span class="math inline">\(1/V_{out} = 1.5\text{m}\)</span> from the surface. So if you&#39;re <span class="math inline">\(1.75\text{m}\)</span> tall, the pool looks shallow enough to stand in, but in fact you&#39;ll go over your head if you try.</p>
+
+
+</body>
+
+</html>
