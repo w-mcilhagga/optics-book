@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+  <title>Chapter 6: Ray Tracing</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+  </script>
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/popouts.js'></script>
+<style>
+.rule {
+	margin-left: 2em;
+	margin-right: 2em;
+	padding-left: 1em;
+	padding-right: 1em;
+	background-color: rgb(220,220,220);
+}
+</style>
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 6
+  </div>
+
+  <h1 id="ray-tracing">Ray Tracing</h1>
+
+  <p>This chapter describes a graphical method for working out what lenses do, known as <em>ray tracing</em>. Ray tracing means we trace the path of individual rays of light, rather than bundles of diverging or converging rays. Ray tracing only looks at what happens to a few carefully selected rays that are quite easy to trace through a lens.</p>
+  
+
+  <figure id="Figure1">
+    <img id='figure1img' src="media/figure1a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 1.</span> A bundle of parallel rays which enter a positive lens are all bent so they pass through the (image) focal point of the lens. However, each ray travels independently from the others, so we can <a onclick='toggle1("figure1b.svg")' style='cursor:pointer'>remove all the rays but one (click)</a>, which leads to the first ray tracing rule: a single ray of light which enters the lens parallel to the optic axis (the dashed line) is refracted so that it passes through the image focal point.</p>
+    </figcaption>
+  </figure>
+
+<script>
+function toggle1(s) {
+	let d = document.getElementById("figure1img")
+	if (d.src.indexOf(s)==-1) {
+		d.src = 'media/'+s
+	} else {
+		d.src = 'media/figure1a.svg'
+	}
+}
+</script>
+
+  <p>The first ray tracing rule is shown in <a href='#Figure1'>Figure 1</a>. A bundle of parallel rays hitting a positive lens all pass through the (image) focal point of the lens. However, each ray travels independently from the others, so if we <a onclick='toggle1("figure1b.svg")' style='cursor:pointer'>remove all but one ray (click)</a>, we have a much simpler situation, which can be summarized as the first ray tracing rule:
+
+  <p class = 'rule'><strong>Rule 1</strong>: Any ray of light which is parallel to the optic axis is refracted so it passes through the image focal point of the lens.</p>
+
+  <p>Next look at <a href='#Figure2'>Figure 2</a>. Rays of light which leave the (object) focal point are refracted so they emerge from the lens in parallel with the optic axis (see Chapter 1). Again, each ray of light is refracted independently from all the others, so we can <a onclick='toggle2("figure2b.svg")' style='cursor:pointer'>remove all but one ray (click)</a>. Looking at this isolated ray leads to our second ray-tracing rule :</p>
+
+  <figure id="Figure2">
+    <img id='figure2img' src="media/figure2a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 2.</span> Ray tracing rule 2: Rays of light coming from the (object) focal point leave the lens in parallel. However, each ray travels independently from the others, so we can <a onclick='toggle2("figure2b.svg")' style='cursor:pointer'>remove all the rays but one (click)</a>, which leads to the second ray tracing rule.
+    </figcaption>
+  </figure>
+  
+<script>
+function toggle2(s) {
+	let d = document.getElementById("figure2img")
+	if (d.src.indexOf(s)==-1) {
+		d.src = 'media/'+s
+	} else {
+		d.src = 'media/figure2a.svg'
+	}
+}
+</script>
+
+  <p class='rule'><strong>Rule 2</strong>: Any ray of light which passes through the object focal point of a lens is refracted so it comes out parallel to the optic axis.</p>
+  
+  <p>Notice that Rule 2 says that the ray doesn't have to <em>start</em> at the focal point, it just has to pass through it. That's because if the ray passes through the focal point, by the time it hits the lens it is actually going in the same direction as if it <em>started</em> at the focal point. So the lens will treat it in the same way.</p>
+
+  <p>These two rules are enough to work out where an image is formed. An example of this is shown in <a href='#Figure3'>Figure 3</a>. Here, an object (an upright arrow) is placed to the left of a positive lens. Although many rays leave each point of the object, it is enough to consider just two rays that follow the ray tracing rules. In the diagram, we draw two rays leaving the arrowhead. The first ray is parallel to the optic axis, so it must obey <a onclick='fig3actions.check("rule1check")' style='cursor:pointer'>Rule 1 (click)</a>. Thus, it is refracted so it goes through the image focal point of the lens. The second ray passes through the object focal point of the lens, so it must obey <a onclick='fig3actions.check("rule2check")' style='cursor:pointer'>Rule 2 (click)</a>. Thus, it is refracted to emerge parallel to the optic axis. The two rays intersect at the point where the image of the arrowhead is formed.</p>
+
+  <figure id="Figure3">
+    <div class='canvas-div' style='width:100%' id='figure3img'></div>
+    <figcaption>
+      <span class="figno">Figure 3.</span> Using the ray-tracing rules to decide where a point on an object forms a sharp image. The three rules can be turned on and off using the check boxes in the lower left corner. The white circles show the focal points of the lens. The object is a white arrow and the image is a bluish arrow. </p>
+	  The image only appears when two or more rules are on, because the image is located where the two rays from those rules <b>intersect</b>.</span>
+    </figcaption>
+  </figure>
+  <script src='scripts/figure3.js'></script>
+
+  <p>We assume that all the other light rays leaving the arrowhead will also converge to this point, which in fact they do. The arrowhead on the object was above the optic axis, and the image of the arrowhead is formed below the optic axis. This means that the image is formed upside down (inverted) relative to the object, and that is always the case for a real image formed by a positive lens. Note that in drawing the entire image in <a href='#Figure3'>Figure 3</a>, we’ve assumed <em>two more</em> things (both of which are true): first, that vertical objects produce vertical images, and second that a point on the optic axis produces an image point on the optic axis. These assumptions let us draw the rest of the image once we know where the arrow tip is. (We could actually ray trace every point on the object, but it would be tedious and lead to the same result.)</p>
+
+  <p>There is a third ray tracing rule, which comes from the other two:</p>
+
+  <p class='rule'><strong>Rule 3 (Thin lenses only)</strong>: Any ray of light which passes through the centre of a lens is not refracted and continues straight and undeviated.</p>
+
+  <p>This rule can be made visible in <a href='#Figure3'>Figure 3</a> by clicking the "rule 3" checkbox. However, <u>rule 3 can only be used on thin lenses</u>, because it only works when the two focal points are equal distances from the lens. It doesn’t work with refracting surfaces, where the two focal points are not the same distance from the refracting surface.</p>
+  
+  <h4>One Last Thing..</h4>
+  <p>If you drag the arrowhead around in <a href='#Figure3'>Figure 3</a> you might notice that sometimes the rays from Rule 1 or Rule 2 miss the lens completely (e.g. when the arrow-object is very tall). When we use the ray-tracing rules, we are allowed to imagine the lens as being much wider than it really is. The imaginary wider lens is shown in <a href='#Figure3'>Figure 3</a> as a dashed line going through the actual lens.</p>
+
+  <h2 id="magnification">Linear Magnification</h2>
+
+  <p>“Linear” magnification compares the size of the image to the size of the object. Rule 3 can be used to work out the linear magnification produced by thin lenses. <a href='#Figure4'>Figure 4</a> shows an object with height \(h_{obj}\) placed at a distance \(d_{obj}\) from a positive lens. An image is created with height \(h_{img}\) at a distance of \(d_{img}\) from the lens.</p>
+
+  <figure id="Figure4">
+    <img src="media/figure4a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 4.</span> The triangles and distances used to derive the linear magnification of a lens.
+    </figcaption>
+  </figure>
+
+  <p>A light ray (obeying Rule 3) is drawn from the top of the object, passing through the optic centre, to arrive at the top of the image. There are two triangles in the diagram. The first (shaded in green) is made from the optic axis, the object, and the ray that obeys Rule 3. It has a height of \(H\) (which is the object height) and a base equal to the object distance, which is simply \(1/V_{in}\).</p>
+
+  <p>The second triangle (shaded in red) is made from the optic axis, the image, and the ray obeying Rule 3. It has a height of \(h\) (which is the image height) and a base equal to the image distance, which is simply \(1/V_{out}\). These two triangles are <em>similar</em>, so they have the same shape but different sizes. That means the ratio of height to base is the same for both triangles, so</p>
+
+<div>\[\frac{h}{1/V_{out}} = \frac{H}{1/V_{in}}\]</div>
+
+ The linear magnification is the image height divided by the object height, \(h/H\). From the previous equation relating the triangles, the linear magnification must be 
+
+<div>\[\frac{h}{H} = \frac{1/V_{out}}{1/V_{in}} = \frac{V_{in}}{V_{out}}\]</div>
+
+ So if we know the vergences, we can work out the linear magnification easily.</p>
+
+  <h3 id="the-sign-convention-for-magnification">The Sign Convention for Magnification</h3>
+
+  <p>Both \(V_{in}\) and \(V_{out}\) may be positive or negative. For a real image, \(V_{in}\) is typically negative and \(V_{out}\) is positive. Thus \(V_{in}/V_{out}\) is negative, and so we have a negative magnification. What does this mean?</p>
+
+  <p>It means that one of the heights, either \(h\) or \(H\), is positive and the other has to be negative. This is because height also obeys a sign convention. When we measure heights, we start from the optic axis. Measurements in the upwards direction are positive, and measurements in the downwards direction are negative. So in <a href='#Figure4'>Figure 4</a>, the object height is positive and the image height is negative. When the image height is the opposite sign to the object height, the image is inverted.</p>
+
+  <p>In general,</p>
+
+  <ul>
+    <li>
+      <p>If the magnification is negative, the image is inverted.</p>
+    </li>
+
+    <li>
+      <p>If the magnification is positive, the image is upright.</p>
+    </li>
+
+    <li>
+      <p>If the absolute value of the magnification is less than 1, the image is smaller than the object.</p>
+    </li>
+
+    <li>
+      <p>If the absolute value of the magnification is more than 1, the image is larger than the object.</p>
+    </li>
+  </ul>
+
+  <p>For example, a magnification of -0.5 means that the image is half the size of the object, and inverted.</p>
+
+  <h3 id="example-1">Example 1</h3>
+
+  <p>An object is placed 450mm to the left of a lens with power \(+4\)D. What is the image magnification?</p>
+
+  <h4 id="answer">Answer</h4>
+
+  <ul>
+    <li>
+      <p>The vergence entering the lens is \(V_{in}=1/(-0.45)=-2.22\text{D}\). Using the thin lens equation \(V_{out}=V_{in}+F=1.78\text{D}\). Thus the magnification is \(V_{in}/V_{out}= -2.222/1.78 = -1.25\). There are no units; magnification is a pure number.</p>
+    </li>
+  </ul>
+
+  <h3 id="example-2">Example 2</h3>
+
+  <p>In the above example, if the object is 10cm tall, how big is the image?</p>
+
+  <h3 id="answer-1">Answer</h3>
+
+  <ul>
+    <li>
+      <p>The magnification is -1.25. To get the image size, we multiply the object size by the magnification. So the image size is \(-1.25 \times 10 = -12.5\)cm. The minus sign tells us that the image is inverted, and 12.5cm tall.</p>
+    </li>
+  </ul>
+
+  <h3 id="example-3">Example 3</h3>
+
+  <p>An object is placed 60cm to the left of a lens with power \(-10\)D. What is the image magnification? (Hint: the magnification formula for positive lenses works fine for negative lenses too.)</p>
+
+  <h4 id="answer-2">Answer</h4>
+
+  <ul>
+    <li>
+      <p>\(V_{in}\) is \(1/(-0.6)=-1.67\text{D}\), and so by the thin lens equation \(V_{out}=V_{in}+F=-11.67\text{D}\). The magnification is \(V_{in}/V_{out}= -1.67/(-11.67) = 0.143\). There are no units; magnification is a pure number.</p>
+    </li>
+
+    <li>
+      <p>So the image is right way up (the magnification is positive) and only about 15% of the size of the object. This confirms what was said in Chapter 2, that virtual images from negative lenses are upright and smaller than the object.</p>
+    </li>
+  </ul>
+
+  <h2 id="ray-tracing-virtual-images.">Ray Tracing Virtual Images.</h2>
+
+  <p>The ray tracing rules can also be used when a positive lens creates a virtual image. However, there is a little problem with Rule 2 in this case. To create a virtual image with a positive lens, the object has to be between the object focal point and the lens. Any ray from the object going through the object focal point is then travelling in the wrong direction to hit the lens.</p>
+
+  <p>However, if a ray of light is travelling so that it <em>looks like</em> it came from the object focal point when it hits the lens, it will behave exactly the same as one which really did – only the direction of the ray matters, not where it starts. So we can amend Rule 2 to read</p>
+
+  <p class='rule'><strong>Rule 2</strong>: Any ray of light which is travelling in the same direction as a ray coming from the object focal point is refracted to emerge parallel to the optic axis.</p>
+
+  <p>Ray-tracing a virtual image from a positive lens is shown in <a href='#Figure5'>Figure 5</a>. Since the two rays diverge, they don’t intersect in the way that the rays did in <a href='#Figure3'>Figure 3</a>. To find the image, what we have to do is follow the rays backwards (dashed lines, called virtual rays) until the virtual rays intersect. This is where the virtual image is.</p>
+
+  <figure id="Figure5">
+    <div class='canvas-div' style='width:100%' id='figure5img'></div>
+    <figcaption>
+      <span class="figno">Figure 5.</span> Like <a href='#Figure3'>Figure 3</a> but for a virtual image. Rule 2 is shown in its amended form. The dashed line between the object focal point and the tip of the object shows that the ray of light coming from the tip of the object is in the same direction as a ray of light coming from the focal point.</p>
+	  <p>The image is formed at the intersection of virtual rays. To see these virtual rays, you must click the check-box in the lower right corner. Also, the image only appears when two or more rules are on, because the image is located where two virtual rays <b>intersect</b>.</span>
+    </figcaption>
+  </figure>
+  <script src='scripts/figure5.js'></script>
+
+  <h2 id="ray-tracing-with-negative-lenses">Ray Tracing with Negative Lenses</h2>
+
+  <p>Negative lenses change the rules slightly. If we send parallel light into a negative lens, it is diverged (top half of <a href="#Figure6">Figure 6</a>). The rays leaving the lens are diverging <em>as if</em> they came from the image focal point. As before, all these rays are independent of one another, so we can <a onclick='toggle6("figure6b.svg")' style='cursor:pointer'>throw away all but one of them (click)</a> to get a ray-tracing rule:</p>
+
+  <p class='rule'><strong>Rule 1 (Negative):</strong> Any ray of light parallel to the optic axis which enters a negative lens is refracted so that it appears to have come from the image focal point.</p>
+
+  <figure id="Figure6">
+    <img id='figure6img' src="media/figure6a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 6.</span> Rule 1 for negative lens. <a onclick='toggle6("figure6b.svg")' style='cursor:pointer'>Click here to switch between a parallel beam and a single ray obeying this rule.</a>
+    </figcaption>
+  </figure>
+<script>
+function toggle6(s) {
+	let d = document.getElementById("figure6img")
+	if (d.src.indexOf(s)==-1) {
+		d.src = 'media/'+s
+	} else {
+		d.src = 'media/figure6a.svg'
+	}
+}
+</script>
+
+  <p>The next ray tracing rule is shpown in <a href="#Figure7">Figure 7</a>. Here, rays of light that are converging towards the object focal point are refracted to emerge in parallel. Again, the rays all act independently, so we can <a onclick='toggle7("figure7b.svg")' style='cursor:pointer'>throw away all but one of them (click)</a> to get another ray tracing rule:</p>
+
+  <p class='rule'><strong>Rule 2 (Negative):</strong> Any ray of light travelling towards the object focal point of a negative lens is refracted to become parallel to the optic axis. 7</p>
+
+  <figure id="Figure7">
+    <img id='figure7img' src="media/figure7a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 7.</span> Rule 1 for negative lens. <a onclick='toggle7("figure7b.svg")' style='cursor:pointer'>Click here to switch between a converging beam and a single ray obeying this rule.</a>
+    </figcaption>
+  </figure>
+<script>
+function toggle7(s) {
+	let d = document.getElementById("figure7img")
+	if (d.src.indexOf(s)==-1) {
+		d.src = 'media/'+s
+	} else {
+		d.src = 'media/figure7a.svg'
+	}
+}
+</script>
+
+  <p>Finally, Rule 3 doesn’t change:</p>
+
+  <p class='rule'><strong>Rule 3: (Thin lenses only)</strong>: Any ray of light which passes through the centre of a lens is not refracted and continues straight and undeviated.</p>
+
+  <p>These rules are shown in action in <a href="#Figure8">Figure 8</a>. As with <a href="#Figure5">Figure 5</a>, the rays leaving the lens are diverging, so they can’t intersect. What we have to do is trace them backwards until the meet each other. The virtual image is at that point.</p>
+
+  <figure id="Figure8">
+    <div class='canvas-div' style='width:100%' id='figure8img'></div>
+    <figcaption>
+      <span class="figno">Figure 8.</span> Using the ray-tracing rules to decide where a negative lens forms a sharp image of a point on an object. The three rules can be turned on and off using the check boxes in the lower left corner. The white circles show the focal points of the lens. The object is a white arrow and the image is a bluish arrow. </p>
+	  <p>The image is formed at the intersection of virtual rays. To see these virtual rays, you must click the check-box in the lower right corner. Also, the image only appears when two or more rules are on, because the image is located where two virtual rays <b>intersect</b>. (The virtual ray for Rule 3 overlaps the actual ray.)
+    </figcaption>
+  </figure>
+  <script src='scripts/figure8.js'></script>
+
+  <section class="footnotes">
+    <hr />
+
+    <ol>
+      <li id="fn1">
+        <p>The optic axis is an imaginary line perpendicular to the lens, which runs through its centre<a href="#fnref1" class="footnote-back">↩</a></p>
+      </li>
+    </ol>
+  </section>
+</body>
+</html>
