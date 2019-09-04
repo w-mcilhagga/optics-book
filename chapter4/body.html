@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+
+  <title>Chapter 4: Multiple Lenses &amp; Surfaces</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+  </script>
+  
+  <!-- the p5 & optics simulation -->
+
+  <script src='../scripts/p5/p5.js'></script>
+  <script src='../scripts/p5/p5.svg.js'></script>
+  <script src='../scripts/p5/p5.dom.js'></script>
+  <script src='../scripts/p5/p5.util.js'></script>
+  <script src='../scripts/p5/p5.yup.js'></script>
+  <script src='../scripts/vec2d.js'></script>
+  <script src='../scripts/raytracing-2/optical_simulation.js'></script>
+  <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+  <script src='../scripts/popouts.js'></script>
+
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 4
+  </div>
+
+  <h1 id="tracing-vergence-through-many-lenses">Multiple Lenses and Surfaces</h1>
+
+  <p>Both the thin lens equation and the paraxial equation say what happens to light as it travels through one lens or one refracting surface, but there are many times when we want to know what happens when light travels through many lenses or refracting surfaces.</p>
+
+  <p>Look at the two lenses in <a href='#Figure1'>Figure 1</a>. The first lens has a power of \(+2{\text{D}}\) and the second lens has a power of \(+3{\text{D}}\), and they are \(0.5{\text{m}}\) apart. There is a point object \(0.75{\text{m}}\) to the left of the first lens. An image forms \(0.25\text{m}\) to the right of the second lens. In this chapter we'll show you how to work out the image distance in these cases.</p>
+
+  <figure id="Figure1">
+
+    <div class='canvas-div' id='figure1image'></div>
+
+    <figcaption>
+      <span class='figno' id='fig1handle'>Figure 1.</span> Light travelling through two positive lenses separated by a gap of \(0.5\text{m}\). The lens powers are written above the lenses. The object is placed \(0.75\text{m}\) to the left of the first lens and the image forms \(0.25\text{m}\) to the right of the second. Note that in reality the light doesn't stop where it converges, as shown here. Instead, it continues until it hits something.
+    </figcaption>
+  </figure>
+  <script src='scripts/figure1.js'></script>
+
+  <p>The first lens obeys the thin lens equation \(V_{in}+F=V_{out}\). Using this equation, we can calculate that \(V_{out}=0.667{\text{D}}\) for the first lens. The second lens also obeys the thin lens equation \(V_{in}+F=V_{out}\), but what is \(V_{in}\) for this lens? The light hitting the second lens isn’t coming from an object, so we can’t work out \(V_{in}\) the way we did in Chapter 1. Instead, the light is coming from the first lens. You might be tempted to say that the vergence entering the second lens is just the vergence leaving the first lens; but if you did, you'd be wrong: the vergence <em>changes</em> as the light travels through the gap between the first lens and the second.</p>
+
+  <p>To figure out what happens to the light as it goes through the second lens, we need a way of working out \(V_{in}\). We can do this using a simple trick, as shown in <a href='#Figure2'>Figure 2</a>.</p>
+
+  <p>First, let's (temporarily) replace the second \(+3\text{D}\) lens with a piece of flat glass, which has no power (\(F=0\text{D}\)). Because it has no power, it can't change the vergence of the light. The light leaving the first lens has a vergence of \(V_{out}=0.667{\text{D}}\), so it converges to a point which is \(1.5\text{m}\) from the first lens, as if the second lens simply isn't there.</p>
+
+  <figure id="Figure2">
+    <div class='canvas-div' id='Figure2 image'></div>
+
+    <figcaption>
+      <span class='figno' id='fig2handle'>Figure 2.</span> In this diagram, the second lens of <a href='#Figure1'>Figure 1</a> has been replaced by a lens with zero power.
+    </figcaption>
+  </figure>
+  <script src='scripts/figure2.js'></script>
+
+  <p>Second, even though the second lens has no power, it <em>still</em> obeys the paraxial equation \(V_{in}+F=V_{out}\). Since the power of the second lens is zero, the paraxial equation for this lens simplifies down to \(V_{in}=V_{out}\). We don't know what \(V_{in}\) is yet, but we can calculate \(V_{out}\). In <a href='#Figure2'>Figure 2</a>, the distance from the second lens to the point of convergence is \(1\text{m}\), so \(V_{out}=1\text{D}\). Since \(V_{in}=V_{out}\), that means that \(V_{in}=1\text{D}\) .</p>
+
+  <p>Finally, the value of \(V_{in}\) <em>doesn't</em> depend on the power of the lens &mdash; it is the vergence of the light just as it enters the lens, and before the lens has done anything. So \(V_{in}\) for the second lens in <a href='#Figure2'>Figure 2</a> <em>must be</em> the same as \(V_{in}\) for the second lens in <a href='#Figure1'>Figure 1</a>; that is, \(1\text{D}\).</p>
+
+  <p>So we've established that the light entering the second lens has a vergence of \(V_{in}=1\text{D}\), no matter what power the lens is. Now, returning to <a href='#Figure1'>Figure 1</a>, the second lens has a power of \(F=+3\text{D}\). The paraxial equation says \(V_{n}+F=V_{out}\), so we have \(1+3=V_{out}\), or \(V_{out}=4\). Thus the light converges to a point which is \(1/V_{out}=0.25\text{m}\) from the second lens.</p>
+
+  <h2>The Step-Along Procedure</h2>
+
+  <p>While the above trick might be good for explaining why \(V_{in}\) is what it is, it's quite tedious in practice to be continually swapping lenses for other zero-powered lenses and working out the consequences. To make life a little easier for us, we can just take out the math steps from the above procedure to work out how vergence changes as light travels from one lens to another. The procedure is as follows:</p>
+
+  <ol>
+    <li>For any two lenses separated by a gap, work out \(V_{out}\) for the first lens.</li>
+
+    <li>Work out the image distance \(1/V_{out}\) for the first lens.</li>
+
+    <li>Subtract the gap width from the image distance</li>
+
+    <li>\(V_{in}\) for the second lens is one over the result of step 3</li>
+  </ol>
+
+  <p>This is called the <em>step-along</em> procedure<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, because it tells you how vergence changes as we step-along from one lens to another in a sequence. For the two lenses in <a href='#Figure1'>Figure 1</a>, this procedure works out as follows:</p>
+
+  <ol>
+    <li>\(V_{out}\) for the first lens is \(0.667\text{D}\).</li>
+
+    <li>The image distance \(1/V_{out}\) for the first lens is \(1/0.667 = 1.5\text{m}\).</li>
+
+    <li>Subtracting the gap width \(0.5\text{m}\) from the image distance gives us \(1.5-0.5 = 1\text{m}\)</li>
+
+    <li>\(V_{in}\) for the second lens is one over the result of step 3, which is \(1/1 = 1\text{D}\).</li>
+  </ol>
+
+  <h3 id="another-example.">An Example.</h3>Look at the pair of lenses in <a href='#Figure3'>Figure 3</a>. The first lens has a power of \(+10{\text{D}}\). The second lens has a power of \(+4{\text{D}}\). The lenses are separated by a gap of \(0.2{\text{m}}\). An object is placed \(0.5{\text{m}}\) to the left of the first lens.
+
+  <p>The vergence of the light entering the first lens is \(V_{in}=1/(-0.5)=-2{\text{D}}\). Thus, the vergence of the light leaving the first lens is</p>
+
+  <div class="math display">
+    \[V_{out}=V_{in}+F=-2+10 = 8{\text{D}}\]
+  </div>
+
+  <figure id="Figure3">
+    <!--<div class='canvas-div' id='Figure3 image'></div>-->
+	<img src='media/figure3.svg'>
+	
+    <figcaption>
+      <span class='figno'>Figure 3.</span> Another example of light passing through two lenses. In this case, the light is converged to a real image between the two lenses, before diverging again to strike the second lens.
+    </figcaption>
+  </figure>
+  <!--<script src='scripts/figure3.js'>
+</script>-->
+
+  <p>Now use the step-along procedure:</p>
+
+  <ol>
+    <li>\(V_{out}\) for the first lens is \(8\text{D}\), as we worked out above.</li>
+
+    <li>The image distance \(1/V_{out}\) for the first lens is \(1/8 = 0.125\text{m}\).</li>
+
+    <li>Subtracting the gap width \(0.2\text{m}\) from the image distance gives us \(0.125-0.2 = -0.075\text{m}\). (Notice that this is a negative distance, and it means that the light converged to a point to the left of the second lens.)</li>
+
+    <li>\(V_{in}\) for the second lens is one over the result of step 3, which is \(1/(-0.075) = -13.33\text{D}\).</li>
+  </ol>
+
+  <p>Now that we have \(V_{in}\) for the second lens, we can apply the thin lens equation to get \(V_{out}\):</p>
+
+  <div class="math display">
+    \[V_{out}=V_{in}+F=-13.33+4=-9.33{\text{D}}\]
+  </div>
+
+  <p>This light is diverging, so it forms a virtual image which is \(1/(-9.33)=-0.107{\text{m}}\) to the left of the second lens.</p>
+
+  <h2 id="following-vergence-through-surfaces">Many Refracting Surfaces</h2>
+
+  <p>We can trace vergence through two (or more) refracting surfaces in pretty much the same way as we traced light through lenses. All we have to do is replace the thin lens equation with the paraxial equation. The step-along procedure doesn't change. Apart from the added complication of the refractive indices, the task isn’t any harder.</p>
+
+  <figure id="Figure4">
+    <!--<div class='canvas-div' id='Figure4 image'></div>-->
+	<img src='media/figure4.svg'>
+
+    <figcaption>
+      <span class='figno'>Figure 4.</span> Two refracting surfaces as described in the text. The scale of the drawing means that the object and image points are off the sides of the image. The different colours show where the refractive indices are different. Light blue to the left is water (\(n=1.33\)), dark blue in the middle is glass (\(n=1.5\)), and grey to the right is air (\(n=1\)).
+    </figcaption>
+  </figure>
+<!--<script src='scripts/figure4.js'>
+</script>-->
+
+  <p>Look at <a href='#Figure4'>Figure 4</a>. This shows a glass lens (with a refractive index of \(1.5\)). On the left of the glass lens is water (refractive index 1.33), and on the right is air. This could be say a lens used in prescription swimming goggles. The distance between the two surfaces is \(0.05{\text{m}}\), which is fairly unrealistic - few lenses are \(5\text{cm}\) thick - but helps us to see what is going on with the calculations. Both surfaces obey the paraxial equation. The paraxial equation for the first surface is, as always</p>
+
+  <div class="math display">
+    \[n_{in} \times V_{in}+F_{surface}=n_{out} \times V_{out}\]
+  </div>
+
+  <p>Let’s suppose that \(F_{surface}=+6.8D\) in water. (This depends on the refractive indices to both sides of the surface, and would change if \(n_{in}\) wasn’t 1.33) An object is placed \(0.8{\text{m}}\) to the left of the first surface. The vergence of the light hitting the first surface is thus \(V_{in}=1/(-0.8) = -1.25{\text{D}}\). Taking the paraxial equation for the first surface, and filling in all the known quantities, gives</p>
+
+  <div class="math display">
+    \[n_{in}\times V_{in} +F_{surface} = 1.33 \times -1.25 + 6.8 = 1.5 \times V_{out}\]
+  </div>
+
+  <p>from which \(V_{out}=3.425{\text{D}}\) for the first surface. Now use the step-along procedure to work out \(V_{in}\) for the second surface:</p>
+  
+  <ol>
+    <li>\(V_{out}\) for the first surface is \(3.425\text{D}\).</li>
+
+    <li>The image distance \(1/V_{out}\) for the first lens is \(1/3.425 = 0.292\text{m}\).</li>
+
+    <li>Subtracting the gap \(0.05\text{m}\) from the image distance gives us \(0.292-0.05 = 0.242\text{m}\)</li>
+
+    <li>\(V_{in}\) for the second lens is one over the result of step 3, which is \(1/0.242 = 4.13\text{D}\).</li>
+  </ol>  
+ 
+  <p>The second surface obeys the paraxial equation</p>
+
+  <div class="math display">
+    \[n_{in} \times V_{in}+F_{surface}=n_{out} \times V_{out}\]
+  </div>
+
+  <p>Here \(n_{in}=1.5\) and \(n_{out}=1\). Let’s suppose that the surface power for the second surface is \(F_{surface(2)}=-2.5D\). From the step-along procedure, the vergence of the light entering the second surface is \(V_{in}=4.13{\text{D}}\). Now, taking the paraxial equation for the second surface, and filling in all the known quantities, we have</p>
+
+  <div class="math display">
+    \[n_{in}\times V_{in}+F_{surface}=1.5 \times 4.13 +-2.5 = 1 \times V_{out}\]
+  </div>
+
+  <p>from which \(V_{out(}=+3.70{\text{D}}\). The image thus forms at a distance of \(1/3.7=0.270{\text{m}}\) to the right of the second surface</p>
+
+  <h3 id="reduced-distance">Reduced Distance</h3>
+
+  <p>There is a clever little trick to make calculations with refracting surfaces quite a lot easier, which depends on the following definitions:</p>
+
+  <ul>
+    <li>
+      <p>The <strong>reduced distance</strong> is defined as the actual distance divided by the refractive index.</p>
+    </li>
+
+    <li>
+      <p>The actual distance is the reduced distance multiplied by the refractive index.</p>
+    </li>
+  </ul>
+
+  <p>When all distances are given as reduced distances, we can use the thin lens equation instead of the paraxial equation, because the thin lens equation with reduced distances is the same as the paraxial equation with actual distances.</p>
+
+  <p>We can try this trick with the problem given earlier, and shown in <a href='#Figure4'>Figure 4</a>. An object is placed \(0.8{\text{m}}\) to the left of the first surface. The reduced distance is \(0.8/n_{in} = 0.8/1.33=0.602{\text{m}}\). The gap between the surfaces is \(0.05{\text{m}}\), which as a reduced distance is \(0.05/1.5=0.0333{\text{m}}\). The surface powers are unchanged.</p>
+
+  <p>The <em>thin lens</em> equation for the first surface says</p>
+
+  <div class="math display">
+    \[V_{in}+F_{surface}=V_{out}\]
+  </div>
+
+  <p>Using the reduced distance for the object gives us</p>
+
+  <div class="math display">
+    \[1/(-0.602)+6.8=V_{out}=5.13{\text{D}}\]
+  </div>
+  
+  <p>Now use the step-along procedure:</p>
+
+  <ol>
+    <li>\(V_{out}\) for the first surface is \(5.13\text{D}\).</li>
+
+    <li>The image distance \(1/V_{out}\) for the first surface is \(1/5.13 = 0.195\text{m}\).</li>
+
+    <li>Subtracting the reduced gap \(0.0333\text{m}\) from the image distance gives us \(0.195-0.0333 = 0.162\text{m}\)</li>
+
+    <li>\(V_{in}\) for the second surface is one over the result of step 3, which is \(1/0.162 = 6.17\text{D}\).</li>
+  </ol> 
+  
+  <p>The <em>thin lens</em> equation for the second surface says</p>
+
+  <div class="math display">
+    \[V_{in}+F_{surface}=V_{out}\]
+  </div>
+
+  <p>Thus \(V_{out(2)}\) is \(6.17+(-2.5)=V_{out}=3.67{\text{D}}\) The image thus forms at a (reduced) distance of \(1/3.67=0.272{\text{m}}\) from the second surface. The actual distance is this reduced distance multiplied by the refractive index to the right of the second lens, which is just 1, so the actual distance here is the same as the reduced distance. There is a slight difference between this result and the result earlier due to rounding.</p>
+
+  <h2 id="power">Powers and Focal Lengths.</h2>
+
+  <p>The thin lens equation is \(V_{in}+F=V_{out}\). When \(V_{in}=0\) (i.e. parallel light), this simplifies to</p>
+
+  <div class="math display">
+    \[F=V_{out}\]
+  </div>
+
+  <p>So the power \(F\) of a thin lens is the vergence \(V_{out}\) leaving it when parallel light enters it. When \(V_{out}=0\) (i.e. parallel light), the thin lens equation simplifies to</p>
+
+  <div class="math display">
+    \[F=-V_{in}\]
+  </div>
+
+  <p>So the power of a thin lens is the negative of \(V_{in}\) when parallel light leaves it.</p>
+
+  <p>These two definitions for a thin lens can be used to define the power of a <em>set</em> of lenses or surfaces. Suppose we have two (or more) lenses or surfaces in line. The <strong>Back Vertex</strong> is the name given to the last lens or surface in the series. The <strong>Front Vertex</strong> is the name given to the first lens or surface in the series. Such a system of lenses or surfaces has two powers:</p>
+
+  <ul>
+    <li>
+      <p>The <strong>Back Vertex Power</strong> (or BVP) is the vergence of light leaving the Back Vertex when parallel light hits the Front Vertex.</p>
+    </li>
+
+    <li>
+      <p>The <strong>Front Vertex Power</strong> (or FVP) is the negative of the vergence of light hitting the Front Vertex when parallel light leaves the Back Vertex.</p>
+    </li>
+  </ul>
+
+  <p>The corresponding front and back vertex focal lengths are given by one over the powers.</p>
+
+  <h3 id="power">The Front Vertex and Back Vertex Power of Two Lenses.</h3>
+
+  <p>Consider a pair of thin lenses separated by a distance \(d\), as shown in the top of <a href="#Figure6">Figure 6</a>. The first lens has power \(F_1\) and the second lens has power \(F_2\). The first lens is also the Front Vertex, and the second lens the Back Vertex. In <a href="#Figure5">Figure 5</a>, the lenses are both positive, but they need not be.</p>
+
+  <figure id="Figure5">
+  <div style='position:relative'>
+    <img src="media/figure5.svg" />
+	<span class="note" style="color:white; position: absolute; left: 210px; top: 20px;"><em>F<sub>1</sub></em></span>
+	<span class="note" style="color:white; position: absolute; left: 315px; top: 20px;"><em>F<sub>2</sub></em></span>
+	<span class="note" style="color:white; position: absolute; left: 210px; top: 265px;"><em>F<sub>1</sub></em></span>
+	<span class="note" style="color:white; position: absolute; left: 315px; top: 265px;"><em>F<sub>2</sub></em></span>
+	
+</div>
+    <figcaption>
+      <span class='figno'>Figure 5.</span> Back and front vertex powers BVP and FVP. The top half of this figure shows two positive lenses separated by a distance \(d\). Parallel light enters the first lens and is converged a little. It continues until it hits the second lens where it is converged further. It leaves the second lens and converges to a point, which is a kind of focal point (since parallel light was sent into the two-lens system). The distance from the second lens to the focal point is the back vertex focal length, which is one over the back vertex power (BVP). <p>The bottom half of this figure shows an object which is placed to cause parallel light to leave the second lens. The distance from the first lens to the object is the front vertex focal length, which is one over the front vertex power (FVP).
+    </figcaption>
+  </figure>
+
+  <p>Let's work out a formula for the Back Vertex Power of two lenses. The first lens obeys the thin lens equation</p>
+
+  <div class="math display">
+    \[V_{in1}+F_1=V_{out1}\]
+  </div>
+
+  <p>and the second lens obeys the thin lens equation:</p>
+
+  <div class="math display">
+    \[V_{in2}+F_2=V_{out2}\]
+  </div>
+
+  <p>where the extra “\(1\)” or “\(2\)” indicates we are dealing with the first lens or the second.</p>
+
+  <p>Since \(V_{in1}=0\) the vergence of the light leaving the first lens is just \(V_{out1}=F_1\). Now use the step-along procedure:</p>
+  
+  <ol>
+    <li>\(V_{out1}\) for the first lens is \(F_1\).</li>
+
+    <li>The image distance \(1/V_{out1}\) for the first lens is \(1/F_1\).</li>
+
+    <li>Subtracting the gap \(d\) from the image distance gives us \(1/F_1-d\)</li>
+
+    <li>\(V_{in2}\) for the second lens is one over the result of step 3, which is \(1/(F_1-d)\).</li>
+  </ol> 
+
+  <p>Putting this into the thin lens equation for the second lens, the vergence \(V_{out2}\) leaving the second lens is thus</p>
+
+  <div class="math display">
+    \[V_{out2}=V_{in2}+F_2=\frac{1}{F_1-d}+F_2=\frac{F_1}{1-d F_1}+F_2\]
+  </div>
+
+  <p>So, to summarize, parallel light entered the first lens (or Front Vertex), and light with vergence \(V_{out2}\) leaves the second lens (or Back Vertex). This is, by definition, the Back Vertex Power of the two lenses:</p>
+
+  <div class="math display">
+    \[\text{BVP}=V_{out2}=\frac{F_1}{1-d F_1}+F_2\]
+  </div>
+
+  <p>The formula for the front vertex power looks the same as the one for back vertex power, just with the two lens powers swapped:</p>
+
+  <div class="math display">
+    \[\text{FVP} = \frac{F_2}{1-d F_2}+F_1\]
+  </div>
+
+  <p>When two thin lenses get very close together, the distance \(d\) between them is essentially zero. In this case, the Back Vertex Power is simply \(\text{BVP}=F_1+F_2\), and the Front Vertex Power is also \(\text{FVP}=F_1+F_2\). That is, they are the same power, just like a thin lens. In this case, we can treat the two lenses as a single lens with a power equal to the sum of the powers of the individual lenses. This is why you can put sets of lenses in an optometrist's trial frame to get any particular power you want - the lenses are close enough together that their powers add.</p>
+
+  <h3 id="power">The Front Vertex and Back Vertex Power of a Thick Lens.</h3>
+
+  <p>Consider two refracting surfaces in air, separated by a distance d, as shown in <a href="#Figure6">Figure 6</a>. The index of refraction between the two surfaces is \(n\). This is a <em>thick lens</em>. When light travels through a thick lens, the vergence of the light is changed by the power of the first refracting surface; then the vergence of the light changes as it travels through the lens; and finally the vergence is changed again by the power of the second refracting surface.</p>
+
+  <p>We can define the Front Vertex Power and Back Vertex Power of a thick lens just as we did for a pair of thin lenses. Thanks to the idea of a <a href='#reduced-distance'>reduced distance</a>, a thick lens with thickness \(d\) and surface powers \(F_1\) and \(F_2\) is exactly the same as two thin lenses with the same powers, separated by a distance \(d/n\).</p>
+
+  <figure id="Figure6">
+    <img src="media/figure6.svg" />
+
+    <figcaption>
+      <span class='figno'>Figure 6.</span> A thick lens is two refracting surfaces separated by a distance \(d\). In this image parallel light enters the first surface and is refracted. It continues through the lens and is then refracted again as it leaves. The light converges on a point, called the back vertex focal point.
+    </figcaption>
+  </figure>
+
+  <p>Thus, for a thick lens, with surface powers \(F_1\) and \(F_2\), we can write down the BVP and FVP as:</p>
+
+  <div class="math display">
+    \[\begin{aligned} \text{BVP} &amp; = &amp;\frac{F_1}{1-(d/n) F_1}+F_2 \\ \text{FVP} &amp; = &amp;\frac{F_2}{1-(d/n) F_2}+F_1 \end{aligned}\]
+  </div>
+
+  <p>These are the same as the two-lens formulae, except we are using the reduced distance between the surfaces.</p>
+
+  <h3 id="thin-lenses">Thin Lenses</h3>
+
+  <p>If the thickness of a lens \(d\) becomes very small, we have a <em>thin</em> lens. Then the BVP and FVP are</p>
+
+  <div class="math display">
+    \[\begin{aligned} \text{BVP} &amp; = &amp;F_1+F_2 \\ \text{FVP} &amp; = &amp;F_2+F_1 \end{aligned}\]
+  </div>
+
+  <p>That is, a thin lens has the same Front and Back Vertex Powers, which are equal to the sum of the surface powers.</p>
+  
+  <!--
+  <p>The paraxial equation and the thin lens equation are obviously closely related. In fact, the thin lens equation comes from the paraxial equation, because a thin lens is just two refracting surfaces, each of which obeys the paraxial equation, as shown in <a href='#Figure6'>Figure 6</a>.</p>
+
+  <figure id="Figure6">
+    <img src='media/image6.svg' />
+
+    <figcaption>
+      <span class='figno'>Figure 6.</span> A lens consists of two refracting surfaces, each of which obeys the paraxial equation. The front surface of the lens, on the left, has power \(F_{front}\). Light with vergence \(V_{in(f)}\) enters the front surface and light with vergence \(V_{out(f)}\) leaves it. The back surface has power \(F_{back}\). Light with vergence \(V_{in(b)}\) enters the surface and light with vergence \(V_{out(b)}\) leaves it. The refractive indices are 1 outside the lens and \(n_{glass}\) inside the lens.
+    </figcaption>
+  </figure>
+
+  <p>The left-hand surface, where the light enters the lens, will be called the <strong>front</strong> surface, with power \(F_{front}\). The paraxial equation for the front surface is</p>
+
+  <div class="math display">
+    \[n_{in}\times V_{in(f)}+F_{front} = n_{out}\times V_{out(f)}\]
+  </div>
+
+  <p>The light hitting the front surface is in air, so \(n_{in}=1\). Since the lens is made of glass, we can replace \(n_{out}\) with the refractive index for glass, which we’ll write as \(n_{glass}\) (to avoid getting fixated on a single value of 1.52). Thus the paraxial equation for the front surface can be rewritten as</p>
+
+  <div class="math display">
+    \[V_{in(f)}+F_{front} = n_{glass}\times V_{out(f)} \tag{Front}\]
+  </div>
+
+  <p>The light travels from the front surface through the lens to the back surface, with power \(F_{back}\). The paraxial equation for the back surface is</p>
+
+  <div class="math display">
+    \[n_{in}\times V_{in(b)}+F_{back} = n_{out}\times V_{out(b)}\]
+  </div>
+
+  <p>In this equation, \(n_{in}\) is the refractive index of glass, since the light hitting the back surface is inside the lens, and \(n_{out}\) is 1, since the light leaving the lens is in air. Thus the paraxial equation for the back surface can be rewritten as</p>
+
+  <div class="math display">
+    \[n_{glass}\times V_{in(b)}+F_{back}=V_{out(b)} \tag{Back}\]
+  </div>
+
+  <p>If the lens is thin, then the light will hardly travel any distance from the front surface to the back surface. In that case, \(V_{out(f)}\approx V_{in(b)}\). We can replace \(V_{in(b)}\) by \(V_{out(f)}\) in (Back) to get a new equation</p>
+
+  <div class="math display">
+    \[n_{glass}\times V_{out(f)}+F_{back} \approx V_{out(b)} \tag{Back 2}\]
+  </div>
+
+  <p>However, the equation called (Front) tells us that \(n_{glass}\times V_{out(f)}\) is exactly equal to \(V_{in(f)}+F_{front}\). So we can replace \(n_{glass}\times V_{out(f)}\) with \(V_{in(f)}+F_{front}\) in equation (Back 2) to give</p>
+
+  <div class="math display">
+    \[V_{in(f)}+F_{front} + F_{back} \approx V_{out(b)} \tag{Back 3}\]
+  </div>
+
+  <p>Now compare (Back 3) to the thin lens equation:</p>
+
+  <div class="math display">
+    \[ \begin{align} V_{in(f)}&amp;\,+\,&amp;F_{front} + F_{back} \; &amp;\approx\quad V_{out(b)} \tag{Back 3} \\ V_{in}&amp;\,+\,&amp;F\;\;\quad\quad &amp;=\quad V_{out} \tag{thin lens} \end{align} \]
+  </div>
+  
+  <p>It is clear from this that the lens power \(F\) in the thin lens equation is just the sum of the power of the front surface of the lens and the back surface of the lens, \(F_{front}+F_{back}\). The subscript parts \((f)\) and \((b)\) aren’t important any more.</p>
+-->
+
+  <p>Thus, if we want a thin lens with power \(F\), we can choose any front surface power \(F_{1}\) and back surface power \(F_{2}\) we like, just so long as they add up to the power \(F\). This gives lens designers some freedom in the lens shapes they can make to give the same lens power. Typical lens shapes are shown in <a href='#Figure7'>Figure 7</a>. For example, a meniscus lens with a positive front surface produces better looking reflections in spectacles than, say a flat surface. Meniscus lenses also have reduced spherical aberration (discussed in the next chapter).</p>
+
+  <figure id="Figure7">
+    <img src="media/figure7.svg" style='width:80%' />
+
+    <figcaption>
+      <span class='figno'>Figure 7.</span> Typical lens cross-sections. The three lenses in the top row are all positive, the three on the bottom row all negative. On the top row, the first lens is a plano-convex lens. One surface is flat (the “plano” surface, with zero power) and one surface has positive power. The second lens is biconvex. Both surfaces are positive. The third lens is a positive meniscus lens. The front surface is positive and the back surface is negative, but since the front surface is more powerful, the total power is positive. On the bottom row, the first lens is plano-concave. The second is biconcave, with both surfaces negative. The last lens is a negative meniscus, but this time the back surface is more powerful than the front, so the total power is negative.
+    </figcaption>
+  </figure>
+
+  <div class="footnotes">
+    <hr />
+
+    <ol>
+      <li id="fn1">
+        <p>There is a formula, called the step-along formula, which lets you calculate the change in vergence as light travels between two lenses. However, it not any easier or faster in use than what we do here.<a href="#fnref1">↩</a></p>
+      </li>
+    </ol>
+  </div>
+</body>
+</html>
