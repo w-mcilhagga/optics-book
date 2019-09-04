@@ -1,0 +1,108 @@
+<script src='../p5/p5.js'></script>
+<script>
+p5.prototype.query = function() { return this }
+</script>
+<script src='../p5/p5.svg.js'></script>
+<script src='../p5/p5.dom.js'></script>
+<script src='../p5/p5.util.js'></script>
+<script src='../p5/p5.yup.js'></script>
+<script src='../vec2d.js'></script>
+<body style='padding:0;margin:0;'>
+<div id='1' style='overflow:hidden;width:75%'></div>
+<div id='2'></div>
+</body>
+<script src='optical_simulation.js'></script>
+<script src='optical_simulation_draw_p5.js'></script>
+
+<script>
+// The demo state
+
+let state = {
+
+	// dragging items
+	dragtarget: false,
+	oldpt: false,
+	//renderer: "svg", // or P2D or WEBGL	
+	
+	// canvas parameters
+	w: 500,
+	h: 300,
+	origin: [], // where the origin is
+	ppm: 200, // need to keep this separate from p5 matrix, because that affects strokeWeight
+	background: 0,
+	
+	items: [	
+		{
+			type:'divergent light',
+			id: 'd#1',
+			position: [-0.5,0.05],
+			target: [0,0], // aim at point
+			spread: 40,
+			raycount: 10,
+			ui: {},
+			style: {
+				arrows: [0.2, '40%']
+			}
+		},
+		{
+			type: 'thinlens',
+			id: 'lens#1',
+			position: [0,0],
+			axis: [1,0],
+			aperture: 0.6,
+			power: 4,
+			virtual: ['light#2'],
+			ui: {ylock:true},
+			style: {
+			
+			}
+		},
+		{
+			type: 'barrier',
+			id: 'b#1',
+			position: [0.7, -0.5, 0.7, 0.5],
+			style: {
+				visible: false
+			}
+		},
+		{
+			type: 'virtual image',
+			lens: 'lens#1',
+			light: 'd#1',
+			style: {
+				visible: true
+			}
+		},	
+		{
+			type: 'real image',
+			id: 'r#1',
+			lens: 'lens#1',
+			light: 'd#1'
+		},
+		{ 
+			type: 'blur disc',
+			barrier: 'b#1',
+			light: 'd#1'
+		},
+		{
+			type: 'copy',
+			// copies the real image location to the barrier
+			copy: [{
+				source: 'r#1',
+				sourceProperty: ['position',0],
+				dest: 'b#1', 
+				destProperty: ['position',2]
+			},
+			{
+				source: 'r#1',
+				sourceProperty: ['position',0],
+				dest: 'b#1', 
+				destProperty: ['position',0]
+			}]
+		}
+	]
+}
+
+makeP5App(state)(window)
+
+</script>

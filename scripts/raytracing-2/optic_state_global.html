@@ -1,0 +1,169 @@
+<script src='../p5/p5.js'></script>
+<script>
+p5.prototype.query = function() { return this }
+</script>
+<script src='../p5/p5.svg.js'></script>
+<script src='../p5/p5.dom.js'></script>
+<script src='../p5/p5.util.js'></script>
+<script src='../p5/p5.yup.js'></script>
+<script src='../vec2d.js'></script>
+<body style='padding:0;margin:0;'>
+<div id='1' style='overflow:hidden;width:75%'></div>
+<div id='2'></div>
+</body>
+<script src='optical_simulation.js'></script>
+<script src='optical_simulation_draw_p5.js'></script>
+
+<script>
+// The demo state
+
+let state = {
+
+	// dragging items
+	dragtarget: false,
+	oldpt: false,
+	//renderer: "svg", // or P2D or WEBGL	
+	
+	// canvas parameters
+	w: 500,
+	h: 300,
+	origin: [], // where the origin is
+	ppm: 200, // need to keep this separate from p5 matrix, because that affects strokeWeight
+	background: 0,
+	
+	items: [
+		{ 
+			draw(inst, vbox, ppm) {
+				inst.noStroke()
+				inst.fill(100,100,0)
+				inst.rect(-0.5*ppm, -0.5*ppm, 1*ppm, 1*ppm)
+			}
+		},
+		{ 
+			type: 'image',
+			id: 'img#1',
+			position: [0,0, 0.5, 0.5], // dimensions in metres
+			image: 'apple.png',
+			ui: {},
+			style: {decoration:'ui'}
+		},
+		{
+			type:'control',
+			controlType: 'slider',
+			params: [-1,1,0,0],
+			position: [100,100],
+			direction: 'up',
+			width: 150,
+			bind: {id:'d#1', property: ['position', 0] }
+		},
+		{
+			type: 'text',
+			text: 'this is a message',
+			position: [0.5, 0],
+			style: {
+				fill: [255, 255, 255]
+			}
+		},
+		{
+			type:'control',
+			controlType: 'checkbox',
+			params: ['visible', true],
+			position: [10,30],
+			bind: {id:'d#1', property: ['style', 'visible'], yes:true, no:false },
+			style: {'color':'red', 'fontSize':'16pt'}
+		},
+		{
+			type:'control',
+			controlType: 'span',
+			params: 'a span',
+			position: [20,-30],
+			style: {'color':'green', 'fontSize':'16pt'}
+		},
+		{
+			type:'parallel light',
+			position: [-1,1],
+			target: 'lens#1',
+			spread: 'fill*1.5',
+			raycount: 10,
+			style: {
+				stroke:[255,0,0],
+				arrows: {pt:[-1,0],dir:[0.7,0.7]}
+			}
+		},	
+		{
+			type:'divergent light',
+			id: 'd#1',
+			position: [-0.4,0.05],
+			target: [0,0], // aim at point
+			spread: 60,
+			raycount: 10,
+			ui: {},
+			style: {
+				arrows: [0.2, '40%']
+			}
+		},
+		{
+			type:'group',
+			id: 'g#1',
+			children: ['lens#1', 'd#1', 'img#1']
+		},
+		{
+			type:'divergent light',
+			position: [-0.3,-0.3],
+			target: 'lens#1', // aim at point
+			spread: 'fill',
+			raycount: 5,
+			ui: {},
+			style: {stroke:[0,255,0]}
+		},
+		{
+			type: 'thinlens',
+			id: 'lens#1',
+			position: [0,0],
+			axis: [1,0],
+			aperture: 0.3,
+			power: 2,
+			virtual: ['light#2'],
+			ui: {ylock:true},
+			style: {
+			
+			}
+		},
+		{
+			type: 'dimension',
+			start: 'lens#1',
+			end: 'd#1',
+			ycoord: -0.2,
+			style: {
+				stroke: [255,255,0],
+				fill: [255, 255, 255],
+				textSize: 18,
+				label: 0.1
+			}
+		},
+		{
+			type: 'thinlens',
+			id: 'lens#2',
+			position: [0.75,0.5],
+			axis: [1,0],
+			aperture: 0.4,
+			power: 5,
+			virtual: [],
+			ui: {selectable:true},
+			style: {}
+		},
+		{
+			type: 'barrier',
+			id:'barrier#1',
+			position: [2,-2,1.5,2],
+			watch: ['light#1']
+		}
+	]
+}
+
+makeP5App(state)(window)
+
+//new p5(makeP5App(state), document.getElementById('1'))
+
+
+</script>
