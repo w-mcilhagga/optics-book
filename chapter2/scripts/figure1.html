@@ -1,0 +1,98 @@
+<script src='../../scripts/p5/p5.js'></script>
+<script src='../../scripts/p5/p5.dom.js'></script>
+<script src='../../scripts/p5/p5.util.js'></script>
+<script src='../../scripts/p5/p5.yup.js'></script>
+<script src='../../scripts/vec2d.js'></script>
+<script src='../../scripts/p5/p5.svg.js'></script>
+<script src='../../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<body>
+<h1>Figure 1 or 3</h1>
+</body>
+<script>
+new p5()
+
+state = {
+    dragtarget: false,
+    oldpt: [
+        -1.03,
+        0.13
+    ],
+    renderer: 'p2d',
+    w: 520,
+    h: 280,
+    origin: [
+        350,
+        140
+    ],
+    ppm: 500,
+    background: [0, 61, 92],
+	renderer: 'svg',
+	
+    items: [
+		{
+			type: 'thinlens',
+			id: 'lens#1',
+			position: [0,0],
+			aperture: 0.25,
+			axis: [1,0],
+			power: -4,
+			ui: {},
+			style: {
+				strokeWeight: 3
+			},
+			//virtual: ['light#1'],
+			z_order: 2
+		},
+		{
+			type: 'divergent light',
+			id: 'light#1',
+			position: [-0.5, 0],
+			target: 'lens#1',
+			spread: 'fill*0.8',
+			raycount: 6,
+			style: {
+				strokeWeight: 2,
+				stroke: [200, 200, 100],
+				arrows: ['', {pt:[0.2,0], dir:[0,1]}]
+			}
+		},
+		{
+			type: 'dimension',
+			start: 'lens#1',
+			end: 'light#1',
+			ycoord: 0.16,
+			style: {
+				stroke: [255,255,255],
+				fill: [255, 255, 255],
+				textSize: 16,
+				dp: 3,
+				label: '50%',
+				textAlign: ['center', 'bottom'],
+				textOffset: [0,6],
+				absolute: true
+			}
+		},
+		{
+			type: 'dimension',
+			start: 'lens#1',
+			end: [-0.167, 0],
+			ycoord: -0.16,
+			style: {
+				stroke: [255,255,255],
+				fill: [255, 255, 255],
+				textSize: 16,
+				label: '50%',
+				textAlign: ['center', 'top'],
+				textOffset: [0,-6],
+				absolute: true
+			}
+		}
+	]
+}
+
+makeP5App(state)(window)
+//new p5(makeP5App(state, ()=>false, {}), document.getElementById('Figure1 image'))
+
+
+</script>

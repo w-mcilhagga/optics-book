@@ -1,0 +1,154 @@
+<script src='../../scripts/p5/p5.js'></script>
+<script src='../../scripts/p5/p5.dom.js'></script>
+<script src='../../scripts/p5/p5.util.js'></script>
+<script src='../../scripts/p5/p5.yup.js'></script>
+<script src='../../scripts/vec2d.js'></script>
+<script src='../../scripts/p5/p5.svg.js'></script>
+<script src='../../scripts/raytracing/optical_simulation.js'></script>
+<script src='../../scripts/raytracing/optical_simulation_draw_p5.js'></script>
+<body>
+<h1>Figure 3</h1>
+<div id = 'Figure1 image' class='canvas-div' style='position:relative;width:520px'></div>
+</body>
+<script>
+
+let co, cn, ta
+
+let state = {
+    dragtarget: false,
+    oldpt: [
+        -1.03,
+        0.13
+    ],
+    renderer: 'p2d',
+    w: 520,
+    h: 300,
+    origin: [
+        350,
+        140
+    ],
+    ppm: 500,
+    background: [0, 61, 92],
+	
+    items: [
+		{
+			type: 'thinlens',
+			id: 'lens#1',
+			position: [0,0],
+			aperture: 0.25,
+			axis: [1,0],
+			power: -4,
+			ui: {xlock:true, ylock:true},
+			style: {
+				strokeWeight: 3
+			},
+			//virtual: ['light#1'],
+			z_order: 2
+		},
+		{
+			type: 'p5',
+			id: 'text',
+			draw(p5, self, viewbox, ppm) {
+			}
+		},
+		{
+			type: 'divergent light',
+			id: 'light#1',
+			position: [-0.5, 0],
+			target: 'lens#1',
+			spread: 'fill*0.8',
+			ui: {xlock:true, ylock:true},
+			raycount: 6,
+			style: {
+				strokeWeight: 2,
+				stroke: [200, 200, 100],
+				arrows: ['', {pt:[0.2,0], dir:[0,1]}]
+			}
+		},
+		{
+			type: 'divergent light',
+			id: 'light#2',
+			position: [-1/6, 0],
+			target: 'lens#1',
+			spread: 'fill*0.8',
+			ui: {xlock:true, ylock:true},
+			raycount: 6,
+			style: {
+				strokeWeight: 2,
+				stroke: [200, 200, 100],
+				arrows: [{pt:[0.2,0], dir:[0,1]}]
+			},
+			plane: 1
+		},
+		{
+			type: 'p5',
+			id: 'dimensions',
+			toparrow: true,
+			draw(p5, self, viewbox, ppm) {
+				p5.stroke(255)
+				p5.strokeWeight(1)
+				let lensh = 0.3/2
+				if (self.toparrow) {
+					p5.line(0, ppm*lensh, -ppm*0.5, ppm*0.3/2)
+					p5.arrow(-ppm*0.5, ppm*lensh, -1, 0, 6, 3)
+				}
+				// virtual
+				let vimg = 1/(1/(-0.5)-4)
+				p5.line(0, -ppm*lensh, ppm*vimg, -ppm*lensh)
+				p5.arrow(ppm*vimg, -ppm*lensh, -1, 0, 6, 3)
+				// labels
+				p5.noStroke()
+				p5.fill(255)
+				p5.textSize(16)
+				p5.textAlign(p5.CENTER)
+				self.toparrow && p5.yup_text('0.5 m', -ppm*0.25, ppm*lensh+10)
+				p5.textAlign(p5.CENTER, p5.TOP)
+				p5.yup_text('0.167 m', ppm*vimg/2, -ppm*lensh-10)
+				
+			}
+		}
+	]
+}
+
+let fig3_actions = {
+	toggle(state, n) {
+		// n=1 is the negative lens, n=2 is the object
+		findObject(state,'light#'+n).raycount=6
+		findObject(state,'light#'+(3-n)).raycount=0	
+		if (n==1) {
+			findObject(state,'lens#1').style.stroke=[255,255,255]
+			findObject(state,'dimensions').toparrow = true
+			co && (co.elt.textContent = 'Show Object')
+		} else {
+			findObject(state,'lens#1').style.stroke=[255,255,255,100]
+			findObject(state,'dimensions').toparrow = false
+			co && (co.elt.textContent = 'Show Negative lens')
+		}
+	}
+}
+
+let fig3_n = 1
+
+function fig3_controls(p5, state, w, h, ppm) {
+	// makes the controls for figure 2
+	co = p5.createButton('Show Object')
+	
+	
+	function resize(p5, state, w, h, ppm) {
+		co.position(90, h-30)
+	}
+	
+	co.elt.onclick = function() {
+		fig3_n = 3-fig3_n
+		fig3_actions.toggle(fig3_n)
+	}
+
+	resize(p5, state, w, h, ppm)
+	return resize
+}
+
+
+new p5(makeP5App(state, fig3_controls, fig3_actions), document.getElementById('Figure1 image'))
+fig3_actions.toggle(1)
+
+</script>
