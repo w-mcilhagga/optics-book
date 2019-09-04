@@ -1,0 +1,55 @@
+<script src='../../scripts/p5/p5.js'></script>
+<script src='../../scripts/p5/p5.svg.js'></script>
+<script src='../../scripts/p5/p5.dom.js'></script>
+<script src='../../scripts/p5/p5.util.js'></script>
+<script src='../../scripts/p5/p5.yup.js'></script>
+<script src='../../scripts/vec2d.js'></script>
+<script src='../../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+
+<body>
+  <div id='figure5img' style="width:100%">
+  </div>
+</body>
+
+<!--<script src='figure5.js'></script>-->
+<script>
+
+let actions = {
+	toggle(s) {
+		s.decorate = s.decorate=='ui'?false:'ui'
+	}
+};
+
+(function() {
+	
+	let state = {
+		w: 500,
+		h: 500,
+		ppm: 500,
+		maxWidth: 500,
+		origin: [250, 250],
+		background: [0,61,93],
+		items: [
+		{
+			type: 'image',
+			image: 'banana.png',
+			align: ['right', 'bottom'],
+			position: [0,0],
+			ui: {xlock: true},
+		},
+		{
+			type: 'p5',
+			draw(p5, vbox, ppm) {
+				p5.fill(255,0,0)
+				p5.circle(0,0,10,10)
+			}
+		}
+		]
+	}
+
+	new p5(makeP5App(state,actions), 'host')
+
+})()
+</script>
+
