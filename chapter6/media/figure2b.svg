@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="520"
+   height="260"
+   viewBox="0 0 520 260"
+   id="svg126"
+   sodipodi:docname="figure2b.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata130">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview128"
+     showgrid="false"
+     inkscape:zoom="1.6"
+     inkscape:cx="260"
+     inkscape:cy="130"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg126" />
+  <defs
+     id="defs2" />
+  <g
+     id="g6">
+    <rect
+       style="fill:#003d5d;fill-opacity:1;stroke:none"
+       id="rect4"
+       height="260"
+       width="520"
+       y="0"
+       x="0" />
+  </g>
+  <g
+     id="g14"
+     transform="matrix(1,0,0,-1,260,130)">
+    <g
+       transform="matrix(1,0,0,-1,-150,30)"
+       id="g12">
+      <g
+         id="g10">
+        <text
+           font-size="12px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="normal"
+           x="0"
+           y="0"
+           dominant-baseline="text-before-edge"
+           id="text8"
+           style="font-style:normal;font-weight:normal;font-size:12px;font-family:sans-serif;dominant-baseline:text-before-edge;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none">focal point</text>
+      </g>
+    </g>
+  </g>
+  <g
+     id="g28"
+     transform="matrix(1,0,0,-1,260,130)">
+    <path
+       d="M -600,0 H 600"
+       stroke-miterlimit="10"
+       id="path16"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:5, 5;stroke-opacity:1;paint-order:fill stroke markers" />
+    <path
+       d="m 594,3 6,-3"
+       stroke-miterlimit="10"
+       id="path18"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:5, 5;stroke-opacity:1;paint-order:fill stroke markers" />
+    <path
+       d="m 600,0 -6,-3"
+       stroke-miterlimit="10"
+       id="path20"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:5, 5;stroke-opacity:1;paint-order:fill stroke markers" />
+    <g
+       transform="matrix(1,0,0,-1,0,-10)"
+       id="g26">
+      <g
+         id="g24">
+        <text
+           font-size="12px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="normal"
+           x="0"
+           y="0"
+           dominant-baseline="text-before-edge"
+           id="text22"
+           style="font-style:normal;font-weight:normal;font-size:12px;font-family:sans-serif;dominant-baseline:text-before-edge;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none" />
+      </g>
+    </g>
+  </g>
+  <g
+     id="g88"
+     transform="matrix(1,0,0,-1,260,130)">
+    <path
+       d="M -261.875,-33.75 0,44.44605 h 259"
+       stroke-miterlimit="10"
+       id="path78"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffff96;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers"
+       sodipodi:nodetypes="ccc" />
+    <path
+       d="M -81.605065,23.394824 -75,22.223025"
+       stroke-miterlimit="10"
+       id="path80"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffff96;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
+    <path
+       d="m -75,22.223025 -4.900479,-4.580973"
+       stroke-miterlimit="10"
+       id="path82"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffff96;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
+    <path
+       d="m 204,47.44605 6,-3"
+       stroke-miterlimit="10"
+       id="path84"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffff96;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
+    <path
+       d="m 210,44.44605 -6,-3"
+       stroke-miterlimit="10"
+       id="path86"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffff96;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
+  </g>
+  <g
+     id="g112"
+     transform="matrix(1,0,0,-1,260,130)">
+    <path
+       d="m 0,82.5 v -165"
+       stroke-miterlimit="10"
+       id="path102"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
+    <path
+       d="m -3,76.5 3,6"
+       stroke-miterlimit="10"
+       id="path104"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
+    <path
+       d="m 0,82.5 3,-6"
+       stroke-miterlimit="10"
+       id="path106"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
+    <path
+       d="m 3,-76.5 -3,-6"
+       stroke-miterlimit="10"
+       id="path108"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
+    <path
+       d="m 0,-82.5 -3,6"
+       stroke-miterlimit="10"
+       id="path110"
+       inkscape:connector-curvature="0"
+       style="fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
+  </g>
+  <g
+     id="g116"
+     transform="matrix(1,0,0,-1,260,130)">
+    <path
+       d="m -155,0 c 0,-2.7614237 2.23858,-5 5,-5 2.76142,0 5,2.2385763 5,5 0,2.7614237 -2.23858,5 -5,5 -2.76142,0 -5,-2.2385763 -5,-5 z"
+       id="path114"
+       inkscape:connector-curvature="0"
+       style="fill:#ffff00;fill-opacity:1;stroke:none;paint-order:stroke fill markers" />
+  </g>
+  <g
+     id="g118"
+     transform="matrix(1,0,0,-1,260,130)" />
+  <g
+     id="g120"
+     transform="matrix(1,0,0,-1,260,130)" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:18.66666603px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+     x="5.4322929"
+     y="21.949867"
+     id="text1056"><tspan
+       sodipodi:role="line"
+       id="tspan1054"
+       x="5.4322929"
+       y="21.949867"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:#ffffff;fill-opacity:1">Rule 2</tspan></text>
+</svg>
