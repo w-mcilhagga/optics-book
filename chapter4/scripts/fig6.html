@@ -1,0 +1,151 @@
+<script src='../../scripts/p5/p5.js'>
+</script>
+  <script src='../../scripts/p5/p5.svg.js'>
+</script>
+  <script src='../../scripts/p5/p5.dom.js'>
+</script>
+  <script src='../../scripts/p5/p5.util.js'>
+</script>
+  <script src='../../scripts/p5/p5.yup.js'>
+</script>
+  <script src='../../scripts/vec2d.js'>
+</script>
+
+<body>
+<div id='stage' style='width:510px'></div>
+</body>
+
+<script >
+
+(function() {
+function fig6(p5) {
+
+	let cv, 
+		w = 520, h=300,
+		cx, cy,
+		Lcurv = 0, Rcurv = 0, // deviation from vertical at centre
+		Lslide, Rslide
+		
+	p5.setup = function() {
+		cv = p5.createCanvas(w,h)
+		p5.windowResize()
+		p5.background(0,61,92)
+		Lslide = p5.createSlider(-2,2,0,1)
+		Lslide.position(10,h-20)
+		Lslide.elt.oninput = ()=>p5.redraw()
+		Rslide = p5.createSlider(-2,2,0,1)
+		Rslide.position(w-130,h-20)
+		Rslide.elt.oninput = ()=>p5.redraw()
+		p5.noLoop()
+	}
+	
+	p5.windowResize = function() {
+		let domWidth = parseInt(window.getComputedStyle(cv.parent()).width)
+		h = h*domWidth/w
+		w = domWidth
+		cx = [w/2-32, w/2+32],
+		cy = h/2
+		p5.resizeCanvas(w, h)
+	}
+	
+	function curveFromPts(h, d) {
+		// h is half-chord, d is the sag
+		let r = (h**2+d**2)/(2*d) // sign of r refers to direction from centre to d
+		let a = Math.atan2(h, Math.abs(r-d))
+		if (r<0) {
+			// centre to the right, angle from PI+/-a
+			a = [Math.PI-a, Math.PI+a]
+		} else {
+			a = [-a, a]
+		}
+		
+		return {r, a}
+	}
+	
+	p5.draw = function() {
+		Lcurv = Lslide.value()
+		Rcurv = Rslide.value()
+		let Lpow = -Lcurv,
+			Rpow = Rcurv
+		// name the lens
+		let name = ''
+		if (Lpow+Rpow==0) {
+			name = 'plano'
+			if (Lpow!==0 && Rpow!=0) {
+				name = 'positive meniscus (+)'
+			}
+		}
+		if (Lpow+Rpow>0) {
+			if (Lpow*Rpow>0) {
+				name = 'biconvex'
+			} else {
+				if (Lpow*Rpow==0) {
+					name = 'plano-convex (+)'
+				} else {
+					name = 'positive meniscus (+)'
+				}
+			}
+		}
+		if (Lpow+Rpow<0) {
+			if (Lpow*Rpow>0) {
+				name = 'biconcave (-)'
+			} else {
+				if (Lpow*Rpow==0) {
+					name = 'plano-concave (-)'
+				} else {
+					name = 'negative meniscus (-)'
+				}
+			}
+		}
+		
+		Lcurv *= 15
+		Rcurv *= 15
+		// adjust appearance of the negative meniscus lens
+		if (Lpow+Rpow<0 && Lpow*Rpow<0) {
+			if (Lpow<Rpow) {
+				Lcurv += 15
+			}
+			if (Lpow>Rpow) {
+				Rcurv -= 15
+			}
+		}
+
+		// put in the centre
+		p5.background(0,61,92)
+		p5.noStroke()
+		p5.fill(200)
+		p5.rect(cx[0],0.1*cy,cx[1]-cx[0],h*0.9)
+		
+		p5.fill(255)
+		p5.textSize(18)
+		p5.text(name, 10, 20)
+		
+		// work out the radius of the front curve
+		let C = curveFromPts(cy*0.9,Lcurv),
+			w = Math.abs(2*C.r)
+		if (C.r<0) {
+			// concave to left
+			p5.fill(200)
+		} else {
+			p5.fill(0,61,92)
+		}
+		p5.arc(cx[0]+Lcurv-C.r, cy, w, w, C.a[0], C.a[1], p5.CHORD)
+		
+		// work out the radius of the back curve
+		C = curveFromPts(cy*0.9,Rcurv)
+		w = Math.abs(2*C.r)
+		if (C.r<0) {
+			// concave to left
+			p5.fill(0,61,92)
+		} else {
+			p5.fill(200)
+		}
+		p5.arc(cx[1]+Rcurv-C.r, cy, w, w, C.a[0], C.a[1], p5.CHORD)
+
+	}
+}
+
+new p5(fig6, 'stage')
+
+})()
+</script>
