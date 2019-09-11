@@ -309,7 +309,7 @@ plugins.arc.draw = function(p5, box, ppm) {
 		center = v2.scale(ppm, this.position),
 	    midangle = v2.angle(this.axis)
 	p5.style(style)
-	p5.arc(...center, ppm*this.r*2, ppm*this.r*2, 
+	p5.arc(...center, ppm*this.r[0]*2, ppm*this.r[1]*2, 
 		midangle-p5.radians(this.width/2), midangle+p5.radians(this.width/2), style.ellipseMode)
 }
 

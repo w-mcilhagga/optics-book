@@ -243,7 +243,7 @@ plugins.computeItem = {
 		this.update()
 	},
 	
-	tol: 1e-5,
+	tol: 1e-6,
 	
 	update() {
 		let rays = this.rays,
@@ -272,8 +272,14 @@ plugins.computeItem = {
 					let n = inter.rays.size // old size
 					inter.rays.add(seed.rays[0])
 					inter.rays.add(seed.rays[1])
-					inter.pt = v2.scale(1/inter.rays.size, v2.add(
+					n = inter.len
+					inter.len+=1
+					/*inter.pt = v2.scale(1/inter.rays.size, v2.add(
 								v2.scale(inter.rays.size-n, seed.pt), 
+								v2.scale(n, inter.pt)
+							))*/
+					inter.pt = v2.scale(1/inter.len, v2.add(
+								v2.scale(inter.len-n, seed.pt), 
 								v2.scale(n, inter.pt)
 							))
 					merged = true
@@ -282,12 +288,14 @@ plugins.computeItem = {
 			}
 			if (!merged) {
 				seed.rays = new Set(seed.rays)
+				seed.len = 1
 				inters.push(seed) // new intersection
 			}
 		}
 		
 		// sort them & copy the biggest to position
-		inters.sort((a,b)=>b.rays.size-a.rays.size)
+		//inters.sort((a,b)=>b.rays.size-a.rays.size)
+		inters.sort((a,b)=>b.rays.len-a.rays.len)
 		inters.length>0 && (this.position = inters[0].pt)
 	}
 	
@@ -463,42 +471,72 @@ plugins['snell surface'] = plugins.setproto(plugins.barrier, {
 plugins.arc = plugins.setproto(plugins.base, {
 	
 	// position: [x,y]
-	// r : r
+	// r : r, or [half-horizontal-axis, half-vertical-axis]
 	// axis: [x,y] points from centre of circle to center of arc
 	// width: w the angular width of the arc in degrees
 	
-    boundingBox() { // conservative bounding box
-		return [this.position[0]-this.r, this.position[0]+this.r,
-			this.position[1]-this.r, this.position[1]+this.r]
+	boundingBox() { // conservative bounding box
+		return [this.position[0]-this.r[0], this.position[0]+this.r[0],
+			this.position[1]-this.r[1], this.position[1]+this.r[1]]
     },
 	
 	ends() {
 		// returns the two chord points
-		let rad = v2.scale(this.r, v2.normalize(this.axis)),
-			w = this.width/180*Math.PI
-		return [v2.add(v2.rotate(rad, w/2),this.position),
-				v2.add(v2.rotate(rad, -w/2),this.position) ]
+		let axis_angle = v2.angle(this.axis),
+			w = this.width/180*Math.PI,
+			lo = axis_angle-w/2,
+			len_lo = 1/Math.sqrt((Math.cos(lo)/this.r[0])**2+(Math.sin(lo)/this.r[0])**2),
+			hi = axis_angle+w/2,
+			len_hi = 1/Math.sqrt((Math.cos(hi)/this.r[0])**2+(Math.sin(hi)/this.r[0])**2)
+			
+		return [v2.add(v2.polar(len_hi, hi),this.position),
+				v2.add(v2.polar(len_lo, lo),this.position) ]
 	},
 	
-	intersect(ray) {
+	_line_ellipse(h, v, a, b, c) { // does line ax+by=c & (x/h)^2+(y/v)^2=1 intersection
+	
+		function quadsolve(a,b,c) { // solve a quadratic
+			let det = b**2-4*a*c
+			if (det<0) return []
+			if (a==0) {
+				return [-c/b]
+			}
+			det = Math.sqrt(det)
+			return [(-b-det)/2/a, (-b+det)/2/a ]
+		}
+		
+		if (Math.abs(b)>Math.abs(a)) {
+			// try y = (-a/b)x+(c/b) = mx+z
+			// then subst into ellipse to get a quadratic in x
+			let m = -a/b, 
+				z = c/b,
+				x = quadsolve(1/h**2+(m/v)**2, 2*m*z/v**2, (z/v)**2-1)
+				return x.map(xx => [xx, m*xx+z])
+		} else {
+			// try x = (-b/a)y+(c/b) = my+z
+			let m = -b/a, 
+				z = c/a,
+				y = quadsolve(1/v**2+(m/h)**2, 2*m*z/h**2, (z/h)**2-1)
+				return y.map(yy => [m*yy+z, yy])
+		}
+
+	},
+	
+	intersect(ray) { 
         if ((this.plane || 0) !== (ray['from'].plane || 0)) {
             return false
         }
-		let pt = ray.path[ray.path.length - 1],
-			d = ray.direction, // line is pt+alpha*d
-			av = v2.sub(pt, this.position),
-			a = v2.norm2(d),
-			b = 2*v2.dot(d, av),
-			c = v2.norm2(av)-this.r**2,
-			det = b**2-4*a*c
 		
-		if (det<0) { return false }
-		
-		// the coefficients of the line pt+alpha*d that intersect the full circle
-		
-		let alphas = [(-b + Math.sqrt(det))/(2*a), (-b - Math.sqrt(det))/(2*a)].filter(x=>x>=0)
+		let d = ray.direction, // line is p+alpha*d
+			p = v2.sub(ray.path[ray.path.length - 1], this.position),
+			a = d[1],
+			b = -d[0],
+			c = d[1]*p[0] - d[0]*p[1],
+			x = this._line_ellipse(this.r[0], this.r[1], a, b, c)
+		// order the intersection points in distance from p
+		let alphas = x.map(x=>v2.dot(v2.sub(x,p), d)).filter(x=>x>=0)
 		alphas.sort()
-
+		
 		for (let alpha of alphas) {
 			let pt = v2.add(ray.path[ray.path.length - 1], v2.scale(alpha, d)),
 			    s = v2.cos(v2.sub(pt, this.position), this.axis)
@@ -519,8 +557,9 @@ plugins['snell arc'] = plugins.setproto(plugins.arc, {
 	// n_in, n_out are indices inside & outside the arc
 	
 	optics(ray) {
-		let normal = v2.normalize(v2.sub(this.position, ray.path[ray.path.length-1])),
-			// normal always points towards the centre
+		let pt = v2.sub(ray.path[ray.path.length-1], this.position),
+			normal = v2.normalize([-pt[0]/this.r[0]**2, -pt[1]/this.r[1]**2]),
+			// normal always points towards the inside
 			{n_in, n_out} = this
 		
 		if (v2.dot(normal, ray.direction)<0) {
@@ -574,7 +613,7 @@ function makeArc(c1, r1, c2, r2, op) {
 				return {
 					type: 'arc',
 					position: [...c1], 
-					r: r1, 
+					r: [r1,r1],
 					axis: [1,0],
 					width: 360
 				}
@@ -588,7 +627,7 @@ function makeArc(c1, r1, c2, r2, op) {
 				return {
 					type: 'arc',
 					position: [...c1], 
-					r: r1, 
+					r: [r1,r1], 
 					axis: [1,0],
 					width: 360
 				}
@@ -599,7 +638,7 @@ function makeArc(c1, r1, c2, r2, op) {
 			let arc = {
 				type: 'arc',
 				position: [...c1], 
-				r: r1, 
+				r: [r1,r1], 
 				axis: v2.normalize(v2.sub(c2, c1))
 			}
 			// work out the angle between one intersection and the axis
@@ -621,6 +660,7 @@ function makeArc(c1, r1, c2, r2, op) {
 	}
 
 }
+
 
 plugins['divergent light'] = plugins.setproto(plugins.base, {
 	intersect: false,

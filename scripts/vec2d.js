@@ -103,7 +103,10 @@ let v2 = {
 		// the unconstrained intersection between (start1 + c1*dir1) & (start2 + c2*dir2)
 		// Returns c1, c2, and (start1 + c1*dir1)
 		let c = m2.solve([[-dir1[0],dir2[0]],[-dir1[1],dir2[1]]], v2.sub(start1, start2))
-		return {c, pt:v2.add(start1,v2.scale(c[0],dir1))}
+		return {c, pt: v2.scale(1/2, 
+			v2.add(v2.add(start1,v2.scale(c[0],dir1)), 
+			       v2.add(start2,v2.scale(c[1],dir2)))
+			)}
 	},
 	ray_segment(start, dir, pt1, pt2) {
 		// the intersection between the ray (start + alpha*dir) and segment (pt1, pt2), if any
@@ -113,6 +116,7 @@ let v2 = {
 	},
 	ray_circle(start, dir, centre, r) {
 		// intersections between ray & circle, if any
+		// not sure if i need this
 		let del = v2.sub(start, centre),
 			a = v2.norm2(dir),
 			b = 2*v2.dot(dir, del),

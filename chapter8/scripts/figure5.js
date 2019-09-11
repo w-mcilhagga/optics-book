@@ -22,12 +22,10 @@ let c=[-0.2,0],
 			shell: [],
 			draw(p5, vbox, ppm) {
 				this.shell.push(this.position)
-				//this.shell.sort((a,b) => a.y-b.y)
-				// should smooth it
 				p5.noFill()
 				p5.stroke(0)
 				p5.strokeWeight(3)
-				p5.beginShape()
+				p5.beginShape(p5.POINTS)
 				this.shell.forEach(x=>p5.vertex(...v2.scale(ppm,x)))
 				p5.endShape()
 				p5.fill(255)
@@ -42,9 +40,9 @@ let c=[-0.2,0],
 			type: 'parallel light',
 			position: [-10/1000,0],
 			id: 'L1',
-			target: [0,0],
-			raycount: 20,
-			spread: 0.004,
+			target: [0+7.8/1000,0],
+			raycount: 30+1,
+			spread: 0.0041*2,
 			ui: {xlock: true},
 			style: {
 				arrows: ['']

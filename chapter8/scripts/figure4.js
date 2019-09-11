@@ -40,7 +40,7 @@ let state = {
 				this.shell.sort((a,b) => a[1]-b[1])
 				p5.noFill()
 				p5.stroke([255,255,0])
-				p5.beginShape()
+				p5.beginShape(p5.POINTS)
 				this.shell.forEach(x=>p5.vertex(...v2.scale(ppm,x)))
 				p5.endShape()
 				p5.fill(255)

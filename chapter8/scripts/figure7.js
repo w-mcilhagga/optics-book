@@ -4,7 +4,7 @@ let EYE = Gullstrand([0,0], 0),
     pupil = makePupil(EYE, 3),
 	ret = findObject({items:EYE}, 'retina')
 	
-ret = ret.position[0]+ret.r
+ret = ret.position[0]+ret.r[0] // back of retina
 
 let c=[-0.2,0],
     state = {
@@ -31,15 +31,7 @@ let c=[-0.2,0],
 				Object.assign(
 					findObject(state,'back lens'), 
 					findObject({items:EYE},'back lens')
-				)/*
-				Object.assign(
-					findObject(state,'pupil top'), 
-					findObject({items:EYE},'pupil top')
 				)
-				Object.assign(
-					findObject(state,'pupil bottom'), 
-					findObject({items:EYE},'pupil bottom')
-				)*/
 				findObject(state,'L1').position[0] = -1/this.vergence
 			},
 			style: {z_order:100}
@@ -99,7 +91,7 @@ let c=[-0.2,0],
 			position: [140+150+10, 10],
 			text: '0%',
 			init(state) {
-				this.state=state
+				this.state = state
 				let v = findObject(state, 'data').accom
 				this.text = (v/1.1*100).toFixed(0)+'%'
 			},

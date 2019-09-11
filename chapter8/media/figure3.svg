@@ -14,7 +14,7 @@
    viewBox="0 0 520 350"
    id="svg160"
    sodipodi:docname="figure3.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+   inkscape:version="0.48.5 r10040">
   <metadata
      id="metadata164">
     <rdf:RDF>
@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -37,7 +37,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1017"
+     inkscape:window-height="1018"
      id="namedview162"
      showgrid="false"
      inkscape:zoom="2.1"
@@ -46,7 +46,7 @@
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg160"
+     inkscape:current-layer="g118"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -324,55 +324,51 @@
          font-size="12px">4</text>
     </g>
   </g>
+  <path
+     style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none"
+     inkscape:connector-curvature="0"
+     id="path104"
+     stroke-miterlimit="10"
+     d="M 235,310 H 398" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none"
+     inkscape:connector-curvature="0"
+     id="path106"
+     stroke-miterlimit="10"
+     d="m 392,307 6,3" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none"
+     inkscape:connector-curvature="0"
+     id="path108"
+     stroke-miterlimit="10"
+     d="m 398,310 -6,3" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none"
+     inkscape:connector-curvature="0"
+     id="path110"
+     stroke-miterlimit="10"
+     d="m 241,313 -6,-3" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none"
+     inkscape:connector-curvature="0"
+     id="path112"
+     stroke-miterlimit="10"
+     d="m 235,310 6,-3" />
   <g
-     id="g120"
-     transform="matrix(1,0,0,-1,159,150)">
-    <path
-       d="M 76,-160 H 239"
-       stroke-miterlimit="10"
-       id="path104"
-       inkscape:connector-curvature="0"
-       style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
-    <path
-       d="m 233,-157 6,-3"
-       stroke-miterlimit="10"
-       id="path106"
-       inkscape:connector-curvature="0"
-       style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
-    <path
-       d="m 239,-160 -6,-3"
-       stroke-miterlimit="10"
-       id="path108"
-       inkscape:connector-curvature="0"
-       style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
-    <path
-       d="m 82,-163 -6,3"
-       stroke-miterlimit="10"
-       id="path110"
-       inkscape:connector-curvature="0"
-       style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
-    <path
-       d="m 76,-160 6,3"
-       stroke-miterlimit="10"
-       id="path112"
-       inkscape:connector-curvature="0"
-       style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1;paint-order:fill stroke markers" />
+     id="g118"
+     transform="translate(316.5,320)">
     <g
-       transform="matrix(1,0,0,-1,157.5,-170)"
-       id="g118">
-      <g
-         id="g116">
-        <text
-           font-size="12px"
-           font-style="normal"
-           font-weight="normal"
-           text-decoration="normal"
-           x="0"
-           y="0"
-           dominant-baseline="text-before-edge"
-           id="text114"
-           style="font-style:normal;font-weight:normal;font-size:12px;font-family:sans-serif;dominant-baseline:text-before-edge;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none">16.67</text>
-      </g>
+       id="g116">
+      <text
+         style="font-size:12px;font-style:normal;font-weight:normal;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:sans-serif"
+         id="text114"
+         dominant-baseline="text-before-edge"
+         y="0"
+         x="0"
+         text-decoration="normal"
+         font-weight="normal"
+         font-style="normal"
+         font-size="12px">16.60</text>
     </g>
   </g>
   <g
