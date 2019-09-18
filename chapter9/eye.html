@@ -1,0 +1,136 @@
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.svg.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../chapter8/scripts/eyes.js'></script>
+<body>
+<div id='host'></div>
+</body>
+
+<script >
+
+let mode='5D refractive',
+	divlight = false,
+	EYE
+
+switch (mode) {
+	case 'emmetrope':
+		EYE = Gullstrand([0,0], 0)
+		break
+	case '5D axial':
+		EYE = Gullstrand([0,0], 0, {r0:[,,,,[-12.2,11.2]]})
+		break
+	case '5D refractive':
+		let k = 0.89
+		EYE = Gullstrand([0,0], 0, {r0:[k*7.8, k*6.5]})
+		break
+}	
+console.log(EYE)
+let pupil = makePupil(EYE, 4)
+
+let c=[-0.2,0],
+    state = {
+	w: 520,
+	h: 300,
+	maxWidth: 520,
+	ppm: 10000,
+	origin: [220, 150],
+	background: [0, 61, 93],
+	renderer: 'svg',
+	items: [
+		{
+			type: 'data',
+			id: 'data',
+			accom: 0,
+			pupildiam: 2,
+			init(state) {
+				EYE = Gullstrand([0,0], this.accom)
+				pupil = makePupil(EYE, this.pupildiam)
+				// update state by copying components of eye and retina into items array
+				Object.assign(
+					findObject(state,'front lens'), 
+					findObject({items:EYE},'front lens')
+				)
+				Object.assign(
+					findObject(state,'back lens'), 
+					findObject({items:EYE},'back lens')
+				)
+				Object.assign(
+					findObject(state,'pupil top'), 
+					findObject({items:EYE},'pupil top')
+				)
+				Object.assign(
+					findObject(state,'pupil bottom'), 
+					findObject({items:EYE},'pupil bottom')
+				)
+			},
+			style: {z_order:100}
+		},
+		...EYE,
+		...pupil,
+		{
+			type: 'real image',
+			id: 'shell',
+			light: divlight?'DL':'PL',
+			lens: 'back lens',
+			shell: [],
+			draw(p5, vbox, ppm) {
+				console.log(this.position)
+				this.shell.push(this.position)
+				this.shell.sort((a,b) => a.y-b.y)
+				p5.noFill()
+				p5.stroke(0)
+				p5.beginShape()
+				this.shell.forEach(x=>p5.vertex(...v2.scale(ppm,x)))
+				p5.endShape()
+				p5.fill(255)
+				p5.circle(...v2.scale(ppm, this.position), 8, 8)
+			},
+			style: {
+				visible: true
+			}
+		},
+		{
+			type: 'parallel light',
+			position: [-0.05,0],
+			id: 'PL',
+			target: [0,0],
+			raycount: 10,
+			spread: 0.01,
+			off:divlight,
+			style: {
+				arrows: ['']
+			}
+		},
+		{
+			type: 'divergent light',
+			position: [-0.2,0],
+			id: 'DL',
+			target: 'front cornea',
+			spread: 'fill*0.7',
+			off:!divlight,
+			raycount: 10,
+			style: {
+				arrows: ['']
+			}
+		},/*
+		{
+			type: 'control',
+			controlType: 'slider',
+			params: [0,1,0,0],
+			position:[10,-10],
+			bind: {id: 'data', property:['accom']}
+		}*/
+	]
+}
+
+//new p5(makeP5App(state), 'host')
+makeP5App(state)(window)
+</script>
+<!--
+
+-->

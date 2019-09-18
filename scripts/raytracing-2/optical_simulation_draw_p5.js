@@ -429,6 +429,7 @@ plugins.control = {
 plugins.dimension = {
 	
 	init(state) {
+		this.state = state
 		if (typeof this.start=='string') {
 			this.startpt = [...findObject(state, this.start).center()]
 		} else if (this.start) {
@@ -453,6 +454,7 @@ plugins.dimension = {
 	},
 	
 	draw(p5, vbox, ppm) {
+		this.init(this.state)
 		if (this.xcoord) {
 			this.startpt[0] = this.endpt[0] = this.xcoord
 		}
@@ -487,7 +489,14 @@ plugins.dimension = {
 		} else {
 			style.labelat /= len
 		}
-		if (style.absolute) { len = Math.abs(len) }
+		if (!style.absolute) {
+			// work out sign of the length
+			if (Math.abs(vec[0])>Math.abs(vec[1])) {
+				len = Math.sign(vec[0])*len
+			} else {
+				len = Math.sign(vec[1])*len
+			}
+		}
 		
 		let pos = v2.add(this.startpt, v2.scale(style.labelat, vec))
 		
@@ -692,7 +701,7 @@ function makeP5App(state, actions) {
 				}
 			}
 			
-			for (let obj of items) if (obj.decorate) {
+			for (let obj of items) if (obj.decorate && (obj.style && obj.style.visible)!=false) {
 				p5.push()
 				obj.decorate(p5, ppm, state.decorate)
 				p5.pop()
@@ -708,7 +717,9 @@ function makeP5App(state, actions) {
 
             for (let obj of items) {
 				if (!obj.ui ||
-					(obj.ui.selectable!=false && (obj.ui.xlock != false || obj.ui.ylock != false)) ) {
+					(obj.ui.selectable!=false 
+					&& !(obj.ui.xlock == true && obj.ui.ylock == true)
+					&& (obj.style && obj.style.visible)!=false) ) {
 					let d = obj.distanceTo && obj.distanceTo([mx, my], p5, state)
 					if (typeof d == 'number' && !isNaN(d)) {
 						hits.push({d,obj})

@@ -22,6 +22,7 @@
 <script src='../scripts/vec2d.js'></script>
 <script src='../scripts/raytracing/optical_simulation.js'></script>
 <script src='../scripts/raytracing/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/slides.js'></script>
 
 </head>
 
@@ -157,29 +158,26 @@
   <p>A negative distance is an example of what is called the <strong>sign convention</strong>, summarized in <a href="#Figure6">Figure 6</a>. In optical calculations, some distances are deemed to be positive and some are negative. The sign convention can be set down in a few rules:</p>
 
   <figure id="Figure6">
-    <img id='figure_6_img' src="media/signconv.svg" />
+	<span class='slideshow-container'>
+	<span>
+    <img src="media/signconv.svg" />
 
     <figcaption>
-      <span class='figno'>Figure 6.</span> The sign convention. Light travels from the object through the lens to the image. This is <span id='light-direction'>left-to-right</span>. The direction going from lens to object is opposite the direction of light, so it is a negative distance. The direction going from lens to image is the same as the direction of light,  so it is a positive distance.
-	  <p><u id='figure_6' style='cursor:pointer'>Click here</u> to see the sign convention for light travelling in the opposite direction.</p>
+      <span class='figno'>Figure 6.</span> The sign convention. Light travels from the object through the lens to the image. This is <b>left-to-right</b>. The direction going from lens to object is opposite the direction of light (i.e. is rightwards), so it is a negative (-) distance. The direction going from lens to image is the same as the direction of light (i.e. is leftwards),  so it is a positive (+) distance.
+	  <p>Click to see the sign convention for light travelling from right-to-left.</p>
     </figcaption>
-  </figure>
-<script>
-document.getElementById('figure_6').onclick = function() {
-	let src = ['media/signconv.svg', 'media/signconv2.svg'],
-		e = document.getElementById('figure_6_img'),
-		current = e.src,
-		span = document.getElementById('light-direction')
-	if (current.indexOf(src[0])>-1) {
-		e.src = src[1] 
-		span.innerHTML = 'right-to-left'
-	} else {
-		e.src = src[0] 
-		span.innerHTML = 'left-to-right'
-	}
-}
-</script>
+	</span>	
+	<span>
+    <img src="media/signconv2.svg" />
 
+    <figcaption>
+      <span class='figno'>Figure 6.</span> The sign convention. Light travels from the object through the lens to the image. This is <b>right-to-left</b>. The direction going from lens to object is opposite the direction of light (i.e. is leftwards), so it is a negative (-) distance. The direction going from lens to image is the same as the direction of light (i.e. is rightwards),  so it is a positive (+) distance.
+	  <p>Click to see the sign convention for light travelling from left-to-right.</p>
+    </figcaption>
+	</span>
+	</span>
+  </figure>
+ 
   <ol>
     <li>
       <p>All distances are measured from the lens we are working with.</p>
@@ -514,4 +512,5 @@ document.getElementById('figure_6').onclick = function() {
   </section>
 
 </body>
+<script>slideshow()</script>
 </html>

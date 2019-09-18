@@ -17,25 +17,6 @@ let state = {
 			},
 			style: {z_order:100}
 		},
-		/*{
-			type: 'real image',
-			id: 'shell',
-			light: 'L1',
-			lens: 'lens1',
-			draw(p5, vbox, ppm) {
-				if (Math.abs(this.position[0]-ret)<0.0001) {
-					p5.fill(0,255,0)
-				} else {
-					p5.fill(255,0,0)
-				}
-				p5.strokeWeight(1)
-				p5.circle(...v2.scale(ppm, this.position), 8, 8)
-			},
-			style: {
-				visible: true,
-				z_order: -10
-			}
-		},*/
 		{
 			type: 'divergent light',
 			position: [-0.125,0],
@@ -90,7 +71,25 @@ let state = {
 			},
 			style: {color:'white'}
 		},
-		
+		{
+			type: 'real image',
+			id: 'shell',
+			light: 'L1',
+			lens: 'lens1',
+			draw(p5, vbox, ppm) {
+				if (Math.abs(this.position[0]-1/45)<0.0001) {
+					p5.fill(0,255,0)
+				} else {
+					p5.fill(255,0,0)
+				}
+				p5.strokeWeight(1)
+				p5.circle(...v2.scale(ppm, this.position), 8, 8)
+			},
+			style: {
+				visible: true,
+				z_order: -10
+			}
+		},
 	]
 }
 

@@ -19,6 +19,7 @@
 <script src='../scripts/raytracing-2/optical_simulation.js'></script>
 <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
 <script src='../scripts/popouts.js'></script>
+<script src='../scripts/slides.js'></script>
 <style>
 .rule {
 	margin-left: 2em;
@@ -39,13 +40,23 @@
 
   <p>This chapter describes a graphical method for working out what lenses do, known as <em>ray tracing</em>. Ray tracing means we trace the path of individual rays of light, rather than bundles of diverging or converging rays. Ray tracing only looks at what happens to a few carefully selected rays that are quite easy to trace through a lens.</p>
   
-
   <figure id="Figure1">
-    <img id='figure1img' src="media/figure1a.svg" />
+  <span class='slideshow-container' id ='slides1'>
+  <span>
+    <img src="media/figure1a.svg" />
 
     <figcaption>
-      <span class="figno">Figure 1.</span> A bundle of parallel rays which enter a positive lens are all bent so they pass through the (image) focal point of the lens. However, each ray travels independently from the others, so we can <a onclick='toggle1("figure1b.svg")' style='cursor:pointer'>remove all the rays but one (click)</a>, which leads to the first ray tracing rule: a single ray of light which enters the lens parallel to the optic axis (the dashed line) is refracted so that it passes through the image focal point.</p>
+      <span class="figno">Figure 1.</span> A bundle of parallel rays which enter a positive lens are all bent so they pass through the (image) focal point of the lens. However, each ray travels independently from the others, so we can <a style='cursor:pointer'>remove all the rays but one (click)</a>.</p>
     </figcaption>
+</span>  
+<span>
+    <img src="media/figure1b.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 1.</span> The single ray that remains leads to the first ray tracing rule: a single ray of light which enters the lens parallel to the optic axis (the dashed line) is refracted so that it passes through the image focal point.</p>
+    </figcaption>
+</span>
+</span>
   </figure>
 
 <script>
@@ -59,30 +70,32 @@ function toggle1(s) {
 }
 </script>
 
-  <p>The first ray tracing rule is shown in <a href='#Figure1'>Figure 1</a>. A bundle of parallel rays hitting a positive lens all pass through the (image) focal point of the lens. However, each ray travels independently from the others, so if we <a onclick='toggle1("figure1b.svg")' style='cursor:pointer'>remove all but one ray (click)</a>, we have a much simpler situation, which can be summarized as the first ray tracing rule:
+  <p>The first ray tracing rule is shown in <a href='#Figure1'>Figure 1</a>. A bundle of parallel rays hitting a positive lens all pass through the (image) focal point of the lens. However, each ray travels independently from the others, so if we 
+  <a class='slideshow-remote' data-slideshow-id='slides1' style='cursor:pointer'>remove all but one ray (click)</a>, we have a much simpler situation, which can be summarized as the first ray tracing rule:
 
   <p class = 'rule'><strong>Rule 1</strong>: Any ray of light which is parallel to the optic axis is refracted so it passes through the image focal point of the lens.</p>
 
-  <p>Next look at <a href='#Figure2'>Figure 2</a>. Rays of light which leave the (object) focal point are refracted so they emerge from the lens in parallel with the optic axis (see Chapter 1). Again, each ray of light is refracted independently from all the others, so we can <a onclick='toggle2("figure2b.svg")' style='cursor:pointer'>remove all but one ray (click)</a>. Looking at this isolated ray leads to our second ray-tracing rule :</p>
+  <p>Next look at <a href='#Figure2'>Figure 2</a>. Rays of light which leave the (object) focal point are refracted so they emerge from the lens in parallel with the optic axis (see Chapter 1). Again, each ray of light is refracted independently from all the others, so we can <a class='slideshow-remote' data-slideshow-id='slides2' style='cursor:pointer'>remove all but one ray (click)</a>. Looking at this isolated ray leads to our second ray-tracing rule :</p>
 
   <figure id="Figure2">
+  <span class='slideshow-container' id='slides2'>
+  <span>
     <img id='figure2img' src="media/figure2a.svg" />
 
     <figcaption>
-      <span class="figno">Figure 2.</span> Ray tracing rule 2: Rays of light coming from the (object) focal point leave the lens in parallel. However, each ray travels independently from the others, so we can <a onclick='toggle2("figure2b.svg")' style='cursor:pointer'>remove all the rays but one (click)</a>, which leads to the second ray tracing rule.
+      <span class="figno">Figure 2.</span> Rays of light coming from the (object) focal point leave the lens in parallel. However, each ray travels independently from the others, so we can <a >remove all the rays but one (click)</a>.
     </figcaption>
+	</span>
+  <span>
+    <img id='figure2img' src="media/figure2b.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 2.</span> The single ray that remains leads to the second ray-tracing rule: Any ray of light which passes through the object focal point of a lens is refracted so it comes out parallel to the optic axis.
+    </figcaption>
+	</span>
+</span>
   </figure>
   
-<script>
-function toggle2(s) {
-	let d = document.getElementById("figure2img")
-	if (d.src.indexOf(s)==-1) {
-		d.src = 'media/'+s
-	} else {
-		d.src = 'media/figure2a.svg'
-	}
-}
-</script>
 
   <p class='rule'><strong>Rule 2</strong>: Any ray of light which passes through the object focal point of a lens is refracted so it comes out parallel to the optic axis.</p>
   
@@ -223,49 +236,51 @@ function toggle2(s) {
 
   <h2 id="ray-tracing-with-negative-lenses">Ray Tracing with Negative Lenses</h2>
 
-  <p>Negative lenses change the rules slightly. If we send parallel light into a negative lens, it is diverged (top half of <a href="#Figure6">Figure 6</a>). The rays leaving the lens are diverging <em>as if</em> they came from the image focal point. As before, all these rays are independent of one another, so we can <a onclick='toggle6("figure6b.svg")' style='cursor:pointer'>throw away all but one of them (click)</a> to get a ray-tracing rule:</p>
+  <p>Negative lenses change the rules slightly. If we send parallel light into a negative lens, it is diverged (top half of <a href="#Figure6">Figure 6</a>). The rays leaving the lens are diverging <em>as if</em> they came from the image focal point. As before, all these rays are independent of one another, so we can <a class='slideshow-remote' data-slideshow-id='slides6' style='cursor:pointer'>throw away all but one of them (click)</a> to get a ray-tracing rule:</p>
 
   <p class='rule'><strong>Rule 1 (Negative):</strong> Any ray of light parallel to the optic axis which enters a negative lens is refracted so that it appears to have come from the image focal point.</p>
 
   <figure id="Figure6">
+  <span class='slideshow-container' id='slides6'>
+  <span>
     <img id='figure6img' src="media/figure6a.svg" />
 
     <figcaption>
-      <span class="figno">Figure 6.</span> Rule 1 for negative lens. <a onclick='toggle6("figure6b.svg")' style='cursor:pointer'>Click here to switch between a parallel beam and a single ray obeying this rule.</a>
+      <span class="figno">Figure 6.</span> A bundle of parallel rays which enter a negative lens are all diverged so they appear to come from the (image) focal point of the lens. However, each ray travels independently from the others, so we can <a style='cursor:pointer'>remove all the rays but one (click)</a>
     </figcaption>
-  </figure>
-<script>
-function toggle6(s) {
-	let d = document.getElementById("figure6img")
-	if (d.src.indexOf(s)==-1) {
-		d.src = 'media/'+s
-	} else {
-		d.src = 'media/figure6a.svg'
-	}
-}
-</script>
-
-  <p>The next ray tracing rule is shpown in <a href="#Figure7">Figure 7</a>. Here, rays of light that are converging towards the object focal point are refracted to emerge in parallel. Again, the rays all act independently, so we can <a onclick='toggle7("figure7b.svg")' style='cursor:pointer'>throw away all but one of them (click)</a> to get another ray tracing rule:</p>
-
-  <p class='rule'><strong>Rule 2 (Negative):</strong> Any ray of light travelling towards the object focal point of a negative lens is refracted to become parallel to the optic axis. 7</p>
-
-  <figure id="Figure7">
-    <img id='figure7img' src="media/figure7a.svg" />
+</span>  
+<span>
+    <img id='figure6img' src="media/figure6b.svg" />
 
     <figcaption>
-      <span class="figno">Figure 7.</span> Rule 1 for negative lens. <a onclick='toggle7("figure7b.svg")' style='cursor:pointer'>Click here to switch between a converging beam and a single ray obeying this rule.</a>
+      <span class="figno">Figure 6.</span> The single ray of light here leads to the first rule for ray-tracing negative lenses: Any ray of light parallel to the optic axis which enters a negative lens is refracted so that it appears to have come from the image focal point.
     </figcaption>
+</span>
+	</span>
   </figure>
-<script>
-function toggle7(s) {
-	let d = document.getElementById("figure7img")
-	if (d.src.indexOf(s)==-1) {
-		d.src = 'media/'+s
-	} else {
-		d.src = 'media/figure7a.svg'
-	}
-}
-</script>
+
+  <p>The next ray tracing rule is shown in <a href="#Figure7">Figure 7</a>. Here, rays of light that are converging towards the object focal point are refracted to emerge in parallel. Again, the rays all act independently, so we can <a class='slideshow-remote' data-slideshow-id='slides7' style='cursor:pointer'>throw away all but one of them (click)</a> to get another ray tracing rule:</p>
+
+  <p class='rule'><strong>Rule 2 (Negative):</strong> Any ray of light travelling towards the object focal point of a negative lens is refracted to become parallel to the optic axis. </p>
+
+  <figure id="Figure7">
+  <span class='slideshow-container' id='slides7'>
+  <span>
+    <img src="media/figure7a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 7.</span> A bundle of rays converging to the (object) focal point is diverged to become parallel by a negative lens. However, each ray travels independently from the others, so we can <a style='cursor:pointer'>remove all the rays but one (click)</a>
+    </figcaption>
+	</span>
+  <span>
+    <img src="media/figure7b.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 7.</span> The single ray of light here leads to the second rule for ray-tracing negative lenses: Any ray of light travelling towards the object focal point of a negative lens is refracted to become parallel to the optic axis.
+    </figcaption>
+	</span>
+</span>
+  </figure>
 
   <p>Finally, Rule 3 doesn’t change:</p>
 
@@ -292,4 +307,9 @@ function toggle7(s) {
     </ol>
   </section>
 </body>
+
+<script>
+slideshow()
+</script>
+
 </html>

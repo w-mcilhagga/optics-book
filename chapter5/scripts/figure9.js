@@ -26,7 +26,7 @@
 				type: 'snell arc',
 				position: [0,0],
 				axis: [-1,0],
-				r: 0.5,
+				r: [0.5, 0.5],
 				width: 160,
 				n_in: 1,
 				n_out: 1.5,

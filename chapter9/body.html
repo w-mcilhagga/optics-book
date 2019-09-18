@@ -7,10 +7,25 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+  </script>
+
+  <script src='../scripts/p5/p5.js'></script>
+  <script src='../scripts/p5/p5.dom.js'></script>
+  <script src='../scripts/p5/p5.util.js'></script>
+  <script src='../scripts/p5/p5.yup.js'></script>
+  <script src='../scripts/vec2d.js'></script>
+  <script src='../scripts/raytracing-2/optical_simulation.js'></script>
+  <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+  <script src='../scripts/raytracing-2/makeArc.js'></script>
+  <script src='../scripts/popouts.js'></script>
+  <script src='../scripts/slides.js'></script>
+  <script src='../chapter8/scripts/eyes.js'></script>
+
+
   <title>Chapter 9: Myopia</title>
   <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
-</script>
+
 </head>
 
 <body>
@@ -24,63 +39,78 @@
   
   <p>Not all eyes are normal, however. In European countries, about 20-30% of people cannot see distant objects clearly, but they can see closer objects without accommodating. These people have <em>myopia</em>, meaning short-sightedness. Optically, myopia occurs because the sharp image of a distant object forms slightly in front of the retina. By the time the light hits the retina, it has spread out somewhat, and so the image formed on the retina is blurred.</p>
   
-  <p>For myopes, then, when parallel light from a distant object hits the cornea, the convergence of the light leaving the back of the lens is too high, so the light converges to a point too soon. One way this can happen is if some component of the eye's optics has too much power. For example, the cornea may be slightly more curved than normal. This kind of myopia is called <em>refractive</em> myopia.</p>
+  <p>A sharp image forms in front of the retina if the convergence of the light leaving the back surface of the lens is too high. One way this can happen is if some component of the eye's optics has too much power. For example, the cornea may be slightly more curved than normal (<a href='#Figure1'>Figure 1</a>), and this then converges the light too much. This kind of myopia is called <em>refractive</em> myopia.</p>
   
-  <p>The other way an eye can be myopic is if it is too long. Then the retina is further away from the lens than it should be. The vergence of the light leaving the eye is enough to converge the light to where the retina <em>should</em> be, but the retina is actually a little further away. Although the eye's optics in this case are normal, they are too powerful for a longer eye, and so a sharp image forms in front of the retina. This is called <em>axial</em> myopia, because the eye's optic axis is longer than it should be. This is the most common form of myopia. </p>
-
-  <figure id="Figure1">
-    <img src="media/image1.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 1.</span> Two kinds of myopia. The eye on the left is longer than normal, but has normal power. Parallel rays of light from a distant object converge where the normally placed retina should be (dashed curve). With nothing to stop them there, they continue and form a blurred spot on the further-away retina. The eye on the right has greater optical power than normal, but a normal length. The greater power means parallel rays of light from a distant object are converged too much and again form an image in front of the retina.
-    </figcaption>
+  <figure id='Figure1'>
+  <span class='slideshow-container' id='slides1'>
+  <span>
+  <img src='media/refractivemyope.svg'/>
+  <figcaption>
+  <span class="figno">Figure 1.</span> A refractive myope. Here the cornea is too curved so parallel light from a distant object is converged too much as it passes through the eye's optics. This means it converges before it reaches the retina. With nothing to stop it, the light then continues, spreading out to form a blurred spot on the retina.</p>
+	<p>Click to show an emmetropic eye, for comparison.</p>  
+  </figcaption>
+  </span>
+  <span>
+  <img src='media/emmetrope.svg'/>
+  <figcaption>
+  <span class="figno">Figure 1.</span> An emmetrope. Light is converged by the cornea and lens to meet at the retina.</p>
+	<p>Click to show a refractive myope, for comparison.</p>  
+  </figcaption>
+  </span>
   </figure>
-
-  <h2 id="blur">Myopic Blur</h2>
-
-  <p>The main optical consequence of myopia is blur. If a sharp image of a distant object always forms in front of the retina of the myopic eye, by the time the light reaches the eye it has spread out again, and the image is no longer sharp. The amount of blur produced by myopia can be calculated using the blur equation introduced in Chapter 5</p>
-
-  <div>
-    \[\theta_{blur}=57 a |V_{need}-V_{out}|\]
-  </div>
-
-  <p>In this formula, the difference \(|V_{need}-V_{out}|\) is the mismatch between the power of the eye&#39;s optics \(V_{out}\) and the power needed to form a sharp image \(V_{need}\). In myopia, \(V_{out}&gt;V_{need}\). The aperture \(a\) in the formula is the pupil diameter, in metres. So the amount of blur experienced by a myope is directly proportional to the myopic error, and to the pupil size.</p>
-
-  <p>This is exploited in the Snellen and Bailie-Lovie eye charts. By seeing what size of letter is blurred beyond recognition we can estimate the size of the blur circle \(\theta_{blur}\), and from that the amount of refractive error. Of course, to do this, we have to measure or control the pupil diameter \(a\), since that affects the amount of blur.</p>
-
-  <p>Anther consequence of the blur equation is that blur worsens when the pupil diameter \(a\) increases. Since the pupil widens at night, many myopes first discover their condition when trying to read road signs at night.</p>
-
-  <h2 id="blur">The Myopic Image Shell</h2>
   
-  <p>to do </p>
-
-  <h2 id="the-far-point">The Far Point of a Myope</h2>
-
-  <p>When a myopic eye views a distant object, parallel light enters the eye and the vergence leaving the back of the lens is too high to form an image on the retina. A clear image can only be formed when the vergence leaving the back of the lens is reduced. This can happen if divergent (rather than parallel) light is sent into the myopic eye, and divergent light naturally comes from closer objects.</p>
+  <p>The other way an eye can be myopic is if it is too long (<a href='#Figure2'>Figure 2</a>), then the retina is further away from the lens than it should be. The light leaving the eye converges to where the retina <em>should</em> be, but the retina is actually a little further away. The eye's optics in this case are normal, but they are too powerful for a longer eye, which requires less power. This is called <em>axial</em> myopia, because the eye's optic axis is longer than it should be. This is the most common form of myopia. </p>
 
   <figure id="Figure2">
-    <img src="media/image2.svg" />
+  <span class='slideshow-container' id='slides2'>
+  <span>
+    <img id='f2' src="media/axialmyope.svg" style='cursor:pointer'/>
 
     <figcaption>
-      <span class="figno">Figure 2.</span> The myopic eye on the left cannot focus parallel rays from a distant object because it has too much power. However, if the object is placed close enough, the divergent light from the object cancels out the extra power in the myopic eye, allowing the light to be focussed on the retina. The point where this occurs is called the far point.
+      <span class="figno">Figure 2.</span> An axial myope. Parallel light from a distant object is converged as normal, but the eye is longer than normal. This means it converges before it reaches the retina. With nothing to stop it, the light then continues, spreading out to form a blurred spot on the retina.</p>
+	<p>Click to show an emmetropic eye, for comparison.</p>  
     </figcaption>
+	</span>
+  <span>
+    <img id='f2' src="media/emmetrope.svg" style='cursor:pointer'/>
+
+    <figcaption>
+      <span class="figno">Figure 2.</span> An emmetrope. Light is converged by the cornea and lens to meet at the retina.</p>
+	<p>Click to show aa axial myope, for comparison.</p>  
+    </figcaption>
+	</span>
+	</span>
   </figure>
 
-  <p>The divergence of the light from the nearby object (\(-5\text{D}\)) has precisely cancelled the extra power of the cornea (in the sense that the corneal power is \(60\text{D}\), but only \(55\text{D}\) is needed). When this happens, we say that the object has been placed at the <em>far point</em> of the myopic eye. The far point of a myopic eye is the furthest distance you can place an object and still see it clearly.</p>
+  
+  <h2 id="the-far-point">The Far Point.</h2>
 
-  <p>The vergence of light from the far point, <em>when it hits the eye</em>, is called the <strong>ocular refraction</strong>. For example, if a patient has a far point of \(-0.2\text{m}\), their ocular refraction is \(1/(-0.2)=-5\text{D}\).</p>
+  <p>When a myopic eye views a distant object, parallel light enters the eye and the vergence leaving the back surface of the lens forms an image in front of the retina. To form an image <em>on</em> the retina, the vergence leaving the back surface of the lens needs to be reduced. This can happen if <em>divergent</em> (rather than parallel) light is sent into the myopic eye, and divergent light naturally comes from closer objects.</p>
+  
+  <p>Thus, if we bring an object close enough to the myopic eye, it will form a sharp image of that object on the retina (<a href='#Figure3'>Figure 3</a>). The point at which an object first becomes clear is called the <em>far point</em>. (The object will also be clear if it is moved even closer than the far point, but in that case the myopic eye is also accommodating.)</p>
+
+  <figure id="Figure3">
+    <div class='canvas-div' style='width:100%' id='figure3img'></div>
+    <figcaption>
+      <span class="figno">Figure 3.</span> Myopic eyes cannot see distant objects clearly, but they can see near objects, if they are close enough. Initially, an object is placed \(0.09\text{m}\) from this myopic eye. The image of the object still forms in front of the retina, so the image on the retina is blurred. However, by moving the object closer, the image can be made to land exactly on the retina. For the eye in the figure, this happens when the object is at about \(0.06\text{m}\) away.</p>
+	  <p>The place where an object is seen clearly is called the far point.</p> 
+    </figcaption>
+  </figure>
+  <script src='scripts/figure3.js'></script>
+
+  <p>The vergence of light from the far point when it hits the cornea is called the <strong>ocular refraction</strong>. For example, if a patient has a far point of \(-0.2\text{m}\), their ocular refraction is \(1/(-0.2)=-5\text{D}\). The eye in <a href='#Figure3'>Figure 3</a> has a far point of \(-0.065\text{m}\), so the ocular refraction is about \(-15.4\text{D}\); this would be considered extremely high myopia.</p>
 
   <h2 id="correcting-myopia-with-spectacles.">Correcting Myopia with Spectacles.</h2>
 
   <p>The myopic eye needs divergent light (equal to their ocular refraction) in order to see clearly. But light from distant objects is parallel, not divergent, so can’t be seen clearly by a myope. However, a myope <em>will</em> be able to see distant objects clearly if we change the vergence of the light to match their ocular refraction when it hits the eye. This can be done with spectacles: that is, a negative lens placed in front of the myopic eye.</p>
 
-  <figure id="Figure3">
-    <img src="media/image3.svg" />
-
+  <figure id="Figure4">
+    <div class='canvas-div' style='width:100%' id='figure4img'></div>
     <figcaption>
-      <span class="figno">Figure 3.</span> The principle behind spectacle correction for myopia. In the top image, an object is placed at the far point and the divergent light forms a sharp image on the bottom. In the bottom image, parallel light strikes a negative lens and diverges. The light appears to diverge from the image focal point. If the image focal point is in the same place as the far point, the spectacles have corrected the distance vision of the myope. When this happens, the sum of spectacle distance and spectacle focal length equals the far point distance.
+      <span class="figno">Figure 4.</span> The principle behind spectacle correction for myopia. In the top image, an object is placed at the far point and the divergent light forms a sharp image on the bottom. In the bottom image, parallel light strikes a negative lens and diverges. The light appears to diverge from the image focal point. If the image focal point is in the same place as the far point, the spectacles have corrected the distance vision of the myope. When this happens, the sum of spectacle distance and spectacle focal length equals the far point distance.</p> 
     </figcaption>
   </figure>
+  <script src='scripts/figure4.js'></script>
 
   <p>Understanding spectacle correction depends on noticing two things:</p>
 
@@ -94,9 +124,9 @@
     </li>
   </ol>
 
-  <p>Suppose then we carefully place a negative lens in front of a myopic eye so that the focal point of the lens is at the exactly the same place as the far point of that eye. When light from a distant object passes through the lens, it <em>seems</em> to diverge from the focal point of the lens. But the focal point is in the same place as the far point. So the light also <em>seems</em> to diverge from the far point of the eye. Light diverging from the far point can be seen clearly by the myope. The myope can now see distant objects clearly, by viewing them through the negative lens (<a href='#Figure3'>Figure 3</a>).</p>
+  <p>Suppose then we carefully place a negative lens in front of a myopic eye so that the focal point of the lens is at the exactly the same place as the far point of that eye. When light from a distant object passes through the lens, it <em>seems</em> to diverge from the focal point of the lens. However, the focal point is in the same place as the far point. So the light leaving the negative lens also <em>seems</em> to diverge from the far point of the eye. Light diverging from the far point - or seeming to - can be seen clearly by the myope. (<a href='#Figure3'>Figure 3</a>).</p>
 
-  <p>Requiring that the focal point of the negative lens be placed exactly on top of the far point of the myopic eye leads to a simple mathematical relationship between the focal length of the spectacles, the far point distance, and the distance from spectacles to the eye. It is this:</p>
+  <p>Requiring that the focal point of the negative lens be placed exactly on top of the far point of the myopic eye leads to a simple relationship between the focal length of the spectacles, the far point distance, and the distance from spectacles to the eye. It is this:</p>
 
   <div>
     \[\text{(distance to far point)}=\text{(spectacle focal length)}-\text{(spectacle distance)}\]
@@ -193,7 +223,24 @@
   </div>
 
   <p>This gives you the required spectacle power \(F\) as a function of ocular refraction \(K\) and spectacle distance. Personally, I can’t see the point of this equation, since it’s no easier to use than the spectacle equation, harder to remember, and obscures the simple relationship between the spectacle focal length and the far point distance.</p>
+  
+<h2 id="blur">Myopic Blur</h2>
 
+  <p>The main optical consequence of myopia is blur. If a sharp image of a distant object always forms in front of the retina of the myopic eye, by the time the light reaches the eye it has spread out again, and the image is no longer sharp. The amount of blur produced by myopia can be calculated using the blur equation introduced in Chapter 5</p>
+
+  <div>
+    \[\theta_{blur}=57 a |V_{need}-V_{out}|\]
+  </div>
+
+  <p>In this formula, the difference \(|V_{need}-V_{out}|\) is the mismatch between the power of the eye&#39;s optics \(V_{out}\) and the power needed to form a sharp image \(V_{need}\). In myopia, \(V_{out}&gt;V_{need}\). The aperture \(a\) in the formula is the pupil diameter, in metres. So the amount of blur experienced by a myope is directly proportional to the myopic error, and to the pupil size.</p>
+
+  <p>This is exploited in the Snellen and Bailie-Lovie eye charts. By seeing what size of letter is blurred beyond recognition we can estimate the size of the blur circle \(\theta_{blur}\), and from that the amount of refractive error. Of course, to do this, we have to measure or control the pupil diameter \(a\), since that affects the amount of blur.</p>
+
+  <p>Anther consequence of the blur equation is that blur worsens when the pupil diameter \(a\) increases. Since the pupil widens at night, many myopes first discover their condition when trying to read road signs at night.</p>
+
+  <h2 id="blur">The Myopic Image Shell</h2>
+  
+  <p>to do </p>
 <h2 id='myopia'>Accommodation and Myopia</h2>
 
   <p>In the previous chapter, we defined the near point is the closest distance that an object can be seen clearly. When looking at an object placed at the near point, the eye is fully accommodated, and at its maximum power. The amplitude of accommodation for a myope is the <em>difference</em> in the vergence of light from the far point and the vergence at the near point:</p>
@@ -261,4 +308,7 @@
   </figure>
   
 </body>
+<script>
+slideshow()
+</script>
 </html>
