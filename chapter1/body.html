@@ -126,13 +126,21 @@
 
   <figure id="Figure5">
 	<div id = 'Figure5 image' class='canvas-div' ></div>
-	<script src='scripts/figure5.js'></script>
+	<script src='scripts/figure5a.js'></script>
 
     <figcaption>
-      <span class='figno'>Figure 5.</span> You can use the slider to see what happens when you change the divergence of light. To get a bundle of rays with high convergence, the rays must start close to the lens. A bundle of rays with low convergence must start a long way away from the lens.
+      <span class='figno' >Figure 5.</span> Divergence. You can move the light source towards or away from the lens and see what happens to the divergence of the light hitting the lens by watching the bar-guage on the left. To get a bundle of rays with high convergence, the rays must start close to the lens. A bundle of rays with low convergence must start a long way away from the lens.
+	  <div id='fig5handle' class="decorate"></div>
     </figcaption>
   </figure>
-
+  <script>
+  d = document.getElementById('fig5handle')
+  d.onmousedown = function() {f5_actions.decorate('ui')}
+  d.onmouseup = function() {f5_actions.decorate()}
+  d.addEventListener("touchstart", ()=>f5_actions.decorate('ui'), false);
+  d.addEventListener("touchend", f5_actions.decorate, false);
+  </script>
+  
   <p>Highly divergent rays must come from a point which is quite close to the lens, and less divergent rays come from a point which is further away. So, like convergence, there is an inverse relationship between distance and divergence: <em>more</em> divergence means <em>less</em> distance.</p>
 
   <p>Let’s define the divergence of a bundle of light rays coming from a point on an object, when it hits a lens, as</p>

@@ -40,7 +40,9 @@ f3_state = {
             type: 'image',
             id: 'apple',
             position: [-1.5+0.1,0.25-0.05,0.5-0.1,0.5-0.1],
-            image: 'scripts/apple.png'
+            image: 'scripts/apple.png',
+			ui: {xlock:true, ylock:true},
+			style: {z_order: -10}
         },
         {
             type: 'divergent light',
