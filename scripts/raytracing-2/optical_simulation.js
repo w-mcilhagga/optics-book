@@ -212,6 +212,20 @@ plugins.thinlens = plugins.setproto(plugins.surface, {
 	}
 })
 
+// mirror
+
+plugins.mirror = plugins.setproto(plugins.surface, {
+	optics(ray) {
+		// work out the ray as if it was a lens:
+		let direction = plugins.surface.optics.call(this, ray, 1, 1),
+			axis = this.axis,
+			[run, rise] = v2.coords(ray.direction, axis)
+		// reverse the direction wrt axis
+		return v2.add(v2.scale(-run, axis), v2.scale(rise, v2.rot90(axis)))
+	}
+})
+
+
 // computational nodes
 
 plugins.computeItem = {
@@ -333,10 +347,12 @@ plugins['virtual image'] = plugins.setproto(plugins.computeItem, {
 						r.ray['from'].style, 
 						plugins['virtual image'].style, 
 						this.style)
-				p5.stroke(style.stroke)
-				p5.strokeWeight(style.strokeWeight)
-				p5.strokeDash(style.strokeDash)
-				p5.line(...v2.scale(ppm, r.pt), ...v2.scale(ppm, v.pt))
+				if (style.visible==true) {
+					p5.stroke(style.stroke)
+					p5.strokeWeight(style.strokeWeight)
+					p5.strokeDash(style.strokeDash)
+					p5.line(...v2.scale(ppm, r.pt), ...v2.scale(ppm, v.pt))
+				}
 			}
 		}
 	}

@@ -158,6 +158,8 @@ plugins.ray.draw = function (p5, vbox, ppm) {
 		}
 		clip = clip.filter(x => x > 0)
 		clip = Math.min(...clip)
+		// break shape if change of colour
+		
 		p5.vertex(...v2.scale(ppm, v2.add(start, v2.scale(clip, dir))))
 	}
 

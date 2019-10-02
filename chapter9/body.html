@@ -104,13 +104,7 @@
 
   <p>The myopic eye needs divergent light (equal to their ocular refraction) in order to see clearly. But light from distant objects is parallel, not divergent, so can’t be seen clearly by a myope. However, a myope <em>will</em> be able to see distant objects clearly if we change the vergence of the light to match their ocular refraction when it hits the eye. This can be done with spectacles: that is, a negative lens placed in front of the myopic eye.</p>
 
-  <figure id="Figure4">
-    <div class='canvas-div' style='width:100%' id='figure4img'></div>
-    <figcaption>
-      <span class="figno">Figure 4.</span> The principle behind spectacle correction for myopia. In the top image, an object is placed at the far point and the divergent light forms a sharp image on the bottom. In the bottom image, parallel light strikes a negative lens and diverges. The light appears to diverge from the image focal point. If the image focal point is in the same place as the far point, the spectacles have corrected the distance vision of the myope. When this happens, the sum of spectacle distance and spectacle focal length equals the far point distance.</p> 
-    </figcaption>
-  </figure>
-  <script src='scripts/figure4.js'></script>
+
 
   <p>Understanding spectacle correction depends on noticing two things:</p>
 
@@ -124,15 +118,34 @@
     </li>
   </ol>
 
-  <p>Suppose then we carefully place a negative lens in front of a myopic eye so that the focal point of the lens is at the exactly the same place as the far point of that eye. When light from a distant object passes through the lens, it <em>seems</em> to diverge from the focal point of the lens. However, the focal point is in the same place as the far point. So the light leaving the negative lens also <em>seems</em> to diverge from the far point of the eye. Light diverging from the far point - or seeming to - can be seen clearly by the myope. (<a href='#Figure3'>Figure 3</a>).</p>
+  <p>Suppose then we carefully place a negative lens in front of a myopic eye so that the focal point of the lens is at the exactly the same place as the far point of that eye. When light from a distant object passes through the lens, it <em>seems</em> to diverge from the focal point of the lens. However, the focal point is in the same place as the far point. So the light leaving the negative lens also <em>seems</em> to diverge from the far point of the eye. Light diverging from the far point - or seeming to - can be seen clearly by the myope. (<a href='#Figure4'>Figure 4</a>).</p>
 
+  <figure id="Figure4">
+<!--
+    <span class='slideshow-container' id='slides4'>
+	<img src='media/figure4_fp.svg'/>
+	<img src='media/figure4_specs.svg'/>
+    </span>
+-->
+    <div class='canvas-div' style='width:100%' id='figure4img'></div>
+    <figcaption>
+      <span class="figno">Figure 4.</span> The principle behind spectacle correction. There are two eyes here, both of which have the same amount of myopia. In the top eye, a light placed at the far point (\(63-64\text{mm}\) from the front of the cornea) is focused on the retina (green dot).In the bottom image, parallel light (from a distant object) is focused in front of the retina (red dot).</p>
+	  <p> By clicking the check box, you can insert a negative lens into the bottom image. The negative lens has a power of \(-20\text{D}\) so it forms a virtual image \(0.05\text{m}\) to its right (yellow lines). By moving the lens, you can move the point of focus within the eye. 
+	  <ul><li>If the lens is too far from the eye, the light focuses in front of the retina.</li>
+<li>If too close, the light focuses behind the retina.</li>
+<li>At just the right distance, the light focuses <em>on</em> the retina.</li></ul> </p> 
+	  <p>At the right distance, the virtual image created by the spectacle lens is <em>exactly</em> at the far point of the eye. The distance to the virtual image is the sum of the distance from the cornea to the lens and the lens to the focal point (there is a few mm of play in this). This equals the far point distance.</p>
+    </figcaption>
+  </figure>
+  <script src='scripts/figure4_2.js'></script>
+  
   <p>Requiring that the focal point of the negative lens be placed exactly on top of the far point of the myopic eye leads to a simple relationship between the focal length of the spectacles, the far point distance, and the distance from spectacles to the eye. It is this:</p>
 
   <div>
     \[\text{(distance to far point)}=\text{(spectacle focal length)}-\text{(spectacle distance)}\]
   </div>
 
-  <p>The minus sign in front of the spectacle distance is just because it is measured from the spectacles to the right in <a href='#Figure3'>Figure 3</a>, and so has a positive sign. The other distances are negative.</p>
+  <p>The minus sign in front of the spectacle distance is just because it is measured from the spectacles to the right in <a href='#Figure4'>Figure 4</a>, and so has a positive sign. The other distances are negative.</p>
 
   <h3 id="example-1">Example 1</h3>
 
@@ -210,7 +223,13 @@
 
   <h2 id="effectivity">Effectivity</h2>
 
-  <p>The spectacle equation relates the focal length of the spectacles to the far point distance and the spectacle distance. Because spectacles are prescribed in terms of power rather than focal length, a variant of this the spectacle equation involving powers, called effectivity, has been developed. If we write the ocular refraction as \(K\), the far point distance is just \(1/K\) . If we write \(F\) for the spectacle power, then \(f_{img}=1/F\). Thus the spectacle equation becomes</p>
+  <p>The spectacle equation above relates the focal length of the spectacles to the far point distance and the spectacle distance. Because spectacles are prescribed in terms of power rather than focal length, a variant of this the spectacle equation involving powers, called effectivity, can be used. If we write the ocular refraction as \(K\), the distance to the far point is just \(1/K\) . If we write \(F\) for the spectacle power, then the spectacle focal length is \(1/F\). Thus the spectacle equation </p>
+  
+  <div>
+    \[\text{(distance to far point)}=\text{(spectacle focal length)}-\text{(spectacle distance)}\]
+  </div>
+  
+  <p>becomes (writing \(d\) for the spectacle distance):</p>
 
   <div>
     \[\frac{1}{K}=\frac{1}{F}-d\]
@@ -222,7 +241,7 @@
     \[F=\frac{K}{1-dK}\]
   </div>
 
-  <p>This gives you the required spectacle power \(F\) as a function of ocular refraction \(K\) and spectacle distance. Personally, I can’t see the point of this equation, since it’s no easier to use than the spectacle equation, harder to remember, and obscures the simple relationship between the spectacle focal length and the far point distance.</p>
+  <p>This gives you the required spectacle power \(F\) as a function of ocular refraction \(K\) and spectacle distance \(d\). Personally, I can’t see the point of this equation, since it’s no easier to use than the spectacle equation, harder to remember, and obscures the simple relationship between the spectacle focal length and the far point distance.</p>
   
 <h2 id="blur">Myopic Blur</h2>
 
@@ -232,18 +251,19 @@
     \[\theta_{blur}=57 a |V_{need}-V_{out}|\]
   </div>
 
-  <p>In this formula, the difference \(|V_{need}-V_{out}|\) is the mismatch between the power of the eye&#39;s optics \(V_{out}\) and the power needed to form a sharp image \(V_{need}\). In myopia, \(V_{out}&gt;V_{need}\). The aperture \(a\) in the formula is the pupil diameter, in metres. So the amount of blur experienced by a myope is directly proportional to the myopic error, and to the pupil size.</p>
+  <p>In this formula, the difference \(|V_{need}-V_{out}|\) is the mismatch between the power of the eye&#39;s optics \(V_{out}\) and the power needed to form a sharp image \(V_{need}\). In myopia, \(V_{out}&gt;V_{need}\). The aperture \(a\) in the formula is the pupil diameter, in metres. So the amount of blur experienced by a myope is directly proportional to the amount of myopia, and to the pupil size.</p>
 
   <p>This is exploited in the Snellen and Bailie-Lovie eye charts. By seeing what size of letter is blurred beyond recognition we can estimate the size of the blur circle \(\theta_{blur}\), and from that the amount of refractive error. Of course, to do this, we have to measure or control the pupil diameter \(a\), since that affects the amount of blur.</p>
 
   <p>Anther consequence of the blur equation is that blur worsens when the pupil diameter \(a\) increases. Since the pupil widens at night, many myopes first discover their condition when trying to read road signs at night.</p>
 
-  <h2 id="blur">The Myopic Image Shell</h2>
-  
-  <p>to do </p>
 <h2 id='myopia'>Accommodation and Myopia</h2>
 
-  <p>In the previous chapter, we defined the near point is the closest distance that an object can be seen clearly. When looking at an object placed at the near point, the eye is fully accommodated, and at its maximum power. The amplitude of accommodation for a myope is the <em>difference</em> in the vergence of light from the far point and the vergence at the near point:</p>
+  <p>In the last chapter, we defined the near point of an emmetrope as the closest distance that an object can be seen clearly. Then, the amplitude of accommodation was just the vergence at the near point. The amplitude of accommodation for myopes is slighlty different.</p>
+  
+  <p>The near point of a myope is still the closest distance that an object can be seen clearly, but the vergence at that point isn't the amplitude of accommodation, because we have to take the myope's far point into account. </p>
+  
+  <p>When an object is placed at the far point, the eye is relaxed, and there is no accommodation. When looking at an object placed at the near point, the eye is fully accommodated, and at its maximum power. The amplitude of accommodation is the <em>difference</em> in the vergence of light from the far point and the vergence at the near point:</p>
 
   <div>
     \[\left\{\begin{matrix} \text{amplitude of} \\ \text{accommodation}\end{matrix}\right\} = \left\{\begin{matrix} \text{vergence from} \\ \text{far point}\end{matrix}\right\} -\left\{\begin{matrix} \text{vergence from} \\ \text{near point}\end{matrix}\right\}\]
@@ -255,7 +275,7 @@
     \[\frac{1}{-0.3}-\frac{1}{-0.1}=6.67\text{D}\]
   </div>
 
-  <p>This definition of accommodative amplitude also works for an emmetrope. The emmetrope's far point is at infinity, so the vergence from the far point is zero.  Thus, an emmetrope who has a near point of 15cm and a far point at \(\infty\) has an amplitude of accommodation equal to</p>
+  <p>As it happens, this definition also works for an emmetrope. The emmetrope's far point is at infinity, so the vergence from the far point is zero.  Thus, an emmetrope who has a near point of 15cm and a far point at \(\infty\) has an amplitude of accommodation equal to</p>
 
   <div>
     \[0-\frac{1}{-0.15}=6.67\text{D}\]
@@ -263,15 +283,15 @@
 
   <p>also.</p>
 
-  <p>When a myope puts on spectacles, their far and near point change. To distinguish these new points, we say that the <strong>artificial</strong> far point is the far point when wearing spectacles, and the <strong>artificial</strong> near point is the near point when wearing spectacles. If we’ve done everything correctly, the artificial far point of a myope should be infinity, just like an emmetrope. There is no simple formula for the artificial near point, although you can work it out using the thin lens equation.</p>
+  <p>When a myope puts on spectacles, their far and near point change. To distinguish these new points, we say that the <strong>artificial</strong> far point and the <strong>artificial</strong> near point are the far point and near point when wearing spectacles. If we’ve done everything correctly, the artificial far point of a myope should be infinity, just like an emmetrope. There is no simple formula for the artificial near point, although you can work it out using the thin lens equation.</p>
 
-  <p>One interesting feature of spectacle correction is that if we take an emmetrope and a myope with the same amplitudes of accommodation, and then correct the myope, the myope’s artificial near point is closer than the emmetrope’s near point. This effect depends on the spectacle distance and the amount of myopia; a zero spectacle distance (i.e. contact lenses) produces no improvement in the near point. This effect means that a myope wearing spectacles needs to accommodate less than an emmetrope who has the same amplitude of accommodation.</p>
+  <p>One interesting feature of spectacle correction is that if we take an emmetrope and a myope with the same amplitudes of accommodation, and then correct the myope, the myope’s artificial near point is closer than the emmetrope’s near point. This effect depends on the spectacle distance and the amount of myopia; a zero spectacle distance (i.e. contact lenses) produces no improvement in the near point. This effect means that a myope wearing spectacles needs to accommodate slightly less than an emmetrope who has the same amplitude of accommodation.</p>
  
 <h3 id="near-add">Near Add</h3>
 
-  <p>Reading glasses are designed for emmetropes. But what if you have myopia as well as presbyopia? Then, your reading glasses are created by a change in your prescription. The concept is simply that the spectacles myope wears will correct their distance vision, so an myope+spectacles is the same as an emmetrope. We could then put another pair of spectacles on them - the reading glasses - to let them see clearly close up.</p>
+  <p>Reading glasses are designed for emmetropes. But what if you have myopia as well as presbyopia? Then, your reading glasses are created by a change in your prescription. The concept is simply that the spectacles myope wears will correct their distance vision, so an myope with spectacles is the same as an emmetrope. We could then put another pair of spectacles on them - the reading glasses - to let them see clearly close up.</p>
 
-  <p>This would be silly in practice, so instead we add the power of their distance prescription and the reading glasses together to form a single lens. For example, if a patient had a reading (or working) distance of \(40\text{cm}\), then the (emmetropic) reading glasses would have a power of \(+2.5\text{D}\). If that patient was myopic, and their spectacle power was \(-3.5\text{D}\), then putting together their distance prescription \(-3.5\text{D}\) and their reading glasses of \(2.5\text{D}\), yields a total power of \(-1\text{D}\). That would then be the required power of their reading glasses - still negative, but not as much as their distance prescription.</p>
+  <p>This would be silly in practice, so instead we add the power of their distance prescription and the reading glasses together to form a single lens. For example, if a patient had a reading (or working) distance of \(40\text{cm}\), then if they were an emmetrope their reading glasses would have a power of \(+2.5\text{D}\). If that patient was myopic, and their spectacle power was \(-3.5\text{D}\), then putting together their distance prescription \(-3.5\text{D}\) and their reading glasses of \(2.5\text{D}\), yields a total power of \(-1\text{D}\). That would then be the required power of their reading glasses - still negative, but not as much as their distance prescription.</p>
 
   <p>In this case, the power of the reading glasses (\(+2.5\text{D}\) in the example) is called the <em>near add</em>. It is the power added on top of the distance prescription to allow the patient to see near objects.</p>
 
@@ -289,7 +309,7 @@
     <embed src="media/bifocals.svg" />
 
     <figcaption>
-      D-segment bifocal lens. This lens would be placed in front of the patient’s right eye, because the D segment (containing the near add prescription) is displaced towards the nose.
+      D-segment bifocal lens. This lens would be placed in front of the patient’s right eye, because the D segment (containing the near add prescription) is displaced towards the nose. Darker shades indicate more negative areas of the lens.
     </figcaption>
   </figure>
 
@@ -303,7 +323,7 @@
     <embed src="media/varifocals.svg" />
 
     <figcaption>
-      Varifocal lens. This lens has a zone at the top set to the patient’s distance prescription, and a zone at the bottom set to their near prescription (= distance prescription plus near add). These zones are joined by a “corridor” where the power changes smoothly. Outside this corridor, the smooth change in power, together with the requirement that the lens surface is smooth, produces areas of astigmatism.
+      Varifocal lens. This lens has a zone at the top set to the patient’s distance prescription, and a zone at the bottom set to their near prescription (= distance prescription plus near add). These zones are joined by a “corridor” where the power changes smoothly. Darker shades indicate more negative areas of the lens. Outside this corridor, the smooth change in power, together with the requirement that the lens surface is smooth, produces areas of astigmatism (shaded in green).
     </figcaption>
   </figure>
   

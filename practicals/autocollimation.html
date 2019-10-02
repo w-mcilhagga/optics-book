@@ -1,0 +1,101 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+  <title>Covering a Lens</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+ 
+ <!-- the p5 & optics simulation -->
+ 
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.svg.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+
+</head>
+<body>
+
+</body>
+
+<script>
+
+let state = {
+    dragtarget: false,
+    oldpt: [
+        -1.03,
+        0.13
+    ],
+    w: 700,
+    h: 320,
+    origin: [
+        400,
+        160
+    ],
+    ppm: 450,
+    background: [0, 61, 92],
+	
+    items: [
+        {
+            type: 'divergent light',
+            id: 'light#1',
+            position: [-0.7, 0],
+            target: 'lens#1',
+            spread: 'fill*0.8',
+            raycount: 4,
+            ui: {xlock:false, ylock:false},
+            style: {
+                stroke: [255,255,255],
+				strokeWidth: 1,
+				arrows: ['50%', '50%', '']
+            }
+        },
+		{
+			type: 'barrier',
+			id: 'backing',
+			position: [-0.701, -0.2, -0.701, 0.2],
+			ui: {xlock: false, ylock: false},
+			style: {
+				stroke: [180,180,180],
+				strokeWidth: 1
+			}
+		},
+		{
+			type: 'group',
+			children: ['light#1', 'backing']
+		},
+		{
+			type: 'thinlens',
+			id: 'lens#1',
+			position: [0.3,0],
+			axis: [1,0],
+			aperture: 0.4,
+			power: 3,
+			ui: {xlock:true, ylock:true},
+            style: {
+				stroke:[255,255,255],
+				z_order: 2
+			}
+		},
+		{
+			type: 'mirror',
+			position: [0.4,0],
+			axis: [1,0],
+			aperture: 0.45,
+			power: 0,
+			ui: {xlock:false, ylock:true},
+            style: {
+				stroke: [180,180,180],
+				strokeWeight: 4,
+				z_order: 2
+			}
+		},
+    ]
+}
+
+
+new p5(makeP5App(state, ()=>null))
+</script>
