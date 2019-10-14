@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+  </script>
+
+  <script src='../scripts/p5/p5.js'></script>
+  <script src='../scripts/p5/p5.dom.js'></script>
+  <script src='../scripts/p5/p5.util.js'></script>
+  <script src='../scripts/p5/p5.yup.js'></script>
+  <script src='../scripts/vec2d.js'></script>
+  <script src='../scripts/raytracing-2/optical_simulation.js'></script>
+  <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+  <script src='../scripts/raytracing-2/makeArc.js'></script>
+  <script src='../scripts/popouts.js'></script>
+  <script src='../scripts/slides.js'></script>
+  <script src='../chapter8/scripts/eyes.js'></script>
+
+  <title>Chapter 10: Hyperopia</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 10
+  </div>
+
+  <h1 id="myopia">Hyperopia</h1>
+
+
+  <p>Hyperopia (also called hypermetropia) is a type of ametropia where the power of the eye’s optics is too small for the length of the eye, or equivalently the focal length is longer than the axial length. Optically, this means that a sharp image of a distant object forms slightly <em>behind</em> the retina. The light, when it hits the retina, has not yet converged fully and so is spread out, so the image formed on the retina is blurred.</p>
+
+  <p>There are two main kinds of hyperopia. In the first kind, called <em>refractive</em> hyperopia, the length of the eye is normal, but the power of the cornea and crystalline lens are together somewhat less than normal, perhaps because the cornea is flatter than it should be. (<a href="#Figure1">Figure 1</a>). 
+
+  <figure id='Figure1'>
+  <span class='slideshow-container' id='slides1'>
+  <span>
+  <img src='media/refractivehyperope.svg'/>
+  <figcaption>
+  <span class="figno">Figure 1.</span> A refractive hyperope. Here the cornea is too flat, so parallel light from a distant object is not converged enough as it passes through the eye's optics. This means it converges towards a point somewhere behind the retina (The white dot shows where the light would converge). However, it hits the retina before it has fully converged, and forms a blurred spot.</p>
+	<p>Click to show an emmetropic eye, for comparison.</p>  
+  </figcaption>
+  </span>
+  <span>
+  <img src='media/emmetrope.svg'/>
+  <figcaption>
+  <span class="figno">Figure 1.</span> An emmetrope. Light is converged by the cornea and lens to meet at the retina.</p>
+	<p>Click to show a refractive hyperope, for comparison.</p>  
+  </figcaption>
+  </span>
+  </figure>
+  
+  <p>The other way an eye can be myopic is if it is too short (<a href='#Figure2'>Figure 2</a>), then the retina is closer to the lens than it should be. The light leaving the eye converges to where the retina <em>should</em> be (shown by the white dot), but the retina is actually a little closer. The eye's optics in this case are normal, but they are too weak for a shorter eye, which requires more power. This is called <em>axial</em> hyperopia, because the eye's optic axis is shorter than it should be. This is the most common form of myopia. </p>
+
+  <figure id="Figure2">
+  <span class='slideshow-container' id='slides2'>
+  <span>
+    <img id='f2' src="media/axialhyperope.svg" style='cursor:pointer'/>
+
+    <figcaption>
+      <span class="figno">Figure 2.</span> An axial hyperope. Parallel light from a distant object is converged as normal, but the eye is shorter than normal. This means the light has not yet converged by the time it reaches the retina, and forms a blurred spot.</p>
+	<p>Click to show an emmetropic eye, for comparison.</p>  
+    </figcaption>
+	</span>
+  <span>
+    <img id='f2' src="media/emmetrope.svg" style='cursor:pointer'/>
+
+    <figcaption>
+      <span class="figno">Figure 2.</span> An emmetrope. Light is converged by the cornea and lens to meet at the retina.</p>
+	<p>Click to show aa axial hyperope, for comparison.</p>  
+    </figcaption>
+	</span>
+	</span>
+  </figure>
+  
+  <p>Accommodation is a complicating factor in hyperopia. A hyperopic eye has less power than it requires, but accommodation can be used to increase power and counteract some, if not all, of the hyperopia of an eye. We will ignore accommodation to begin with.</p>
+
+  <h2 id="the-hyperopic-far-point">The Hyperopic Far Point</h2>
+
+  <p>The far point in hyperopia is a slightly more abstract idea than it was in myopia. For a myope, if you place an object at their far point, they can see the object clearly. If you put an object at the far point of a hyperope, they won’t be able to see it, because the hyperopic far point is <em>behind</em> their eye.</p>
+
+  <p>The myopic eye needs divergent light striking the cornea, and this is easily obtained by putting an object at some point in front of the eye. But it doesn’t have to be done that way - spectacles, for instance, can be used to create divergent light, but it doesn’t come from any physical point. In hyperopia, the far point just a way of expressing what kind of vergence the hyperopic eye needs in order to see clearly.</p>
+
+  <p>A hyperopic eye (unaccommodated) needs <em>convergent</em> light in order to see clearly. The convergence of the light hitting the cornea that is needed for the hyperopic eye to form a clear image is again called the <strong>ocular refraction</strong>. The far point of the hyperopic eye is defined as one over the ocular refraction. The far point is where the light that hits the cornea would converge if the eye were not there (<a href='Figure3' >Figure 3</a>). Thus the difference between the myopic and hyperopic far point is that, for the myope, light comes from the far point, whereas for the hyperope, light travels towards the far point.</p>
+  
+  <figure id="Figure3">
+    <div class='canvas-div' style='width:100%' id='figure3img'></div>
+    <figcaption>
+      <span class="figno">Figure 3.</span> For the eye in the figure, this happens when the object is at about \(0.08\text{m}\) away.</p>
+	  <p>The place where an object is seen clearly is called the far point.</p> 
+    </figcaption>
+  </figure>
+  <script src='scripts/figure3.js'></script>
+
+  <h2 id="correcting-hyperopia-with-spectacles.">Correcting Hyperopia with Spectacles.</h2>
+
+  <p>For a hyperope to see distant objects clearly, we must somehow change the vergence of light from a distant object (which is zero) to equal the ocular refraction by the time it hits the cornea. This can be done with a positive lens. How this is done is shown in <a href='#Figure4'>Figure 4</a>. At the top of the figure, light converging towards the far point is focussed by a hyperopic eye. This forms a clear image on the retina. In the bottom of the figure, parallel light from a distant object strikes a positive lens. The lens is chosen so that when the light leaving it hits the cornea, the a vergence is exactly equal to the ocular refraction. Thus the combination of lens and hyperopic eye can form a sharp image of a distant object on the retina. If we removed the eye and allowed the light from the lens to continue it would converge on the far point. But this is also, by definition, the focal point of the lens. This means that the focal point of the lens must be at the same place as the far point of the hyperopic eye, in order to get the correct amount of convergence at the eye.</p>
+
+  <figure id='Figure4'>
+    <img src="media/image5.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 4.</span> The top diagram shows the far point of a hyperope. When convergent light (with the right amount of convergence) hits the hyperopic eye, the eye converges it more, and it then forms a sharp image on the retina. If the eye were not there, the convergent light would instead converge to a point some distance behind the retina (dashed lines). This point is called the far point. In the bottom diagram, parallel light from a distant object is converged by a positive lens. The light converges towards the image focal point of the lens (dashed lines). If the image focal point is at the same place as the far point, then the convergence of the light, when it hits the eye, is exactly what the eye needs for clear vision. In this case, the image focal length must be equal to the sum of the spectacle distance and the distance to the far point.
+    </figcaption>
+  </figure>
+
+  <p>The fact that the far point and the focal length of the spectacles must coincide gives a simple relationship between the far point, the focal length, and the distance from spectacles to eyes: The focal length of the lens must equal the distance from lens to eye plus the distance from eye to far point. That is,</p>
+
+  <div>
+    \[\text{(distance to far point)}=\text{(spectacle focal length)}-\text{(spectacle distance)}\]
+  </div>
+
+  <p>This is identical to the spectacle equation for the myope, but here both the far point distance and the spectacle focal length are positive (they are negative for the myope).</p>
+
+  <h3 id="example-1">Example 1</h3>
+
+  <p>A hyperope with an ocular refraction of \(+6.5\text{D}\) wears spectacles with a spectacle distance of 14mm. What is the power of the spectacles?</p>
+
+  <h4 id="answer">Answer</h4>
+
+  <p>The distance to the far point is \(1/6.5=0.154\text{m}\). The spectacle focal length is thus \(0.154+0.014=0.168\text{m}\). The spectacle power is then \(1/0.168=+5.95\text{D}\).</p>
+
+  <h3 id="example-2">Example 2</h3>
+
+  <p>A patient has spectacles with power \(+8.5\text{D}\) worn at a distance of \(13\text{mm}\). What power of contact lenses should they have?</p>
+
+  <h4 id="answer-1">Answer</h4>
+
+  <p>To answer this, first work out the far point distance. The focal length of the spectacles is \(1/8.5=0.118\text{m}\), and so the distance from the eye to the far point is, by the above equation, \(0.118 - 0.013 = 0.105\text{m}\). Contact lenses have a spectacle distance of zero, so the focal length of the contacts is exactly the same as the far point distance. Thus the power of the contacts should be \(1/0.105=+9.52\text{D}\).</p>
+
+  <p>It is always the case for a hyperope that the contact lens prescription is stronger than the spectacle prescription. The difference between the two prescriptions increases with the amount of correction required.</p>
+  
+<h2 id='hyperopia'>Accommodation and Hyperopia</h2>
+
+  <p>Because accommodation increases the power of the eye it is possible for hyperopes to compensate for their lack of optical power by accommodating. For example, if the ocular refraction of a hyperope is \(+3\text{D}\), that means they need \(3\text{D}\) more power than they actually have in order to see distant objects clearly. If they have sufficient accommodative amplitude, they can easily supply this extra power by accommodating. Thus hyperopes can often see distant objects clearly, if they have sufficient accommodation, whereas myopes never can.</p>
+
+  <p>Since the hyperope can see distant objects, they will not initially complain that their distance vision is impaired. Instead, they will complain that they cannot focus clearly on near objects. This is because they have already used up some of their accommodative amplitude to correct their hyperopia so they have less left to focus on near objects. As a result, their near point is further away than normal. (As with the myope, the amplitude of accommodation of a hyperope is the difference in vergence between the far point and the near point)</p>
+
+  <p>The amount of hyperopia that the patient can eliminate by accommodating is called the <em>facultative hyperopia</em>. The amount of hyperopia left over (if any) is called the <em>absolute hyperopia</em>. The total hyperopia is the sum of facultative and absolute:</p>
+
+  <div>
+    \[\text{total hyperopia}=\text{facultative hyperopia}+\text{absolute hyperopia}\]
+  </div>
+
+  <p>The total hyperopia is equal to the ocular refraction.</p>
+
+  <h3 id="example-3">Example 1</h3>
+
+  <p>A patient with a total hyperopia of \(+5\text{D}\) and an amplitude of accommodation of \(8\text{D}\) can use \(5\text{D}\) of their accommodation to correct all of their hyperopia. Thus their facultatitive hyperopia is \(+5\text{D}\) and their absolute hyperopia is \(0\). However, having used up \(5\text{D}\) of accommodation means they only have \(3\text{D}\) of accommodation left, so their near point is then \(1/3=0.333\)m.</p>
+
+  <h3 id="example-4">Example 2</h3>
+
+  <p>A patient has a total hyperopia of \(+6\text{D}\) but their accommodative amplitude is only \(3\text{D}\) (perhaps because they are older). If they accommodate fully, that will only remove \(3\text{D}\) of hyperopia, leaving \(3\text{D}\) remaining. The amount of hyperopia compensated by accommodation, \(3\text{D}\), is their facultative hyperopia; the remaining \(3\text{D}\) of hyperopia is their absolute hyperopia. Unfortunately for this patient their near point doesn’t exist (as they have no accommodation left over), so they can see nothing clearly.</p>
+
+  <p>The facultative and absolute components of hyperopia can be determined by subjective refraction. The smallest added plus power that allows the patient to see the 6/6 (or 6/5) line clearly is the patient’s absolute hyperopia. The highest plus power that allows the patient to see the letter chart clearly is their total hyperopia; and the facultative hyperopia is the difference between these two.</p>
+
+  <p>Take Example 1 above. Since the patient can already see clearly at distance, the lowest plus power that enables them to see the letter chart is \(0\text{D}\), which is their absolute hyperopia. When the plus power is \(+5\text{D}\), then this completely corrects their hyperopia and the patient does not need to accommodate. If we increase past this, however, their hyperopia has been overcorrected and they will not be able to see the letter chart clearly.</p>
+
+  <table id=Table1>
+    <caption>
+      <span class="figno">Table 1.</span> An example of what happens as successively higher powered positive lenses are placed in front of a hyperopic eye. Note that the sequence of added corrections is illustrative only - you wouldn’t restrict yourself to round-number powers in practice.
+    </caption>
+
+    <tbody>
+      <tr class="odd">
+        <td style="text-align: center;"><strong>Added</strong></td>
+
+        <td style="text-align: center;"><strong>Accommodation used</strong></td>
+
+        <td style="text-align: center;"><strong>Resultant</strong></td>
+
+        <td style="text-align: center;"><strong>VA</strong></td>
+      </tr>
+
+      <tr class="even">
+        <td style="text-align: center;"><strong>correction</strong></td>
+
+        <td style="text-align: center;"><strong>(facultative hyperopia)</strong></td>
+
+        <td style="text-align: center;"><strong>Refractive Error</strong></td>
+
+        <td style="text-align: center;"></td>
+      </tr>
+
+      <tr class="odd">
+        <td style="text-align: center;">plano</td>
+
+        <td style="text-align: center;">5D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">6/6</td>
+      </tr>
+
+      <tr class="even">
+        <td style="text-align: center;">+1D</td>
+
+        <td style="text-align: center;">4D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">6/6</td>
+      </tr>
+
+      <tr class="odd">
+        <td style="text-align: center;">+2D</td>
+
+        <td style="text-align: center;">3D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">6/6</td>
+      </tr>
+
+      <tr class="even">
+        <td style="text-align: center;">+3D</td>
+
+        <td style="text-align: center;">2D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">6/6</td>
+      </tr>
+
+      <tr class="odd">
+        <td style="text-align: center;">+4D</td>
+
+        <td style="text-align: center;">1D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">6/6</td>
+      </tr>
+
+      <tr class="even">
+        <td style="text-align: center;">+5D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">6/6</td>
+      </tr>
+
+      <tr class="odd">
+        <td style="text-align: center;">+6D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">-1D</td>
+
+        <td style="text-align: center;">6/9</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>This is shown in <a href="#Table1" >Table 1</a>. (The “resultant refractive error” column is the total hyperopia less the added correction and the accommodation used.) What is happening here is that each dioptre of added correction is reducing the need for accommodation by the same amount. So long as the correction plus accommodation adds up to the total hyperopia (\(+5\text{D}\)) the patient acts as if they have no refractive error. When the added correction goes over the total hyperopia, the accommodation can go no lower than zero, and as a result the patient can no longer see the letter chart clearly. The lowest added correction that lets the patient see the letter chart is \(0\text{D}\), which is their absolute hyperopia. The highest plus power that lets the patient see the letter chart, \(+5\text{D}\), is their total hyperopia.</p>
+
+  <table id=Table2>
+    <caption>
+      <span class="figno">Table 2.</span> This patient has some absolute hyperopia. As a result, they require some additional plus power (+3D) in order to see the 6/6 line clearly.
+    </caption>
+
+    <tbody>
+      <tr class="odd">
+        <td style="text-align: center;"><strong>Added</strong></td>
+
+        <td style="text-align: center;"><strong>Accommodation used</strong></td>
+
+        <td style="text-align: center;"><strong>Resultant</strong></td>
+
+        <td style="text-align: center;"><strong>VA</strong></td>
+      </tr>
+
+      <tr class="even">
+        <td style="text-align: center;"><strong>correction</strong></td>
+
+        <td style="text-align: center;"><strong>(facultative hyperopia)</strong></td>
+
+        <td style="text-align: center;"><strong>Refractive Error</strong></td>
+
+        <td style="text-align: center;"></td>
+      </tr>
+
+      <tr class="odd">
+        <td style="text-align: center;">plano</td>
+
+        <td style="text-align: center;">3D</td>
+
+        <td style="text-align: center;">3D</td>
+
+        <td style="text-align: center;">6/18</td>
+      </tr>
+
+      <tr class="even">
+        <td style="text-align: center;">+1D</td>
+
+        <td style="text-align: center;">3D</td>
+
+        <td style="text-align: center;">2D</td>
+
+        <td style="text-align: center;">6/12</td>
+      </tr>
+
+      <tr class="odd">
+        <td style="text-align: center;">+2D</td>
+
+        <td style="text-align: center;">3D</td>
+
+        <td style="text-align: center;">1D</td>
+
+        <td style="text-align: center;">6/9</td>
+      </tr>
+
+      <tr class="even">
+        <td style="text-align: center;">+3D</td>
+
+        <td style="text-align: center;">3D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">6/6</td>
+      </tr>
+
+      <tr class="odd">
+        <td style="text-align: center;">+4D</td>
+
+        <td style="text-align: center;">2D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">6/6</td>
+      </tr>
+
+      <tr class="even">
+        <td style="text-align: center;">+5D</td>
+
+        <td style="text-align: center;">1D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">6/6</td>
+      </tr>
+
+      <tr class="odd">
+        <td style="text-align: center;">+6D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">6/6</td>
+      </tr>
+
+      <tr class="even">
+        <td style="text-align: center;">+7D</td>
+
+        <td style="text-align: center;">0D</td>
+
+        <td style="text-align: center;">-1D</td>
+
+        <td style="text-align: center;">6/9</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Doing the same for Example 2 yields <a href="#table2" >Table 2</a>. In this case, \(+3\text{D}\) is the smallest correction that allows the patient to see the letter chart; this is their absolute hyperopia. The largest correction that allows the patient to see the letter chart, \(+6\text{D}\), is their total hyperopia.</p>
+
+  <p>In young hyperopes, it is not unusual to find that the refractive error is greater when measured using objective methods (retinoscopy) or under cycloplegia, than when measured using subjective methods. The reason for this is because when doing subjective refraction (e.g. by finding the maximum plus sphere that gives good distance vision) the young hyperopic eye does not completely relax its accommodation (the ciliary muscles are in spasm), whereas under retinoscopy conditions it does, or at least relaxes more. (Why retinoscopy should lead to more relaxed accommodation is unknown.) Even with retinoscopy, there remains some unrelaxed accommodation, so in order to get the total hyperopia, it is necessary to paralyze the ciliary muscles with a cycloplegic drug while doing retinoscopy.</p>
+
+  <p>The hyperopia that is measured by subjective methods is called the <em>manifest hyperopia</em>. The difference between subjective and objective (preferably cycloplegic) refraction is called the <em>latent hyperopia</em>. Total hyperopia is the sum of latent and manifest hyperopia. Latent hyperopia is a kind of facultative hyperopia, since it is caused by accommodation, except that it does not go away as the power of the added lens (in subjective refraction) is increased.</p>
+
+  <h3 id="accommodative-amplitude">Accommodative Amplitude</h3>
+
+  <p>The accommodative amplitude of a hyperope is the difference in vergences from the far point and the near point. This difference shows how much the hyperope can change the power of their optics to retain a sharp image on the retina. This is exactly the same as the myope and emmetrope.</p>
+
+  <h3 id="example-5">Example 3</h3>
+
+  <p>A hyperopic patient has a far point which is 0.25m behind their eye, and a near point which is 0.5m in front of their eye. What is their amplitude of accommodation?</p>
+
+  <h4 id="answer-2">Answer</h4>
+
+  <p>The vergence at the far point is \(1/0.25 = +4\text{D}\). The vergence at the near point is \(1/(-0.5)=-2\text{D}\), so the difference is \(4-(-2)=6\text{D}\).</p>
+
+  <p>Another way of thinking about this calculation is that the patient uses \(4\text{D}\) of accommodation to see a distant object (since their ocular refraction is \(1/0.25=4\text{D}\)), and then uses an additional \(2\text{D}\) to overcome the divergence of light from the near point. The total is \(4+2=6\text{D}\) of accommodation.</p>
+</body>
+<script>
+slideshow()
+</script>
+</html>

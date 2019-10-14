@@ -373,7 +373,7 @@ plugins.control = {
 					self.value(self.control.value())
 					p5.redraw()
 				}
-				this.control.value(this.value()) // initial value
+				//this.value(this.control.value()) // initial value
 				switch (this.direction) {
 					case 'up':
 						this.control.style('transform-origin', 'left center')

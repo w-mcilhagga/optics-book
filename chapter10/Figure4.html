@@ -1,0 +1,28 @@
+<link rel="stylesheet" type="text/css" href="../styles/popout.css" />
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/popouts.js'></script>
+<script src='../chapter8/scripts/eyes.js'></script>
+
+<body>
+  <figure id="Figure4">
+    <div class='canvas-div' style='width:100%' id='figure4img'></div>
+    <figcaption>
+      <span class="figno">Figure 4.</span> The principle behind spectacle correction. There are two eyes here, both of which have the same amount of myopia. In the top eye, a light placed at the far point (\(63-64\text{mm}\) from the front of the cornea) is focused on the retina (green dot).In the bottom image, parallel light (from a distant object) is focused in front of the retina (red dot).</p>
+	  <p> By clicking the check box, you can insert a negative lens into the bottom image. The negative lens has a power of \(-20\text{D}\) so it forms a virtual image \(0.05\text{m}\) to its right (yellow lines). By moving the lens, you can move the point of focus within the eye. 
+	  <ul><li>If the lens is too far from the eye, the light focuses in front of the retina.</li>
+<li>If too close, the light focuses behind the retina.</li>
+<li>At just the right distance, the light focuses <em>on</em> the retina.</li></ul> </p> 
+	  <p>At the right distance, the virtual image created by the spectacle lens is <em>exactly</em> at the far point of the eye. The distance to the virtual image is the sum of the distance from the cornea to the lens and the lens to the focal point (there is a few mm of play in this). This equals the far point distance.</p>
+    </figcaption> 
+  </figure>
+  <script>popout.openButton=()=>true</script>
+  <script src='scripts/figure4_2.js'></script>
+  <p class='closer'  onclick='window.close()'>Close this Window</p>
+
+</body>
