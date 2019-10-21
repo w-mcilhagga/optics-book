@@ -1,0 +1,24 @@
+<link rel="stylesheet" type="text/css" href="../styles/popout.css" />
+<script src="../MathJax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/popouts.js'></script>
+
+<body>
+  <figure id="Figure5">
+    <div class='canvas-div' style='width:100%' id='figure5img'></div>
+    <figcaption>
+      <span class="figno">Figure 5.</span> Using the ray-tracing rules to decide where a point on an object forms a sharp image. The three rules can be turned on and off using the check boxes in the lower left corner. The white circles show the focal points of the lens. The object is a white arrow and the image is a bluish arrow. </p>
+	  The image only appears when two or more rules are on, because the image is located where the two rays from those rules <b>intersect</b>.</span>
+    </figcaption>
+  </figure>
+  <script>popout.openButton=()=>true</script>
+  <script src='scripts/figure5.js'></script>
+  <p class='closer'  onclick='window.close()'>Close this Window</p>
+
+</body>

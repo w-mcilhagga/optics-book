@@ -1,0 +1,22 @@
+<link rel="stylesheet" type="text/css" href="../styles/popout.css" />
+<script src="../MathJax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/popouts.js'></script>
+
+<body>
+  <figure id="Figure4">
+    <div class='canvas-div' style='width:100%' id='figure4img'></div>
+    <figcaption>
+      <span class='figno'>Figure 4.</span> Changing the amount of blur by changing the aperture. You can use the slider to change the size of the aperture stop. When the stop is small, few rays get through the lens and the blur circle is small. Note that the aperture stop doesn't change the brightness of the blur circle, only the size. </span>
+    </figcaption>
+  </figure>
+  <script>popout.openButton=()=>true</script>
+  <script src='scripts/figure4.js'></script>
+  <p class='closer'  onclick='window.close()'>Close this Window</p>
+</body>

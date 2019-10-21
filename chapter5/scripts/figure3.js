@@ -1,141 +1,250 @@
+let fig3actions
+
 (function() {
 	
-	let focus = 1/(1/(-1.5-(-0.25))+2.5)-0.25,
-		scrn = 40/300,
+	let power = 4,
 		state = {
 			w: 520,
 			h: 260,
-			origin: [200, 130],
+			origin: [270, 130],
 			background: [0,61,93],
-			ppm: 400,
-			renderer: 'svg',
+			ppm: 300,
 			items: [
+				// real lens and fake one
 				{
-					type: 'barrier',
-					position: [focus,-scrn, focus, scrn],
-					id: 'B#2',
+					type: 'thinlens',
+					id: 'fake',
+					power: 3,
+					aperture: 0.5,
 					plane: 2,
-					ui: {ylock: true, xlock: true },
+					axis: [1,0],
+					position: [0,0.001],
+					ui: { xlock: true, ylock: true},
 					style: {
-						strokeWeight: 4,
-						stroke: [190,190,190],
-						z_order: 2,
-						visible: false
+						strokeWeight: 3
 					}
 				},
 				{
 					type: 'thinlens',
 					id: 'L#1',
-					power: 2.5,
-					aperture: 0.4,
+					power,
+					aperture: 10,
 					axis: [1,0],
-					position: [-0.25,0],
-					ui: { xlock: true, ylock: true}
+					position: [0,0],
+					ui: { xlock: true, ylock: true},
+					style: {
+						strokeDash: [3, 10],
+						stroke: [255,255,255,100]
+					}
+				},
+				// three rays
+				{
+					type: 'divergent light',
+					position: [-0.8,0.2],
+					id: 'rule1',
+					target: 0,
+					spread: 0,
+					raycount: 1,
+					ui: {xlock:[-Infinity, -1/power]},
+					off: true,
+					style: {
+						arrows: ['50%',''],
+						strokeWeight: 2,
+						stroke: [255, 50, 50],
+					}
+				},
+				{
+					type: 'js', // fixes rule 2
+					init(state) {
+						// changes rule 2 depending on the object position
+						let obj = findObject(state, 'rule2')
+						if (obj.position[0]>-1/power) {
+							// switch target to an angle 
+							obj.target = (180/Math.PI)*v2.angle(
+									v2.sub(obj.position,[-1/power, 0]))
+						} else {
+							obj.target = [-1/power, 0]
+						}
+						findObject(state, 'rule2dim').style.visible = !obj.off
+					}
 				},
 				{
 					type: 'divergent light',
-					position: [-1.5,0],
-					id: 'D#1',
-					target: 'L#1',
-					spread: 'fill*0.9',
-					raycount: 6,
+					position: [-0.8,0.2],
+					id: 'rule2',
+					target: [-1/power,0],
+					spread: 0,
+					raycount: 1,
+					ui: {xlock:[-Infinity, -1/power]},
+					off: true,
 					style: {
-						arrows: [{pt:[-0.4,0], dir:[0,1]}, {pt: [-0.05,0],dir:[0,1]}]
+						stroke: [0,255,0],
+						strokeWeight: 2,
+						arrows: ['50%','']
 					}
 				},
-				{
-					type: 'barrier',
-					position: [focus+0.3,-scrn, focus+0.3, scrn],
-					id: 'B#1',
-					ui: {ylock: true, xlock: true },
-					style: {
-						strokeWeight: 4,
-						stroke: [190,190,190],
-						z_order: -1
-					}
-				},
-				{
+				{ 
 					type: 'dimension',
-					label: 'd',
-					start: 'L#1',
-					end: 'B#2',
-					ycoord: 0.25,
+					id: 'rule2dim',
+					start: 'rule2',
+					end: [-1/power, 0],
+					label: ' ',
+					arrows: [],
 					style: {
-						stroke: [255,255,255],
-						fill: [255,255,255],
-						textOffset: [0,5],
-						textAlign: ['center', 'bottom'],
-						textSize: 14,
-						offset: [[0,0],[-2,0]]
+						stroke: [0,255,0],
+						strokeWeight: 1,
+						strokeDash: [4, 4],
+						visible: true
 					}
 				},
 				{
-					type: 'dimension',
-					label: 's',
-					start: 'L#1',
-					end: 'B#1',
-					ycoord: -0.25,
+					type: 'divergent light',
+					position: [-0.8,0.2],
+					id: 'rule3',
+					off: true,
+					target: [0,0],
+					spread: 0,
+					raycount: 1,
+					ui: {xlock:[-Infinity, -1/power]},
 					style: {
-						stroke: [255,255,255],
-						fill: [255,255,255],
-						textOffset: [0,-5],
-						textAlign: ['center', 'top'],
-						textSize: 14
+						stroke: [220,220,0],
+						strokeWeight: 2,
+						arrows: ['50%','']
 					}
 				},
 				{
-					type: 'dimension',
-					label: 's - d',
-					start: 'B#1',
-					end: 'B#2',
-					ycoord: 0.25,
-					style: {
-						stroke: [255,255,255],
-						fill: [255,255,255],
-						textOffset: [0,5],
-						textAlign: ['center', 'bottom'],
-						textSize: 14,
-						arrows: ['0%'],
-						offset: [[0,0],[2,0]]
-					}
+					type: 'group',
+					id: 'object-top',
+					children: ['rule1', 'rule2', 'rule3']
 				},
 				{
-					type: 'blur disc',
-					barrier: 'B#1',
-					light: 'D#1',
-					id: 'BD#1'
+					type: 'virtual image',
+					light: 'object-top',
+					lens: 'L#1'
 				},
+				// object & image
 				{
-					// copy blur disc size to a dimensions
-					type: 'p5',
+					type: 'js',
 					init(state) {
-						this.blur = findObject(state, 'BD#1')
-						this.disc = findObject(state, 'blurdim')
-					},
-					draw(p5, vbox, ppm) {
-						let box = this.blur.blurbox
-						this.disc.startpt = [box[0], box[2]]
-						this.disc.endpt = [box[1], box[3]]
+						let p = findObject(state, 'rule1').position
+						findObject(state,'object').start = [p[0],0]
+						findObject(state,'object').end = [...p]
+						let img = 1/(1/p[0]+power)
+						findObject(state,'image').start = [img,0]
+						findObject(state,'image').end = [img, p[1]*img/p[0]]
 					}
 				},
 				{
 					type: 'dimension',
-					label: 'b',
-					id: 'blurdim',
-					xcoord: focus+0.3+0.02,
+					id: 'object',
+					start: [],
+					end: [],
+					label: ' ',
 					style: {
-						stroke: [255,255,255],
-						fill: [255,255,255],
-						textOffset: [5, 0],
-						textAlign: ['left', 'center'],
-						textSize: 14,
-						arrows: ['0%', '100%'],
-						offset: [[0,0],[0,0]]
+						stroke: [255, 255, 255],
+						strokeWeight: 5,
+						arrowLength: 10,
+						arrowWidth: 5,
+						z_order:-1
+					}				
+				},
+				{
+					type: 'js',
+					init(state) {
+						let r1 = !findObject(state, 'rule1').off,
+							r2 = !findObject(state, 'rule2').off,
+							r3 = !findObject(state, 'rule3').off
+						findObject(state, 'image').style.visible = (r1+r2+r3)>1
 					}
 				},
+				{
+					type: 'dimension',
+					id: 'image',
+					start: [],
+					end: [],
+					label: ' ',
+					style: {
+						stroke: [200, 200, 255],
+						strokeWeight: 5,
+						arrowLength: 10,
+						arrowWidth: 5,
+						z_order:-1,
+						visible: true
+					}				
+				},
+				// optic axis
+				{
+					type: 'dimension',
+					start: [-2,0],
+					end: [2,0],
+					label: ' ',
+					style: {
+						stroke: [255, 255, 255],
+						strokeDash: [5,5]
+					}
+				},
+				// controls for each rule
+				{
+					type: 'control',
+					controlType: 'checkbox',
+					id: 'rule1check',
+					params: ['rule 1', false],
+					position: [10, -50],
+					style: {
+						color: 'rgb(255,50,50)'
+					},
+					bind: { id: 'rule1', property: ['off'], yes: false, no: true}
+				},
+				{
+					type: 'control',
+					controlType: 'checkbox',
+					id: 'rule2check',
+					params: ['rule 2', false],
+					position: [10, -30],
+					style: {
+						color: 'rgb(0,255,0)'
+					},
+					bind: { id: 'rule2', property: ['off'], yes: false, no: true}
+				},
+				{
+					type: 'control',
+					controlType: 'checkbox',
+					params: ['rule 3', false],
+					position: [10, -10],
+					style: {
+						color: 'rgb(220,220,0)'
+					},
+					bind: { id: 'rule3', property: ['off'], yes: false, no: true}
+				},
+				// focal points
+				{
+					type: 'p5',
+					draw(p5, vbox, ppm) {
+						p5.noStroke()
+						p5.fill(255)
+						p5.circle(ppm/power, 0, 10)
+						p5.circle(-ppm/power, 0, 10)
+					}
+				}
+				
 			]
 		}
 
-	new p5(makeP5App(state), 'figure3img')
-
+	fig3actions = {
+		
+		toggle(s) {
+			s.decorate = s.decorate=='ui'?false:'ui'
+		},
+		
+		check(state, ruleid) {
+			let box = findObject(state, ruleid)
+			box.control.checked(!box.control.checked())
+			box.control.elt.onchange()
+		}
+	}
+	
+	new p5(makeP5App(state, fig3actions), 'figure3img')
+	
+	popout.openButton('Figure3')
+	popout.addhelp('Figure3', fig3actions.toggle)
 })()
