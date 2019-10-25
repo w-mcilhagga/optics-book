@@ -20,7 +20,7 @@
 <script src='../scripts/raytracing-2/optical_simulation.js'></script>
 <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
 <script src='../scripts/popouts.js'></script>
-
+<script src='../scripts/slides.js'></script>
 </head>
 
 <body>
@@ -219,7 +219,7 @@ function toggle3(s) {
   </div>
 
   <p>When the angle \(\theta_b\) is very small, however (say less than 5 degrees), \(\tan(x)\approx x/57\), so the formula can be simplified to 
-  <div>\[\theta_b \approx 57a\, |V_{need}-V_{out}|\label{eq:blur-4}\]</div>
+  <div>\[\theta_b \approx 57a\, |V_{need}-V_{out}|\tag{5}\]</div>
   
   Thus, the angular size of blur \(\theta_b\) (in degrees) is just 57 times the aperture times the difference between the vergence needed \(V_{need}\) and the vergence \(V_{out}\) that actually occurs. Note that the aperture \(a\) must be measured in metres to get the angle in degrees, using this formula, because the units of \(|V_{need}-V_{out}|\) are dioptres, or \({\text{m}}^{-1}\).</p>
 
@@ -238,27 +238,52 @@ function toggle3(s) {
       <p>You can also work out the blur angle without using Equation (4). From before, we know the blur disc size is \(b=4.86{\text{m}}{\text{m}}\), and the distance from lens to screen is \(d=130{\text{m}}{\text{m}}\). Thus the blur angle is \(\tan \theta_b = 4.86/130\). From this, \(\theta_b = \tan^{-1}(4.86/130) = 2.13^o\). This is slightly different from the answer we got above, because Equation (4) is an approximation to the true blur angle.</p>
     </li>
   </ul>
-
-  <h2 id="depth-of-field">Depth of Field</h2>
-
-  <p>When an image screen and a lens are fixed in place, only objects at a specific distance from the lens will be in focus. Objects closer than this, or further away, will be blurred (<a href='#Figure6'>Figure 6</a>). For example, suppose we have a lens with power \(F=+20D\) and which is \(10\)mm wide (the aperture \(a\)). An image screen is placed \(0.08{\text{m}}\) from the lens. In this case, the vergence leaving the lens that yields a sharp image is \(1/0.08=12.5{\text{D}}\). That is, the vergence needed to create a sharp image is \(V_{need}=12.5{\text{D}}\). From the thin lens equation, to get a vergence of \(12.5{\text{D}}\) leaving the lens, we need \(V_{in}=-7.5{\text{D}}\), and so an object has to be \(13.33\)cm from the lens in order to produce a sharp image.</p>
-
+  
+  <h3>Letter Charts</h3>
+  <p>Since blur is related to refractive error, we can measure the amount of refractive error by measuring the amount of blur a patient experiences. <a href='#Figure6'>Figure 6</a> shows the effect of blur on the readability of letters. When the blur diameter is about 2/3 the height of the letters, they can't be read at all. </p>
+  
   <figure id="Figure6">
-    <div class='canvas-div' id='figure6img'></div>
-
+    <div class='canvas-div' style='width:100%' id='figure6img'></div>
     <figcaption>
-      <span class='figno'>Figure 6.</span> A lens can only focus at one distance at a time. This lens is looking at three different coloured point objects at different distances. Initially the screen is set to focus on the nearest (orange) object, but in that case, the images of the other two are blurred. If you move the screen to focus on the middle (white) object, it blurs the orange one. Only one distance can be in focus at a time.
+      <span class='figno'>Figure 6.</span> The effect of blur on readability. The slider allows you to change the size of the blur circle (in the middle of the image). The top row of letters is not blurred, but the bottom row shows what happens when they are. The height of the letters is 32 units. When the blur diameter is about 1/2 to 2/3 of this, it's nearly impossible to read the letters.
     </figcaption>
   </figure>
 <script src='scripts/figure6.js'></script>
 
-  <p>However, a small amount of blur is not usually noticeable, and so some objects that are closer, and some that are further away, will still appear to be in focus. The range of distances over which objects appear to be in focus is called the depth of field. An example of depth of field is shown in <a href='#Figure7'>Figure 7</a>.</p>
+<p>
+Thus, we can measure the amount of blur a person has by showing them letters of different sizes and seeing what their smallest readable letter is. The person's blur is then roughly 2/3 of this. This is the principle behind letter charts. 
+</p>
+
+<p>
+For example, the the letters on the 6/6 (or 20/20) line on a letter chart are 5 minutes of arc tall (a degree has 60 minutes, so they are \(5/60=0.083\) degrees tall). If a person can't read these letters (but can read larger letters) their blur cicle is about 0.056 degrees (2/3 of 0.083) in diameter. Looking at Equation (5) above, this means that \(\theta_b = 0.056\). Assuming the pupil is 5mm wide (that is, \(a=0.005\)), we get</p>
+  
+  <div>\[0.056 \approx 57\times0.005\, |V_{need}-V_{out}|\]</div>
+  
+  <p>
+  From this, their refractive error \(|V_{need}-V_{out}|\) (see Chapter 8 and 9) is about  \(0.2\text{D}\). 
+  </p>
+</p>
+
+  <h2 id="depth-of-field">Depth of Field</h2>
+
+  <p>When an image screen and a lens are fixed in place, only objects at a specific distance from the lens will be in focus. Objects closer than this, or further away, will be blurred (<a href='#Figure7'>Figure 7</a>). For example, suppose we have a lens with power \(F=+20D\) and which is \(10\)mm wide (the aperture \(a\)). An image screen is placed \(0.08{\text{m}}\) from the lens. In this case, the vergence leaving the lens that yields a sharp image is \(1/0.08=12.5{\text{D}}\). That is, the vergence needed to create a sharp image is \(V_{need}=12.5{\text{D}}\). From the thin lens equation, to get a vergence of \(12.5{\text{D}}\) leaving the lens, we need \(V_{in}=-7.5{\text{D}}\), and so an object has to be \(13.33\)cm from the lens in order to produce a sharp image.</p>
 
   <figure id="Figure7">
+    <div class='canvas-div' id='figure7img'></div>
+
+    <figcaption>
+      <span class='figno'>Figure 7.</span> A lens can only focus at one distance at a time. This lens is looking at three different coloured point objects at different distances. Initially the screen is set to focus on the nearest (orange) object, but in that case, the images of the other two are blurred. If you move the screen to focus on the middle (white) object, it blurs the orange one. Only one distance can be in focus at a time.
+    </figcaption>
+  </figure>
+<script src='scripts/figure7.js'></script>
+
+  <p>However, a small amount of blur is not usually noticeable, and so some objects that are closer, and some that are further away, will still appear to be in focus. The range of distances over which objects appear to be in focus is called the depth of field. An example of depth of field is shown in <a href='#Figure8'>Figure 8</a>.</p>
+
+  <figure id="Figure8">
     <img src="media/dominos.jpg" />
 
     <figcaption>
-      <span class='figno'>Figure 7.</span> A lens can only focus at one distance at a time. Here, the camera is focussed on the nearby dominos, so the distant dominos are blurred.
+      <span class='figno'>Figure 8.</span> A lens can only focus at one distance at a time. Here, the camera is focussed on the nearby dominos, so the distant dominos are blurred.
     </figcaption>
   </figure>
 
@@ -286,15 +311,15 @@ function toggle3(s) {
 
   <p>As we shall see in a later chapter, the paraxial equation or the thin lens equation is based on the assumption that (a) all rays of light are close to the optic axis, and (b) are nearly parallel with it. When these assumptions are wrong, the paraxial equation stops being correct, and the image no longer forms where the paraxial equation says it will. Since the thin lens equation is based on the paraxial equation, the thin lens equation will also stop being correct. Rays that don’t obey the paraxial equation give rise to aberrations. There are a number of different aberrations; we will consider only spherical aberration, coma, and chromatic aberration.</p>
 
-  <figure id="Figure8">
-   <div class='canvas-div' id='figure8img'></div>
+  <figure id="Figure9">
+   <div class='canvas-div' id='figure9img'></div>
     <figcaption>
-      <span class='figno'>Figure 8.</span> Spherical aberration can be reduced by blocking the peripheral rays (rays that are a long way from the centre of the lens).
+      <span class='figno'>Figure 9.</span> Spherical aberration can be reduced by blocking the peripheral rays (rays that are a long way from the centre of the lens).
     </figcaption>
   </figure>
-  <script src='scripts/figure8.js'></script>
+  <script src='scripts/figure9.js'></script>
   
-  <p>Spherical aberration is due to rays of light that are parallel with the optic axis, but hit the lens a long way from the centre (breaking assumption (a) of the paraxial equation). These rays are focussed at a different place from the rays that are close to the optic axis. <a href='#Figure8'>Figure 8</a> shows spherical aberration in a refracting surface. The rays that hit the surface a long way above or below the optic axis are bent to arrive at a point different from the rays close to the optic axis (the paraxial rays). This difference in focal power between central and peripheral rays leads to blur.</p>
+  <p>Spherical aberration is due to rays of light that are parallel with the optic axis, but hit the lens a long way from the centre (breaking assumption (a) of the paraxial equation). These rays are focussed at a different place from the rays that are close to the optic axis. <a href='#Figure9'>Figure 9</a> shows spherical aberration in a refracting surface. The rays that hit the surface a long way above or below the optic axis are bent to arrive at a point different from the rays close to the optic axis (the paraxial rays). This difference in focal power between central and peripheral rays leads to blur.</p>
 
   <p>Spherical aberration can be positive or negative. In positive spherical aberration, the marginal rays (those rays away from the optic axis and thus towards the margins of the lens) focus closer than the paraxial rays. In a sense, the margins of the lens behave like they have more focal power than the centre. Negative spherical aberration occurs when the marginal rays focus further away than the paraxial rays.</p>
 
@@ -302,25 +327,25 @@ function toggle3(s) {
 
   <ol>
     <li>
-      <p>Use a non-spherical (aspheric) surface: Spherical aberration is specifically caused by using a spherical refracting surface. We can get rid of spherical aberration by using a surface of a different shape. For example, if the lens has positive spherical aberration, as in <a href='#Figure8'>Figure 8</a>, we can reduce this by making the lens less powerful at the edges; this is easiest done by making the lens less curved at the edges.</p>
+      <p>Use a non-spherical (aspheric) surface: Spherical aberration is specifically caused by using a spherical refracting surface. We can get rid of spherical aberration by using a surface of a different shape. For example, if the lens has positive spherical aberration, as in <a href='#Figure9'>Figure 9</a>, we can reduce this by making the lens less powerful at the edges; this is easiest done by making the lens less curved at the edges.</p>
     </li>
 
     <li>
-      <p>Block any rays of light that aren’t paraxial. In (<a href='#Figure8'>Figure 8</a>), this can be dine by reducing the aperture with the slider. In our eye, the iris does this, so that most of the light rays that are heading for the fovea must pass close to the optic centre of the eye. This ensures that at least the foveal image has less spherical aberration.</p>
+      <p>Block any rays of light that aren’t paraxial. In (<a href='#Figure9'>Figure 9</a>), this can be dine by reducing the aperture with the slider. In our eye, the iris does this, so that most of the light rays that are heading for the fovea must pass close to the optic centre of the eye. This ensures that at least the foveal image has less spherical aberration.</p>
     </li>
   </ol>
 
   <h2 id="coma">Coma</h2>
 
-  <p>The paraxial equation is built on the assumption that rays of light are (a) close to the optic axis, and (b) are nearly parallel with it. Coma occurs when rays of light hit a lens at large angles relative to the optic axis, breaking assumption (b) (<a href='#Figure9'>Figure 9</a>). The main solution to coma is the same as for spherical aberration: block many of the rays entering the lens (or eye) with a small aperture.</p>
+  <p>The paraxial equation is built on the assumption that rays of light are (a) close to the optic axis, and (b) are nearly parallel with it. Coma occurs when rays of light hit a lens at large angles relative to the optic axis, breaking assumption (b) (<a href='#Figure10'>Figure 10</a>). The main solution to coma is the same as for spherical aberration: block many of the rays entering the lens (or eye) with a small aperture.</p>
 
-  <figure id="Figure9">
-    <div class='canvas-div' style='width:100%' id='figure9img'></div>
+  <figure id="Figure10">
+    <div class='canvas-div' style='width:100%' id='figure10img'></div>
     <figcaption>
-      <span class='figno'>Figure 9.</span> Rays that strike a refracting surface obliquely do not come to a single focus point, even if they strike the surface near the centre. This is called coma. However, if you move these rays so that they travel horizontally and so hit the surface at a lesser angle, they <b>will</b> focus at a single point.</span>
+      <span class='figno'>Figure 10.</span> Rays that strike a refracting surface obliquely do not come to a single focus point, even if they strike the surface near the centre. This is called coma. However, if you move these rays so that they travel horizontally and so hit the surface at a lesser angle, they <b>will</b> focus at a single point.</span>
     </figcaption>
   </figure>
-  <script src='scripts/figure9.js'></script>
+  <script src='scripts/figure10.js'></script>
   
   <p>Coma has the same cause as spherical aberration. In both cases, light rays are striking the surface at a large angle. In spherical aberration, the large angle results from the shape of the sphere. In coma, the large angle results from the angle the rays are approaching. Changing the surface to a non-spherical shape may reduce spherical aberration, but it won't, therefore, reduce coma. 
   <h2 id="scatter.">Scatter.</h2>
@@ -329,31 +354,60 @@ function toggle3(s) {
 
   <h2 id="chromatic-aberration.">Chromatic Aberration.</h2>
 
-  <p>Chromatic aberration occurs because the refractive index of glass (and other refracting substances) depends on the wavelength, or colour<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, of the light. The wavelengths of visible light are from about 400nm (violet) to 700nm (red). For example, the refractive index for crown glass varies from about 1.52 for violet light to 1.50 for red light. This variation in refractive index can be clearly seen when shining a white light beam through a prism – the beam of light is split into different colours, as each wavelength is bent a different amount by the glass (<a href='#Figure10'>Figure 10</a>). Although this dispersion of light yields some pretty effects, it has a serious downside when trying to form sharp images with lenses.</p>
+  <p>Chromatic aberration occurs because the refractive index of glass (and other refracting substances) depends on the wavelength, or colour<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, of the light. The wavelengths of visible light are from about 400nm (violet) to 700nm (red). For example, the refractive index for crown glass varies from about 1.52 for violet light to 1.50 for red light. This variation in refractive index can be clearly seen when shining a white light beam through a prism – the beam of light is split into different colours, as each wavelength is bent a different amount by the glass (<a href='#Figure11'>Figure 11</a>). Although this dispersion of light yields some pretty effects, it has a serious downside when trying to form sharp images with lenses.</p>
 
-  <figure id="figure10">
+  <figure id="figure11">
     <img src="media/prism.jpg" />
 
     <figcaption>
-      <span class="figno">Figure 10.</span> Dispersion of light by a prism. White light is split into constituent wavelengths because each wavelength bends a different amount.
+      <span class="figno">Figure 11.</span> Dispersion of light by a prism. White light is split into constituent wavelengths because each wavelength bends a different amount.
     </figcaption>
   </figure>
 
   <p>Recall that the focal power \(F_{surface}\) of a refracting surface of radius \(r\) is given by \(F_{surface}=(n_{out} - n_{in})/r\), where \(n_{out}\) and \(n_{in}\) are refractive indices to the right and left of the surface. If we make a single refracting surface out of crown glass, with a radius of curvature of, say, \(r =0.05{\text{m}}\), then the surface power is going to be \((1.5-1)/0.05 = 10{\text{D}}\) for red light (700nm) and \((1.52-1)/0.05 =10.4{\text{D}}\) for violet light (400nm). This means that a distant red object will form a clear image 0.150m from the lens<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, while a distant blue object will form a clear image at 0.1462m from the lens, a difference of nearly 4mm. A white object, which emits light across the entire spectrum, will thus have its image spread out over 4mm of space, so it will be impossible to get a single clear image – if one wavelength is in focus, the others will not be.</p>
 
-  <figure id="Figure11">
-    <div class='canvas-div' id='figure11img'></div>
+  <figure id="Figure12">
+    <div class='canvas-div' id='figure12img'></div>
     <figcaption>
-      <span class='figno'>Figure 11.</span> Chromatic aberration from a thin lens. The refractive index varies with wavelength, causing each wavelength to come to a focus at a different distance. Here only three wavelengths are represented, coloured blue, green and red. Blue comes into focus first, then green, then red last. The image is a mixture of the blur discs of these three wavelengths. In reality, with more wavelengths, the blur would look like concentric rainbows.</span>
+      <span class='figno'>Figure 12.</span> Chromatic aberration from a thin lens. The refractive index varies with wavelength, causing each wavelength to come to a focus at a different distance. Here only three wavelengths are represented, coloured blue, green and red. Blue comes into focus first, then green, then red last. The image is a mixture of the blur discs of these three wavelengths. In reality, with more wavelengths, the blur would look like concentric rainbows.</span></p>
+	  <p>You can turn off some of the wavelengths using the checkboxes to see what happens to the wavelengths individually. </p>
     </figcaption>
   </figure>
-  <script src='scripts/figure11.js'></script>
+  <script src='scripts/figure12.js'></script>
 
-  <p>One way to reduce the effect of chromatic aberration is simply to reduce the lens aperture. Reducing the aperture doesn’t change the refractive indices at all, but it does reduce the amount of blur due to the defocus of one wavelength compared to others. The downside to reducing the aperture is a lot of light reaching the eye is not used, but in daylight this isn’t such a problem. </p>
-  <!--
-  <p>The dispersion of optical materials is summarized by the <em>Abbe number</em>, defined as 
-<div>\[\text{Abbe} =\frac{n_{587.6} - 1}{n_{486.1} - n_{656.3}}\]</div> Where \(n_{\text{xxx}}\) is the refractive index of the material at wavelength \(\text{xxx}\). The odd wavelengths in this definition (587.6, 486.1, and 656.3nm) are called Fraunhofer lines, which are specific marks in the spectrum of sunlight, and so can be easily picked out in a lab using a prism. A low Abbe number indicates a high dispersion; a high Abbe number indicates low dispersion. The Abbe number for both crown glass and CR-39 is 58, whereas for polycarbonate (a transparent plastic) it is 30; so polycarbonate is highly dispersive compared to glass.</p>
-  -->
+  <p>One way to reduce the effect of chromatic aberration is simply to reduce the lens aperture. Reducing the aperture doesn’t change the refractive indices at all, but it does reduce the amount of blur due to the defocus of the blurred wavelengths. The downside to reducing the aperture is a lot of light reaching the eye is not used, but in daylight this isn’t such a problem. </p>
+  
+  <h3>Abbe Number</h3>
+  <p>We could measure the amount of chromatic aberration in a lens by the difference in power at different wavelengths. For example, suppose some kind of glass has the following refractive indices at different wavelengths:</p>
+  
+  <table>
+  <tr><th>Wavelength (in nm)</th><th>Refractive index \(n\)</th>
+  <th>Power for \(r=0.03\)</th></tr>
+  <tr><td>400</td><td>1.79</td><td>26.33</td></tr>
+  <tr><td>500</td><td>1.75</td><td>25</td></tr>
+  <tr><td>600</td><td>1.72</td><td>24</td></tr>
+  <tr><td>700</td><td>1.7</td><td>23.33</td></tr>
+  </table>
+  
+  <p>If we made a refracting surface out of this glass with a radius of \(r=0.03\text{m}\), then the power (in air) can be calulated using the formula \(F_{surface}=(n_{wavelength}-1)/r\), where \(n_{wavelength}\) is the refractive index of a particular wavelength. These are given in the third column of the table. </p>
+  <p>The refractive index varies by \(3\text{D}\) in this column. We might therefore measure the chromatic aberration by the difference between the power at 400nm and the power at 700nm, namely \(26.33-23.33 = 3\text{D}\). 
+  </p>
+  <p>However, if we used the same glass but made a lens with a radius of r=0.06m, then the powers in the table would all halve, and so our measure of chromatic aberration would also halve, to \(1.5\text{D}\). So a straightforward difference might not be a good measure of chromatic aberration.</p>
+  <p>However, if we divided the difference by the power at some middle wavelength, say 600nm, then the chromatic aberration would be \(3/24 = 0.125\) for the lens with radius \(0.03\text{m}\), and \(1.5/12 = 0.125\) for the lens with radius \(0.06\text{m}\) - that is, the same.</p>
+  
+  <p>So let's measure the chromatic aberration as (power at 400-power at 700)/(power at 600). The formula for this is</p>
+  <div>\[\frac{\dfrac{n_{400}-1}{r}-\dfrac{n_{700}-1}{r}}{\dfrac{n_{600}-1}{r}}\]</div>
+  This looks awful, but it simplifies to
+  <div>\[\frac{n_{400}-n_{700}}{n_{600}-1}\]</div>
+  
+  <p>However, this is almost alwats a fraction less than 1. To keep the numbers large, the chromatic aberration of a substance (or a lens made of thst substance) is summarized by the reciprocal of the above, called the <em>Abbe number</em>:
+  
+<div>\[\text{Abbe Number} =\frac{n_{587.6} - 1}{n_{486.1} - n_{656.3}}\]</div> 
+
+<p>where \(n_{\text{xxx}}\) is the refractive index of the material at wavelength \(\text{xxx}\). The chromatic aberration of a substance is usually called the <em>dispersion</em>. The peculiar wavelengths in this definition (587.6, 486.1, and 656.3nm) are called Fraunhofer lines, which are specific marks in the spectrum of sunlight, and so can be easily standardized in a lab. </p>
+
+<p>A low Abbe number indicates a high dispersion; a high Abbe number indicates low dispersion. The Abbe number for both crown glass and CR-39 is 58, whereas for polycarbonate (a transparent plastic) it is 30; so polycarbonate is highly dispersive compared to glass.</p>
+
 
   <div class="footnotes">
     <hr />
@@ -369,5 +423,7 @@ function toggle3(s) {
     </ol>
   </div>
 </body>
-
+<script>
+slideshow()
+</script>
 </html>

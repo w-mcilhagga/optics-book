@@ -1,5 +1,12 @@
 (function() {
 	
+	function blurlum(width, rays, minwidth, maxrays) {
+		// relative blur luminance 
+		width = Math.max(width, minwidth)
+		let r = ((rays-1)/(maxrays-1))/(width/minwidth)
+		return r**0.25
+	}
+	
 	let focus = 1/(1/(-1.5-(-0.25))+2.5)-0.25,
 		scrn = 60/300,
 		state = {
@@ -164,10 +171,12 @@
 						for (let i=0; i<3; i++) {
 							let box = this.blur[i].blurbox,
 								d = box[3]-box[2],
-								flux = (this.blur[i].raycount/6)**2, //[0..1]
-								area = (d/0.15)**2+1,
-								lum = flux/area
-							p5.fill(clr[i][0]*lum, clr[i][1]*lum, clr[i][2]*lum)
+								//flux = (this.blur[i].raycount/6)**2, //[0..1]
+								//area = (d/0.15)**2+1,
+								//lum = flux/area,
+								lum = blurlum(d, this.blur[i].raycount, 0.01, 6)
+							//p5.fill(clr[i][0]*lum, clr[i][1]*lum, clr[i][2]*lum)
+							p5.fill(clr[i][0], clr[i][1], clr[i][2], 255*lum)
 							p5.circle(vbox[1]-ppm*scrn-10,0,ppm*d+3) 
 						}
 					}
@@ -228,8 +237,8 @@
 		}		
 	}
 	
-	new p5(makeP5App(state, actions), 'figure11img')
+	new p5(makeP5App(state, actions), 'figure12img')
 	
-	popout.openButton('Figure11')
-	popout.addhelp('Figure11', actions.toggle)
+	popout.openButton('Figure12')
+	popout.addhelp('Figure12', actions.toggle)
 })()

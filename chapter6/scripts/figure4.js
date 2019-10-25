@@ -1,5 +1,12 @@
 (function() {
 	
+	function blurlum(width, rays, minwidth, maxrays) {
+		// relative blur luminance 
+		width = Math.max(width, minwidth)
+		let r = ((rays-1)/(maxrays-1))/(width/minwidth)
+		return r**0.6
+	}
+	
 	let focus = 1/(1/(-1.5-(-0.25))+2.5)-0.25,
 		scrn = 40/300,
 		state = {
@@ -54,9 +61,7 @@
 					draw(p5, vbox, ppm) {
 						let box = this.blur.blurbox,
 							d = box[3]-box[2],
-							flux = (this.blur.raycount/10)**2, //[0..1]
-							area = (d/0.15)**2+1,
-							lum = flux/area
+							lum = blurlum(d, this.blur.raycount, 0.01, 10)
 						p5.noStroke()
 						p5.fill(0)
 						p5.rect(vbox[1]-2*ppm*scrn-10, -ppm*scrn, 2*ppm*scrn, 2*ppm*scrn)

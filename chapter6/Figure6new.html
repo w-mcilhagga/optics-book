@@ -1,4 +1,15 @@
+<link rel="stylesheet" type="text/css" href="../styles/popout.css" />
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
 
+<body>
+  <figure id="Figure6">
+    <div class='canvas-div' style='width:100%' id='figure6img'></div>
+    <figcaption>
+      <span class='figno'>Figure 6.</span> The height of the E is 32.
+    </figcaption>
+  </figure>
+  <script>
   function sketch(p5) {
   
 	let images = [], 
@@ -11,6 +22,7 @@
 		w = document.getElementById('figure6img').clientWidth
 		imscale = Math.min(w, 500)/500,
 		h = 232*imscale+30
+		console.log(w,h)
 	}
 	
 	p5.preload = function() {
@@ -44,4 +56,5 @@
   }
   
   let myP5 = new p5(sketch, 'figure6img')
-
+  </script>
+</body>
