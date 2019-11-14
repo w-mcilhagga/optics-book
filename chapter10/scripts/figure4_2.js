@@ -38,10 +38,10 @@ let c=[-0.2,0],
     offset = 35/1000,
     state = {
 	w: 510,
-	h: 320,
+	h: 340,
 	//maxWidth: 700,
 	ppm: 4000,
-	origin: [510-370, 220],
+	origin: [510-370, 240],
 	background: [0, 61, 93],
 	items: [
 		...translate(EYE, 0, offset),
@@ -52,7 +52,7 @@ let c=[-0.2,0],
 			id: 'PL',
 			target: 'front cornea_t',
 			target_spread: 0.012,
-			spread: 0.012,
+			spread: 0.01,
 			raycount: 9,
 			ui: {ylock:true, xlock:true},
 			style: {
@@ -74,7 +74,7 @@ let c=[-0.2,0],
 			light: 'PL',
 			lens: 'back lens_t',
 			draw(p5, vbox, ppm) {
-				if (Math.abs(this.position[0]-0.0213)<0.0002) {
+				if (Math.abs(this.position[0]-0.0213)<0.00015) {
 					p5.fill(0,255,0)
 				} else {
 					p5.fill(255,0,0)
@@ -137,7 +137,7 @@ let c=[-0.2,0],
 			id: 'PL2',
 			target: 'front cornea',
 			target_spread: 0.012,
-			spread: 0.012,
+			spread: 0.01,
 			raycount: 9,
 			ui: {ylock:true, xlock:true},
 			style: {
@@ -159,7 +159,7 @@ let c=[-0.2,0],
 			light: 'PL2',
 			lens: 'back lens',
 			draw(p5, vbox, ppm) {
-				if (Math.abs(this.position[0]-0.0213)<0.0002) {
+				if (Math.abs(this.position[0]-0.0213)<0.00015) {
 					p5.fill(0,255,0)
 				} else {
 					p5.fill(255,0,0)
@@ -186,17 +186,37 @@ let c=[-0.2,0],
 			}
 		},
 		{
+			type: 'real image', // for the focal point
+			id: 'farpt2',
+			light: 'PL2',
+			lens: 'specs',
+			draw(p5, vbox, ppm) {
+				p5.fill(255)
+				p5.circle(...v2.scale(ppm, this.position), 8, 8)
+				p5.stroke(255)
+				p5.strokeDash([3,5])
+				p5.line(...v2.scale(ppm, this.rays[0].pt), ...v2.scale(ppm, this.position))
+				p5.line(...v2.scale(ppm, this.rays[this.rays.length-1].pt), 
+				...v2.scale(ppm, this.position))
+			},
+			style: {
+				visible: true,
+				z_order: -10
+			}
+		},
+		{
 			type: 'dimension',
 			start: 'specs',
 			end: 'focalpt',
-			ycoord: -1.9*7.8/1000-0.004,
+			ycoord: +1.9*7.8/1000-0.002,
+			label: 'f = 0.09m',
 			style: {
 				labelat: '50%',
 				stroke: 255,
 				fill: 255,
 				textSize: 16,
-				textOffset: [0,-10],
-				textAlign: ['center', 'top']
+				textOffset: [0,8],
+				textAlign: ['center', 'bottom']
 			}
 		},		
 		{

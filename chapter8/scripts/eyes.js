@@ -139,14 +139,14 @@ function makePupil(eye, diam) {
 		{
 			type: 'barrier',
 			id: 'pupil top',
-			position: [x, diam/1000/2, x, y],
+			position: [x, diam/1000/2, x, y+0.0005],
 			style: {strokeWeight: 3 },
 			ui: {xlock: true, ylock: true}
 		},
 		{
 			type: 'barrier',
 			id: 'pupil bottom',
-			position: [x, -diam/1000/2, x, -y],
+			position: [x, -diam/1000/2, x, -y-0.0005],
 			style: {strokeWeight: 3 },
 			ui: {xlock: true, ylock: true}
 		},

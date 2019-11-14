@@ -55,7 +55,7 @@ let c=[-0.2,0],
 			light: 'PL',
 			lens: 'back lens',
 			draw(p5, vbox, ppm) {
-				if (Math.abs(this.position[0]-0.0213)<0.0002) {
+				if (Math.abs(this.position[0]-0.0213)<0.00015) {
 					p5.fill(0,255,0)
 				} else {
 					p5.fill(255,0,0)
