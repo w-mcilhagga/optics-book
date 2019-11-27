@@ -1,0 +1,158 @@
+[
+	{
+		"id": "view_1",
+		"origin": [
+			0.21011850501367366,
+			0.30147378481017206
+		],
+		"scale": 200,
+		"filename": "oblique",
+		"activeLayerId": "layer_1"
+	},
+	{
+		"id": "world_1",
+		"layers": [
+			{
+				"id": "layer_1",
+				"items": [
+					{
+						"type": "lens",
+						"F": 0.9,
+						"position": [
+							-0.0975,
+							0.3475
+						],
+						"index": [
+							1,
+							1
+						],
+						"id": "lens_1",
+						"aperture": 0.36,
+						"orientation": 0
+					},
+					{
+						"type": "light",
+						"vergence": "parallel",
+						"beamWidth": 0.4,
+						"rayCount": 9,
+						"position": [
+							-1.5925,
+							0.3475
+						],
+						"id": "light_1",
+						"orientationMode": "object",
+						"orientationObject": "lens_1",
+						"orientationMatchWidth": "yes",
+						"orientationPt": [
+							0,
+							0
+						]
+					},
+					{
+						"type": "barrier",
+						"position": [
+							1.0125,
+							0.13249999999999973
+						],
+						"id": "barrier_1",
+						"aperture": 0.94
+					},
+					{
+						"type": "light",
+						"vergence": "parallel",
+						"beamWidth": 0.4,
+						"rayCount": 9,
+						"position": [
+							-1.5274999999999999,
+							1.1325000000000003
+						],
+						"id": "light_2",
+						"orientationMode": "object",
+						"orientationObject": "lens_1",
+						"orientationMatchWidth": "yes",
+						"orientationPt": [
+							0,
+							0
+						],
+						"orientationAngle": 0
+					}
+				]
+			}
+		]
+	},
+	{
+		"handle": {
+			"stroke-linecap": "round",
+			"stroke-width": 10,
+			"opacity": 0
+		},
+		"lens": {
+			"stroke": "#0000FF",
+			"stroke-width": 1,
+			"fill": "none",
+			"muller_lyer": 4,
+			"angleWidth": 60,
+			"length": 7
+		},
+		"mirror": {
+			"stroke": "#999999",
+			"stroke-width": 1,
+			"fill": "none",
+			"hatchlength": 5,
+			"hatchspace": 5
+		},
+		"barrier": {
+			"stroke": "#000000",
+			"stroke-width": 2,
+			"fill": "none"
+		},
+		"light>ray": {
+			"stroke-width": 0.6,
+			"fill": "none",
+			"pointer-events": "none",
+			"muller_lyer": 4,
+			"angleWidth": 60,
+			"length": 7,
+			"arrowx": [
+				-0.85
+			]
+		},
+		"light": {
+			"stroke": "none",
+			"fill": "#000000",
+			"radius": 5
+		},
+		"light_2": {
+			"fill": "#7979db"
+		},
+		"light_2>ray": {
+			"stroke-width": 1.3,
+			"fill": "none",
+			"pointer-events": "none",
+			"muller_lyer": 4,
+			"angleWidth": 60,
+			"length": 7,
+			"arrowx": [
+				-0.85
+			]
+		},
+		"light_1": {
+			"fill": "#68d768"
+		},
+		"light_1>ray": {
+			"stroke-width": 1.3,
+			"fill": "none",
+			"pointer-events": "none",
+			"muller_lyer": 4,
+			"angleWidth": 60,
+			"length": 7,
+			"arrowx": [
+				-0.85
+			]
+		},
+		"lens_1": {
+			"stroke": "#000000",
+			"stroke-width": 2
+		}
+	}
+]

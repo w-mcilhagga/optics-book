@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+</script>
+  <script src='../scripts/p5/p5.js'></script>
+  <script src='../scripts/p5/p5.dom.js'></script>
+  <script src='../scripts/p5/p5.util.js'></script>
+  <script src='../scripts/p5/p5.yup.js'></script>
+  <script src='../scripts/vec2d.js'></script>
+  <script src='../scripts/raytracing-2/optical_simulation.js'></script>
+  <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+  <script src='../scripts/raytracing-2/makeArc.js'></script>
+  <script src='../scripts/popouts.js'></script>
+  <script src='../scripts/slides.js'></script>
+  <script src='../chapter8/scripts/eyes.js'></script>
+
+  <title>Chapter 11: Astigmatism</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 11
+  </div>
+
+  <h1 id="astigmatism">Astigmatism</h1>
+
+  <p>Up until now, we’ve been dealing with lenses as if they were two-dimensional objects, as shown in the ray diagram in <a href="Figure1" >Figure 1 (a)</a>. What we’re really doing, however, is looking at just a two-dimensional cross-section of a three dimensional lens. That’s fine for spherical lenses, because all cross sections through the centre of a spherical lens are the same. No matter which cross-section we consider, the power is the same. (<a href="Figure1" >Figure 1 (b)</a>).</p>
+  
+  <figure id='Figure1'>
+  <div class='canvas-div' style='width:100%' id='figure1img'></div>
+  <figcaption>
+  <span class="figno">Figure 1.</span>(A) A ray diagram shows the paths taken by light in a 2 dimensional cross section of a lens. (B) Lenses however are 3 dimensional. The green (horizontal) cross-section shows the rays from (A) travelling through the lens. If the lens is spherical, all lens cross sections are the same, so the rays will travel in exactly the same paths in the blue (vertical) cross-section of the lens, or indeed any other cross-section.
+  </figcaption>
+  </figure>
+  <script src='scripts/figure1.js'></script>
+ 
+  <p>Not all lenses are spherical, however. In some lenses, the cross-sections are all different. In this case, we have to work out what happens one cross-section at a time. The first problem we face is that if the lens isn’t spherical, the cross-sections aren’t circles, and so we can’t even begin to work out the power of the lens in each cross-section, because the formula for surface power (and the paraxial equation) assumes that the surfaces are circular.</p>
+  
+
+  <p>However, some lens shapes do have circular cross-sections. These are called <strong>toric</strong> lenses (so called because the lens is shaped like a slice off a <em>torus</em>, which is a donut or barrel shaped object, see <a href="Figure2" >Figure 2</a>). A toric lens has two cross-sections which are circular. These cross-sections are called the <strong>principal meridians</strong>, and are always at right angles to one another. These are the only cross-sections of the lens where the paraxial equation or the thin lens equation is valid but, if we figure out what happens on these particular cross-sections, we can figure out what the image formed by the lens looks like.</p>  
+  
+  <figure id='Figure2'>
+    <img src="media/figure2.png" />
+
+    <figcaption>
+      <span class="figno">Figure 2.</span> A toric lens is a kind of astigmatic lens which is shaped like a slice off a torus (or donut). A toric lens has two principal meridians, which are cross sections of the lens that are circular. The principal meridians of the toric lens (the slice) are shown as black circular curves on the surface.
+    </figcaption>
+  </figure>
+
+
+  <h3 id="example">Example</h3>
+
+  <p>A toric shaped glass lens, like the one in <a href="Figure2" >Figure 2</a>, has principal meridians with radii of 0.25m and 0.1m. What are the surface powers along these meridians?</p>
+
+  <h4 id="answer">Answer</h4>
+
+  <p>Assuming the refractive index of glass is 1.5, the surface powers along the two meridians are \((1.5-1)/0.25=+2\text{D}\), and \((1.5-1)/0.1=+5\text{D}\).</p>
+
+  <p>If we know the powers of the lens along the principal meridians, we can use the thin lens equation to work out the position of the image along each meridian, or cross-section:</p>
+
+  <h3 id="example-1">Example</h3>
+
+  <p>A toric lens has a power of \(+2\text{D}\) along one principal meridian, and \(+5\text{D}\) along the other principal meridian. An object is placed \(45\text{cm}\) in front of the lens. Where do the images form?</p>
+
+  <h4 id="answer-1">Answer</h4>
+
+  <p>The only way to answer this question is to work with each meridian (cross-section) separately. For the first meridian with power \(+2\text{D}\), the thin lens equation says that \(V_{out}=1/(-0.45)+2=-0.222\text{D}\), so the image forms at a distance of \(1/(-0.222)=-4.5\text{m}\) from the lens. That is, it is a virtual image, \(4.5\text{m}\) to the left of the lens.</p>
+
+  <p>For the second meridian with power \(+5\text{D}\), \(V_{out}=1/(-0.45)+5 = 2.778\text{D}\), so the image forms at a distance of \(1/2.778=0.36\text{m}\) from the lens. This is a real image to the right of the lens.</p>
+
+  <p>Clearly, this lens cannot form a sharp image of the object, since there is no way the image can be both virtual and real, and in two different places at once. Instead, the image formed by this lens is always blurred. Lenses, such as toric lenses, where the power is different for different cross-sections are called <strong>astigmatic</strong><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> lenses. An astigmatic lens never produces a sharp image.</p>
+
+  <h2 id="images-formed-by-asigmatic-lenses">Images formed by Astigmatic Lenses</h2>
+
+  <p>Take a toric lens and place it so the principal meridians are horizontal and vertical. Now imagine sending a beam of parallel light at this lens; for example light from a single point on a distant object. Consider first just the light lying in the horizontal cross-section of the lens (<a href="Figure3" >Figure 3</a>, green plane). The parallel light in this cross-section will hit the horizontal meridian of the lens, and will then be focussed to the focal point of the horizontal meridian. If the horizontal meridian has power \(F_h\), then the light passing through the meridian will focus at a distance of \(f_h=1/F_h\) from the lens.</p>
+
+  <figure id='Figure3'>
+    <img src="media/figure3.png" />
+
+    <figcaption>
+      <span class="figno">Figure 3.</span> An astigmatic lens has two focal lengths, one for each principal meridian. Here, the focal length for the horizontal meridian \(f_h\) is shorter than the focal length for the vertical meridian \(f_v\). The principal meridians don’t have to be horizontal and vertical, but they are always at right angles.
+    </figcaption>
+  </figure>
+
+  <p>Now consider the vertical cross-section (<a href="Figure3" >Figure 3</a>, blue plane). The parallel light in this plane will hit the vertical meridian of the lens and then also focus to a point. If the vertical meridian has a power \(F_v\), the focal point is at a distance of \(f_v=1/F_v\) from the lens. For a spherical lens, \(f_h\) and \(f_v\) are the same, but for an astigmatic lens, \(f_h\) and \(f_v\) are different.</p>
+
+  <p>Consider what happens if we use a flat image screen to try and form an image using this toric lens. First, put the image screen at the horizontal focal point; that is, put the screen at a distance \(f_h\) from the lens. This is shown in the top left of <a href="Figure4" >Figure 4</a>. Here the image is focused horizontally, but blurred vertically, and so the image of a distant point object looks like a vertical line. The length of the vertical line can be worked out using the blur equation given in Chapter 7.</p>
+
+  <p>Next, put the screen at a distance \(f_v\) from the lens. This is shown in the bottom left of <a href="Figure4" >Figure 4</a>. Here the image is focused vertically, but blurred horizontally, and so the image of a distant point object looks like a horizontal line. Again, the length of the line can be worked out from the blur equation.</p>
+
+  <p>Anywhere between these two extremes, the image of a point object is roughly elliptical. We can figure out the width and height of the ellipse using the formula for the blur circle given in Chapter 7. The blur formula says that if a screen is placed a distance \(d\) from a lens with power \(F\) and aperture \(a\), the angular diameter of the blur circle is given by 
+  
+  <div>\[\text{angular diameter}=57\times a|D-F|\]</div> 
+  
+  where \(D=1/d\) is the power needed to form a sharp image at the distance \(d\) where the screen is put. When this formula is applied to spherical lenses, the angular diameter is the same in all directions, so the blur forms a circular disc.</p>
+
+<figure>
+  <table id='Figure4'>
+    <tbody>
+      <tr >
+        <td style="text-align: center;">
+		<img src="media/d-is-fh.png"/>
+		</td>
+
+        <td style="text-align: center; vertical-align:middle">
+		<img src="media/vblur.jpg"/> 
+		</td>
+      </tr>
+
+      <tr >
+        <td style="text-align: center;">
+		<img src="media/d-is-clc.png" />
+		</td>
+
+        <td style="text-align: center; vertical-align:middle">
+		<img src="media/isoblur.jpg"/>
+		</td>
+      </tr>
+
+      <tr >
+        <td style="text-align: center;">
+		<img src="media/d-is-fv.png" />
+		</td>
+
+        <td style="text-align: center; width:30%; vertical-align:middle">
+		<img src="media/hblur.jpg" />
+		</td>
+      </tr>
+    </tbody>
+  </table>
+	<figcaption><span class="figno">Figure 4.</span> Astigmatic images formed at different distances from the lens. The left hand column shows the images formed by a point object when the screen is placed at different distances (vertical line, disc, horizontal line). The right hand column shows images blurred accordingly. See text for details.</figcaption>
+  </figure>
+  
+  <p>However, with a toric lens whose horizontal meridian has power \(F_h\), and whose vertical meridian has power \(F_v\), the blur “circle” will have different widths horizontally and vertically, and will end up something like an ellipse. The horizontal width of the blur ellipse (at distance \(d= 1/D\)) is </p>
+  
+  <div>\[\text{horizontal angle of blur ellipse}=57\times a|D-F_h|\]</div> 
+  
+  and the vertical width of the blur ellipse is 
+  
+  <div>\[\text{vertical angle of blur ellipse}=57\times a|D-F_v|\]</div>
+
+  <p>The vertical and horizontal line images occur when \(D\) equals \(F_h\) or \(F_v\), because then the horizontal or vertical widths are zero. In between these two images, there is a third psition where the blur is completely circular. For a circle, the horizontal and vertical blur angles must be the same, so 
+  
+  <div>\[a|D-F_h|=a|D-F_v|\]</div> 
+  
+  This happens when \(D=(F_h+F_v)/2\). This circular blur ellipse is called the <em>circle of least confusion</em><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> (abbreviated clc). The angular width of the circle of least confusion is \(57\times a|F_v-F_h|/2\). This is shown in <a href="Figure4" >Figure 4</a>, middle row.</p>
+
+  <p>The value \((F_h+F_v)/2\) is called the <em>equivalent sphere</em>, the idea being that the equivalent sphere is the power of a spherical lens that is the most similar to the astigmatic lens.</p>
+
+  <p>Finally, the space from the first line image to the second line image is called the <em>Interval of Sturm</em>, after the mathematician who first defined its shape in three dimensions. Within the Interval of Sturm, the blur image transitions smoothly from a line to a circle (the clc) and then to another line, which is at 90 degrees to the first.</p>
+
+  <h2 id="the-astigmatic-eye">The Astigmatic Eye</h2>
+
+  <p>Astigmatism in the human eye can be caused by an astigmatic cornea or an astigmatic crystalline lens. If the lens is astigmatic, the amount of astigmatism may vary with accommodation. Astigmatism can also be combined with spherical refractive error such as myopia or hyperopia.</p>
+
+  <p>The principal meridians of astigmatism in humans are often close to horizontal or vertical. Human astigmatism is classified as follows (see also <a href="Figure5" >Figure 5</a>):</p>
+
+  <ol>
+    <li>
+      <p>When the principal meridians are vertical and horizontal, the astigmatism is subdivided into:</p>
+
+      <ol>
+        <li>
+          <p>With-the-rule astigmatism: the horizontal meridian has the least power and the vertical meridian has the most focal power.</p>
+        </li>
+
+        <li>
+          <p>Against-the-rule astigmatism: the vertical meridian has the least power and the horizontal meridian has the most focal power.</p>
+        </li>
+      </ol>
+    </li>
+
+    <li>
+      <p>The second case is where the meridians are at some other angle. This is called oblique astigmatism.</p>
+    </li>
+  </ol>
+
+  <p>There is a third case, irregular astigmatism, caused by much more distorted cornea or lens shapes that aren’t even approximately toric. While this kind of astigmatism can’t be readily analyzed in terms of the principal meridians we’ve used above, it is still considered astigmatism because no clear (i.e. point-like or stigmatic) image of a point object can be produced by the eye. You can get this kind of astigmatism following injury to the cornea, eye surgery, or in keratoconus (a disease which causes thinning of the cornea).</p>
+  
+  <figure id='Figure5'>
+    <img src="media/human-astigmatism.svg"/>
+
+    <figcaption>
+      <span class="figno">Figure 5.</span> Classification of human astigmatism depending on where the first and second line images appear. In each diagram, the vertical line is the first line image, the dot is the clc, and the slanted line is the second line image. In these diagrams, the patient has against-the-rule astigmatism.
+    </figcaption>
+  </figure>
+
+  <p>Astigmatism can also be “combined” with myopia or hyperopia, by which we mean that the equivalent sphere <div>\[(F_h+F_v)/2\]</div> is myopic or hyperopic. The degree of spherical error leads to a classification of astigmatism into five types, which is useful when correcting astigmatism during subjective refraction:</p>
+
+  <ol>
+    <li>
+      <p>The myopia is so great that the Interval of Sturm (the interval from the first to the second line image created by the eye) is entirely in front of the retina. This is called <em>compound myopic</em> astigmatism.</p>
+    </li>
+
+    <li>
+      <p>The myopia is a little less so the second line image at one end of the Interval of Sturm just touches the retina and the rest is in front of the retina. This is called <em>simple myopic</em> astigmatism.</p>
+    </li>
+
+    <li>
+      <p>The myopia or hyperopia is small enough that the Interval of Sturm crosses the retina. One line image forms in front of the retina, another behind it. This is called <em>mixed</em> astigmatism.</p>
+    </li>
+
+    <li>
+      <p>The hyperopia is enough that only the first line image at one end of the Interval of Sturm touches the retina, and the rest falls behind the retina. This is called <em>simple hyperopic</em> astigmatism.</p>
+    </li>
+
+    <li>
+      <p>The hyperopia is large enough that the Interval of Sturm is entirely behind the retina. This is called <em>compound hyperopic</em> astigmatism.</p>
+    </li>
+  </ol>
+
+  <p>An astigmatic eye is corrected by using an astigmatic spectacle lens. The spectacle lens has its principal meridians at the same angle as the principal meridians of the astigmatic eye. The astigmatic spectacle lens corrects the refractive error on each of the meridians.</p>
+
+  <h3 id="example-2">Example</h3>
+
+  <p>A with-the-rule astigmatic hyperope has ocular refractions along the meridians of \(+2\text{D}\) and \(+3\text{D}\). If spectacles are placed at a distance of \(15\text{mm}\), what are the spectacle powers?</p>
+
+  <h4 id="answer-2">Answer</h4>
+
+  <p>The spectacle powers are calculated along each meridian seperately. A "with-the-rule" astigmatic eye has the vertical meridian with the most power. Thus the ocular refraction vertically is \(+2\text{D}\) and the ocular refraction horizontally is \(+3\text{D}\). (The ocular refraction of a hyperope says how much extra power is needed for them to see clearly. Since the vertical meridian requires less extra power, it has the most power.)</p>
+
+  <p>Along the horizontal meridian, the spectacle focal length is \(1/3+0.015 = 0.348\text{m}\), so the spectacle power is \(1/0.348=+2.87\text{D}\). Along the vertical meridian, the spectacle focal length is \(1/2+0.015=0.515\text{m}\), so the spectacle power is \(+1.94\text{D}\).</p>
+
+  <h2 id="power-cross-sphere-cylinder">Power Cross, Sphere &amp; Cylinder</h2>
+
+  <p>An astigmatic lens has two principal meridians and two powers. One way of representing this is by a <em>power cross</em>. This is a circle with two lines, representing the principal meridians of the astigmatic lens, with their powers written beside them. Examples of power crosses for both an astigmatic lens and a spherical lens are shown in <a href="Figure6" >Figure 6</a>.</p>
+
+  <figure id='Figure6'>
+    <img src="media/pcross.svg"/>
+
+    <figcaption>
+      <span class="figno">Figure 6.</span> The power cross shows the power of a lens along the two principal meridians. The power cross on the right is for a \(+6\text{D}\) spherical lens. In this case the choice of meridians is arbitrary, since they all have the same power. On the left is a power cross for an astigmatic lens. The \(+8\text{D}\) meridian is oriented at 40 degrees to horizontal.
+    </figcaption>
+  </figure>
+
+  <p>It will be shown in a later chapter that if two lenses are close together, their powers simply add up. This idea allows us to break up an astigmatic lens into a sum of simpler lenses. There are two ways of doing this: an astigmatic lens can be broken up into two cylindrical lenses, or it can be broken up into a sum of a spherical and a cylindrical lens.</p>
+
+  <p>A <em>cylindrical lens</em> is an extreme form of astigmatic lens where there is no power on one of its meridians(e.g. \(F_h=0\) or \(F_v=0\) for vertical and horizontal meridians). This kind of lens is curved in one direction, but flat in the other. The power cross for a cylindrical lens is shown in <a href="Figure7" >Figure 7</a>.</p>
+
+  <figure id='Figure7'>
+    <img src="media/pcross-cyl.svg"/>
+
+    <figcaption>
+      <span class="figno">Figure 7.</span> A cylindrical lens and its power cross. The axis of the cylinder is vertical in this case. The power along the axis is zero, while the power at 90 degrees to the axis is not.
+    </figcaption>
+  </figure>
+
+  <p>Any power cross for an astigmatic lens can be broken up into a sum of two cylindrical lenses. This is termed a crossed-cylinder representation. A crossed-cyl representation of an astigmatic lens is shown in <a href="Figure8" >Figure 8</a>. Another way of describing astigmatic lenses is to break them up into a sum of a spherical lens and a cylindrical lens. This is the form used most often by optometrists. Two examples of a sphere-cyl representation are shown in <a href="Figure9" >Figure 9</a>. The top row shows a plus cylinder representation, and the bottom row shows a minus cyl representation.</p>
+
+  <figure id='Figure8'>
+    <img src="media/x-cyl.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 8.</span> Decomposing an astigmatic lens into a pair of cylindrical lenses
+    </figcaption>
+  </figure>
+
+  <p>The sphere-cyl form is always abbreviated. For example, the sphere-cyl form for the lens on the top row of <a href="Figure9" >Figure 9</a> is <strong>+5DS/+3DCx130</strong>, which means a spherical lens (that’s the +5DS part) with an added positive cylindrical lens (that’s the +3DC part), whose axis is oriented at 130 degrees. The axis of the cylinder is the meridian that has no power. The orientation of the axis is taken counterclockwise from horizontal. Note that if the axis is horizontal, this is given as 180 degrees, and never zero. The sphere-cyl form for the lens on the bottom row is <strong>+8DS/-3DCx40</strong>. Both lenses are. of course, the same; the difference between the two sphere-cyl forms is just whether one uses a positive or negative cylinder.</p>
+
+  <figure id='Figure9'>
+    <img src="media/sphere-cyl.svg"/>
+
+    <figcaption>
+      <span class="figno">Figure 9.</span> Decomposing an astigmatic lens into a sum of a spherical lens and a cylindrical lens.
+    </figcaption>
+  </figure>
+
+  <h2 id="oblique-astigmatism">Oblique Astigmatism</h2>
+
+  <p>If we look more carefully at spherical lenses, we find that they too suffer from a kind of astigmatism, called <em>oblique astigmatism</em>. <a href="Figure10" >Figure 10</a> shows a lens with two parallel beams of light going through it. Both parallel beams are focussed at the same horizontal distance from the lens, so both focus to a point on a vertical image screen.</p>
+
+  <p>Remember that the focal length is the distance from the lens to the image when parallel light enters the lens. For the horizontal (green) rays, the focal length is shorter than for the oblique (blue) rays. This means that the power of the lens (i.e. one over the focal length) depends on which angle the rays strike it.</p>
+
+  <figure id='Figure10'>
+    <img src="media/oblique.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 10.</span> The distance from the lens to the point image depends on the angle that a beam of light hits a lens. The horizontal beam focusses at a shorter distance from the lens than the oblique ray. This is so that all parallel beams focus on the same vertical plane, forming a sharp image in 2D.
+    </figcaption>
+  </figure>
+
+  <p>This isn’t a problem in two dimensions, but it becomes one in three dimensions. <a href="Figure11" >Figure 11</a> shows two spherical lenses. On the left, a beam of parallel light strikes the ens at 90 degrees. Light in two planes (blue and green) are shown. Because the light strikes the lens at the same angle in both planes, it is focussed to the same point in both planes, and a point image is formed.</p>
+
+  <p>On the right, the lens has been turned slightly. In the vertical (green) plane, the light still strikes the lens at right angles, and so the light continues to be focussed to the same point as before. However, the light in the horizontal plane (blue) is now striking the lens obliquely. As shown in <a href="Figure10" >Figure 10</a>, this means it focusses to a point which is further away. The two focal points lead to astigmatism (compare <a href="Figure11" >Figure 11</a> and <a href="Figure10" >Figure 10</a>).</p>
+
+  <p>While the lens was turned in <a href="Figure11" >Figure 11</a>, in real situations, any lens will encounter light beams coming at it from all angles. Beams that strike the lens at an oblique angle will behave just like the beam shown in <a href="Figure11" >Figure 11</a>, right hand side. The cure for oblique astigmatism is to design the lens so that it has the same focal length regardless of the angle the beam of light strikes it. Then a sharp image will form on a spherical surface behind the eye, rather than on a flat surface. The human eye does this to some extent. The retina, where the image forms, is curved. However, the sharp image formed by the eye is on a curved surface which is a bit flatter than the retina, leading to blur away from the optic axis.</p>
+
+  <figure id = 'Figure11'>
+    <img src="media/oblique-lens.png"/>
+
+    <figcaption>
+      <span class="figno">Figure 11.</span> Oblique astigmatism. On the left, a beam of light hits a spherical lens at right angles. Two cross-sections of light have been shown (horizontal and vertical). The light in both cross sections is focussed to the same point. On the right, the lens has been titled so that light in the horizontal cross-section strikes it at an angle. Now, the light in this cross-section focusses further away than the light in the vertical cross-section (as per <a href="Figure10" >Figure 10</a>) and astigmatism results.
+    </figcaption>
+  </figure>
+
+  <section class="footnotes">
+    <hr />
+
+    <ol>
+      <li id="fn1">
+        <p>The word astigmatic means “not a point”; <em>stigmatic</em> means point-like, and the prefix <em>a-</em> negates that<a href="#fnref1" class="footnote-back">↩</a></p>
+      </li>
+
+      <li id="fn2">
+        <p>“Circle of Least Confusion” is an odd term. The circle part is obvious enough, but what does “confusion” mean? The idea is that if light doesn’t come to a point, it is “confused” and spreads out. The amount of “confusion” relates to how far the light spreads from the point. "Least confusion" means that the light spreads the minimum from a point image.<a href="#fnref2" class="footnote-back">↩</a></p>
+      </li>
+    </ol>
+  </section>
+</body>
+</html>
