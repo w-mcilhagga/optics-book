@@ -4,81 +4,111 @@
 
 let cam
 
+
 function figure1(p5) {
 	let circ = make_ngon(200),
 		p1on=true,
-		p2on=true
-	
-	function resetMat() {
-		cam.camera()
+		p2on=true,
+		state = {w:540, h:350},
+		cv, w, h, ratio, cvparent,
+		button, c1, c2, orientation, distance, orbitOn=true
+
+	function size(cv) {
+		// size scales the canvas according to the width of the containing div
+		let domwidth = parseInt(window.getComputedStyle(cvparent).width);
+		ratio = domwidth / state.w
+		w = ratio * state.w
+		h = ratio * state.h
 	}
-	
+		
 	p5.setup = function() {
-	  p5.createCanvas(540, 350, p5.WEBGL);
+	  cv = p5.createCanvas(state.w, state.h, p5.WEBGL);
+	  cvparent = cv.parent()
+	  size(cv)
+	  p5.resizeCanvas(w, h)
 	  p5.setAttributes('antialias', true);
 	  cam = p5.createCamera()
-	  p5.ortho(-p5.width/2, p5.width/2, -p5.height/2, p5.height/2, -600, 600)
+	  p5.ortho(-w/2, w/2, -h/2, h/2, -4*w, 4*w)
 	  // controls
-	  let button = p5.createButton('Reset');
-	  button.position(19, p5.height-25);
+	  button = p5.createButton('Reset');
+	  button.position(19, p5.height-50);
 	  button.mousePressed(()=>cam.camera());
-	  let c1 = p5.createCheckbox('horizontal plane', p1on)
-	  c1.position(229,p5.height-25)
+	  c1 = p5.createCheckbox('horizontal plane', p1on)
+	  c1.position(229,p5.height-50)
 	  c1.style('color', 'white')
 	  c1.changed(()=>p1on=c1.checked())	  
-	  let c2 = p5.createCheckbox('vertical plane', p2on)
-	  c2.position(99,p5.height-25)
+	  c2 = p5.createCheckbox('vertical plane', p2on)
+	  c2.position(99,p5.height-50)
 	  c2.style('color', 'white')
 	  c2.changed(()=>p2on=c2.checked())
+	  orientation = p5.createSlider(0,90,0,1)
+	  orientation.position(19, p5.height-25)
+	  orientation.mouseMoved(()=>false)
+	  distance = p5.createSlider(100,300,250,1)
+	  distance.position(180, p5.height-25)
+	  for (elem of [orientation, distance]) {
+		elem.mousePressed(()=>{orbitOn=false})
+		elem.mouseReleased(()=>{orbitOn=true})
+	  }
 	}
-
+	
+	p5.windowResized = function () {
+		size(cv)
+		p5.resizeCanvas(w, h)
+		button.position(19, h-50);
+	    c1.position(229,h-50)
+		c2.position(99,h-50)
+		orientation.position(19, p5.height-25)
+		distance.position(180, p5.height-25)
+	  
+	    p5.ortho(-w/2, w/2, -h/2, h/2, -4*w, 4*w)
+	}
+	
 	p5.draw = function() {
-	  p5.orbitControl()
-	  p5.background(0, 61, 93);
+	  orbitOn && p5.orbitControl()
+	  p5.background(0, 61, 93)
+	  p5.translate(0,-30*ratio,0) // shifts the drawing up a bit
 	  // lens
-	  p5.fill(200, 200, 255);
-	  p5.strokeWeight(4);
-	  p5.stroke(200, 200, 255);
-	  showobj(0, 0, 0, 150, circ);
+	  p5.fill(200, 200, 255)
+	  p5.strokeWeight(4)
+	  p5.stroke(200, 200, 255)
+	  showobj(0, 0, 0, 150*ratio, circ)
 	  // rays
-	  p5.stroke(255, 255, 255, 150)
-	  p5.strokeWeight(2)
+	  p5.stroke(255, 255, 255, 100)
+	  p5.strokeWeight(1)
 	  p5.noFill()
-	  rays(0,0,0,150)
+	  p5.blendMode(p5.ADD)
+	  let r = orientation.value()
+	  let d = distance.value()
+	  rays({n:9, pos:[0,0,0], Fy:1/150, Fz:1/250, d:d, aperture:150, rotation:r})
 	  // screen
 	  p5.fill(180)
 	  p5.stroke(180)
 	  p5.strokeWeight(3);
-	  showobj(250,0,0, 250, make_ngon(4))
+	  showobj(d*ratio,0,0, 250*ratio, make_ngon(4))
 	  // planes
-	  let lim = 150*0.5
+	  let lim = 150*0.5*ratio
 	  p5.noStroke()
 	  if (p1on) {
 		  p5.fill(200,0,0, 100)
 		  p5.beginShape()
-		  p5.vertex(-200,0,lim)
-		  p5.vertex(-200,0,-lim)
-		  p5.vertex(0,0,-lim)
-		  p5.vertex(250,0,0)
-		  p5.vertex(0,0,lim)
-		  p5.vertex(-200,0,lim)
+		  p5.vertex(-200*ratio,...rot(r,0,lim))
+		  p5.vertex(-200*ratio,...rot(r,0,-lim))
+		  p5.vertex(d*ratio,...rot(r,0,-lim))
+		  p5.vertex(d*ratio,...rot(r,0,lim))
+		  p5.vertex(-200*ratio,...rot(r,0,lim))
 		  p5.endShape()
 	  }
 	  if (p2on) {
 		  p5.fill(0,100,0, 100)
 		  p5.beginShape()
-		  p5.vertex(-200,lim,0)
-		  p5.vertex(-200,-lim,0)
-		  p5.vertex(0,-lim,0)
-		  p5.vertex(250,0,0)
-		  p5.vertex(0,lim,0)
-		  p5.vertex(-200,lim,0)
+		  p5.vertex(-200*ratio,...rot(r,lim,0))
+		  p5.vertex(-200*ratio,...rot(r,-lim,0))
+		  p5.vertex(d*ratio,...rot(r,-lim,0))
+		  p5.vertex(d*ratio,...rot(r,lim,0))
+		  p5.vertex(-200*ratio,...rot(r,lim,0))
 		  p5.endShape()
 	  }
-	}
-
-	function mouseClicked() {
-
 	}
 
 	// for speed, generate the ngon sin/cos coords
@@ -107,27 +137,66 @@ function figure1(p5) {
 		}
 		return s
 	}
-
-	function rays(x0, y0, z0, d) {
+	
+	function rot(angle, x,y) {
+		// rotates x & y by a specific angle
+		let c = Math.cos(angle*p5.PI/180),
+		    s = Math.sin(angle*p5.PI/180)
+		return [c*x-s*y, s*x+c*y]
+	}
+	
+	function rays(params) {
 		// generates 3d lines going through a thin lens centred at (x,y,z)
 		// with diameter d in y & z directions.
-		let n=5,
-			del = linspace(-d*0.45, d*0.45, n)
+		// params: {n:5, pos:[0,0,0], Fy:1/200, Fz:1/200, d:250, aperture:150}
+		let n = params.n,
+			a = linspace(-params.aperture*0.45, params.aperture*0.45, n),
+			[x0,y0,z0] = params.pos || [0,0,0],
+			d = params.d,
+			r = params.rotation || 0
 		for (yi=0; yi<n; yi++) {
 			for (zi=0; zi<n; zi++) {
-				y = y0+del[yi]
-				z = z0+del[zi]
-				if ((y**2+z**2)<=(d/2)**2) {
+				y = a[yi]
+				z = a[zi]
+				if ((y**2+z**2)<=(params.aperture/2)**2) {
 					p5.beginShape()
-					p5.vertex(x0-200,y,z)
-					p5.vertex(x0,y,z)
-					p5.vertex(x0+250,0,0)
+					p5.vertex((x0-200)*ratio,...rot(r,(y0+y)*ratio,(z0+z)*ratio))
+					p5.vertex(x0*ratio,...rot(r,(y0+y)*ratio,(z0+z)*ratio))
+					p5.vertex((x0+d)*ratio,
+						...rot(r,(y0+y*(1-d*params.Fy))*ratio,(z0+z*(1-d*params.Fz))*ratio))
 					p5.endShape()
 				}
 			}
 		}
 
 	}
+	
+	p5.mouseDragged = function() {
+		if (p5.mouseY<(h-25)) { return false } // eliminate page scrolling
+	/*
+		let dx = p5.mouseX-p5.pmouseX, 
+			dy = p5.mouseY-p5.pmouseY
+			eyeX = cam.eyeX,
+			eyeY = cam.eyeY,
+			eyeZ = cam.eyeZ,
+			eyedist = Math.sqrt(eyeX**2+eyeY**2+eyeZ**2),
+			dxz = Math.sqrt(eyeX**2+eyeZ**2),
+			dyz = Math.sqrt(eyeY**2+eyeZ**2)
+		// changes in x rotate camera about Y axis (actually, upward axis)
+		eyeX = eyeX-dx*eyeZ/dxz
+		eyeZ = eyeZ+dx*eyeX/dxz
+		
+		// changes in y rotate camera about X axis (actually, outward axis)
+		eyeY = eyeY-dy*eyeZ/dyz
+		eyeZ = eyeZ+dy*eyeY/dyz
+		
+		let len = Math.sqrt(eyeX**2+eyeY**2+eyeZ**2)
+		cam.setPosition(eyeX/len*eyedist, eyeY/len*eyedist, eyeZ/len*eyedist)
+		cam.lookAt(0,0,0)
+	*/
+	}
+	
+	
 }
 
 new p5(figure1)

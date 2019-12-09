@@ -1,0 +1,18 @@
+<link rel="stylesheet" type="text/css" href="../styles/popout.css" />
+<script src="../MathJax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/popouts.js'></script>
+
+<body>
+  <figure id="Figure1">
+    <div class='canvas-div' style='width:100%' id='figure1img'></div>
+    <figcaption>
+      <span class='figno'>Figure 1.</span> A ray diagram shows the paths taken by light in a 2 dimensional cross section of a lens. However, lenses are actually 3 dimensional. If you click and drag this image, you can see the lens from different viewpoints. Two cross sections are picked out in green and blue (and can be turned on and off with the check box). The rays in both these cross-sections (and indeed, any other cross section) focus on the same point.
+    </figcaption>
+  </figure>
+  <script>popout.openButton=()=>true</script>
+  <script src='scripts/figure1.js'></script>
+  <p class='closer'  onclick='window.close()'>Close this Window</p>
+</body>
