@@ -36,8 +36,8 @@ function figure1(p5) {
 	  orient = p5.createSlider(0,90,0,1)
 	  orient.position(110, p5.height-25)
 	  orient.mouseMoved(()=>{return false})
-	  orient.mousePressed(()=>{orbitOn = false})
-	  orient.mouseReleased(()=>{orbitOn = true})
+	  //orient.mousePressed(()=>{orbitOn = false})
+	  //orient.mouseReleased(()=>{orbitOn = true})
 	  olabel = p5.createDiv('Rotate lens:')
 	  olabel.position(10, p5.height-25)
 	  olabel.style('color', 'white')
@@ -54,7 +54,7 @@ function figure1(p5) {
 	}
 	
 	p5.draw = function() {
-	  orbitOn && p5.orbitControl()
+	  p5.mouseY<(p5.height-50) && p5.orbitControl()
 	  p5.background(0, 61, 93);
 	  p5.translate(-20*ratio,-20*ratio,0) // shifts the drawing up a bit
 	  // lens
