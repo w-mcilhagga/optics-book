@@ -1,0 +1,122 @@
+  <script src='../../scripts/p5/p5.js'>
+</script>
+  <script src='../../scripts/p5/p5.svg.js'>
+</script>
+  <script src='../../scripts/p5/p5.dom.js'>
+</script>
+  <script src='../../scripts/p5/p5.util.js'>
+</script>
+  <script src='../../scripts/p5/p5.yup.js'>
+</script>
+  <script src='../../scripts/vec2d.js'>
+</script>
+  <script src='../../scripts/raytracing-2/optical_simulation.js'>
+</script>
+  <script src='../../scripts/raytracing-2/optical_simulation_draw_p5.js'>
+</script>
+
+<body></body>
+<script>
+(function() {
+
+clr = [180,180,255]
+arrows = [{pt:[-0.15,0], dir:[0,1]},
+		  {pt:[0.15,0], dir:[0,1]},
+		  {pt:[1/1.5-1/3+0.4,0], dir:[0,1]}
+		  ]
+state = {
+    w: 600,
+    h: 250,
+    origin: [
+        170,
+        250/2
+    ],
+    ppm: 550,
+    background: [0, 61, 92],
+	renderer: 'svg',
+	
+    items: [
+        {
+            type: 'parallel light',
+            id: 'light#2',
+            position: [-180/550, 0],
+            target: 'objective2',
+            spread: 'fill*0.8',
+            raycount: 7,
+            ui: {ylock:true},
+            style: {
+                stroke: clr,
+				strokeWidth: 1,
+				arrows: arrows
+            }
+        },
+		{
+			type: 'thinlens',
+			id: 'objective2',
+			position: [0,0],
+			axis: [1,0],
+			aperture: 0.2,
+			power: 1.5,
+			ui: {ylock:true},
+            style: {
+				stroke:[255,255,255],
+				strokeWeight:3,
+				z_order: 2
+			}
+		},
+		{
+			type: 'thinlens',
+			id: 'eyepiece2',
+			position: [0+1/1.5-1/3,0],
+			axis: [1,0],
+			aperture: 0.18,
+			power: -3,
+			ui: {ylock:true},
+            style: {
+				stroke:[255,255,255],
+				strokeWeight:3,
+				z_order: 2
+			}
+		},
+		{
+			type: 'thinlens',
+			id: 'eyepiece3',
+			position: [0+1/1.5-1/3-0.001,0],
+			axis: [1,0],
+			aperture: 0.2,
+			power: 0,
+			ui: {ylock:true},
+            style: {
+				stroke:[255,255,255],
+				strokeWeight:3,
+				z_order: 2
+			}
+		},		
+		{
+			type: 'real image', // for the far point
+			id: 'farpoint',
+			light: 'light#2',
+			lens: 'eyepiece3',
+			draw(p5, vbox, ppm) {
+				p5.fill(255)
+				p5.circle(...v2.scale(ppm, this.position), 8, 8)
+				p5.stroke(255)
+				p5.strokeDash([3,5])
+				p5.line(...v2.scale(ppm, this.rays[0].pt), ...v2.scale(ppm, this.position))
+				p5.line(...v2.scale(ppm, this.rays[this.rays.length-1].pt), 
+				...v2.scale(ppm, this.position))
+			},
+			style: {
+				visible: true,
+				z_order: -10
+			}
+		},
+    ]
+}
+
+
+makeP5App(state)(window)
+
+})()
+
+</script>

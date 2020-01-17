@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+</script>
+  <script src='../scripts/p5/p5.js'>
+</script>
+  <script src='../scripts/p5/p5.dom.js'>
+</script>
+  <script src='../scripts/p5/p5.util.js'>
+</script>
+  <script src='../scripts/p5/p5.yup.js'>
+</script>
+  <script src='../scripts/vec2d.js'>
+</script>
+  <script src='../scripts/raytracing-2/optical_simulation.js'>
+</script>
+  <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'>
+</script>
+  <script src='../scripts/popouts.js'>
+</script>
+  <script src='../scripts/slides.js'>
+</script>
+
+  <title>Chapter 12: Spectacles</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 12
+  </div>
+
+  <h1 id="b-more-about-spectacles">More About Spectacles</h1>
+
+  <h2 id="spectacle-magnification">Spectacle Magnification</h2>
+
+  <p>When ametropia is corrected with spectacles, it introduces an unwanted side-effect: magnification. A person wearing spectacles see the world slightly smaller than they would without spectacles (if they are a myope) or slightly larger (hyperope).</p>
+
+  <p>As before, we define magnification as the tangent of the visual angle of an object observed while wearing spectacles, divided by the tangent of the visual angle of the object observed without spectacles. <a href="#Figure1">Figure 1</a> shows a myope wearing spectacles at a distance of \(d\) (metres). They are looking at a distant object. We pick two rays from the distant object, one coming from the top of the object and one from the bottom. These two rays are picked out because they are refracted by the spectacles so they both hit the optic centre of the patient’s eye. The size of the object is measured by the tangent of the visual angle \(\alpha\) between the rays when they hit the eye. This is</p>
+
+  <div>
+    \[\tan \alpha = \dfrac{h}{d}\]
+  </div>where \(h\) is the separation between the rays when they hit the spectacles.
+
+  <figure id="Figure1">
+    <img src="media/myope_mag_2.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 1.</span> The top image shows a myope viewing a distant object through spectacles. Two rays come from the top and bottom of the object. The doted lines show where those two rays would converge if there were no spectacles. However, they hit the spectacles and are diverged. After passing through the spectacle lens they head to the centre of the myope’s eye. The visual angle between the rays is \(\alpha\). In the bottom image, the spectacles have been removed (The dotted line shows where they were). The eye has to be moved slightly so that the rays hit the centre of the cornea. The angle between the rays is \(\beta\).
+    </figcaption>
+  </figure>
+
+  <p>If the two rays were not diverged by the spectacles, they would have converged a distance \(e\) from the spectacles. The size of the object without the spectacles is the tangent of the angle \(\beta\), shown in the bottom image of <a href="#Figure1">Figure 1</a>, which is given by</p>
+
+  <div>
+    \[\tan \beta = \dfrac{h}{e}\]
+  </div>So the magnification produced is
+
+  <div>
+    \[M = \dfrac{\tan \alpha}{\tan \beta} = \dfrac{e}{d}\]
+  </div>Since \(e\) is less than \(d\), the overall magnification must be less than 1, so myopes experience <em>minification</em> (things appear smaller) when they look through spectacles.
+
+  <p>We can’t work out this magnification numerically unless we know the value of \(e\). However, \(e\) can be calculated using the paraxial equation. The two rays hitting the spectacles are converging to a point which is \(e\) metres from the spectacles. So their vergence is \(V_{in}=1/e\). The two rays leave the spectacles and converge to a point which is \(d\) metres from the spectacles, so the convergence of these rays leaving the spectacles is \(V_{out}=1/d\). Using the thin lens equation \(V_{in}+F=V_{out}\), we have</p>
+
+  <div>
+    \[\dfrac{1}{e}+F=\dfrac{1}{d}\]
+  </div>This gives \(e=d/(1-d F)\). Substituting this for \(e\) into the formula \(M=e/d\) yields
+
+  <div>
+    \[M = \dfrac{1}{1-d F}\]
+  </div>
+
+  <p>For example, a myopic patient has spectacles with a power of \(-7.5 \text{D}\) worn at a distance of \(15\) mm. The magnification they experience is thus \(M=1/(1-d F)=1/(1-0.015\times(-7.5))=0.899\). That is, things appear roughly 10% smaller than they would without spectacles. However, if the same patient wore contact lenses, then the spectacle distance \(d\) would be zero, and so the magnification would be 1. Thus contact lenses produce fewer magnification problems than spectacles. (However, when we use thick-lens theory to analyze contact lenses, there can still be some magnification produced.)</p>
+
+  <p>There are a couple of other formulae spectacle magnification. If we let \(K\) be the patient’s ocular refraction, then the magnification is also</p>
+
+  <div>
+    \[M = \dfrac{K}{F}\]
+  </div>or
+
+  <div>
+    \[M = 1+d K\]
+  </div>These formulas come by combining the formula for magnification \(M=1/(1-d F)\) with the formula \(1/F=1/K+d\), which is the relationship between spectacle focal length \(1/F\), spectacle distance \(d\), and far point distance \(1/K\).
+
+  <h3 id="spectacle-magnification-in-other-ametropias.">Spectacle Magnification in Other Ametropias.</h3>
+
+  <p>Exactly the same formula for magnification applies to hyperopia. However, in hyperopia, the spectacle power \(F\) is positive, so this yields magnification. For example, a hyperopic patient has spectacles with a power of \(+7.5 \text{D}\) worn at a distance of \(15\) mm. The magnification they experience is thus \(M=1/(1-d F)=1/(1-0.015\times7.5)=1.12\). Thus, objects appear about 12% bigger to the hyperope wearing spectacles than without.</p>
+
+  <p>Spectacle magnification in astigmatism can be analyzed simply by calculating the magnification along the principal meridians. Because the spectacle lens powers are different along the different meridians, a patient with astigmatism wearing spectacles will experience different amounts of magnification in different directions. That is, their retinal image will be distorted by being stretched or squashed.</p>
+
+  <p>Spectacle magnification can lead to transient difficulties when a patient receives a new prescription. The new prescription may cause a different amount of magnification compared to the previous one, and it can take a while to get used to it.</p>
+
+  <p>The other serious consequence of magnification is when it leads to different image sizes in the left and right retina (called <em>aniseikonia</em>), perhaps because the refractive error is quite different in the two eyes. This leads to perceptual distortions, such as the world appearing to be slightly tilted, and may result in nausea, headaches, and giddiness. Sensitivity to aniseikonia and rate of adaption to it vary greatly between patients.</p>
+
+  <h3 id="cosmetic-effects">Cosmetic Effects</h3>
+
+  <p>One obvious form of spectacle magnification is when you look at someone wearing spectacles. If they are a myope, then you will not see their eyes through the spectacles, but instead a virtual image of their eyes. Since a myope is corrected with a negative lens, the virtual image of their eyes will be smaller and closer than their real eyes. For small degrees of myopia, this is not an issue, but for larger amounts of myopia, the effect may be unwanted. The opposite effect occurs with hyperopes. They are corrected with positive lenses, so these act as magnifiers of their eyes.</p>
+
+  <h1 id="prisms">Prisms</h1>
+
+  <p>A prism is a block of refracting material (e.g. glass) with a triangular cross-section and flat sides (see Figure <a href="#fig1" data-reference-type="ref" data-reference="fig1">[fig1]</a>). The triangular cross section has a base and an apex (top). The apical angle is the angle between two of the surfaces at the apex of the prism. Prisms change the direction of light, and some of the unwanted effects of spectacles are because they behave like prisms when viewing objects through any point other than the centre of the lens.</p>
+  
+  <figure id=Figure2>
+    <img src="media/figure2.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 2</span> The top left inset shows a prism, with apex and base marked. The main picture shows that when light passes through a prism it is bent towards the base of the prism, once when it enters and once again when it leaves. The total angle through which it bends is called the deviation. When an observer looks through a prism, they see an image of the object displaced towards the apex. The distance from the true object position to the apparent object position is called the displacement
+    </figcaption>
+  </figure>
+  
+  <h3 id="deviating-angle">Deviating Angle</h3>
+
+  <p>Figure <a href="#fig2" data-reference-type="ref" data-reference="fig2">[fig2]</a> shows a ray of light passing through a prism. For convenience, the ray of light is horizontal inside the prism. The ray is bent once when it enters the prism, then bent again (by the same amount) when it leaves. The total angle that the light is bent by is called the <em>deviating angle</em>, and I’ll write it as \(\delta\).</p>
+
+  <p>The angle between the lines \(N_1 N_2\) and \(R_1 R_2\) is \(\theta_{in}\). However, the angle between these two lines is also equal to \(\delta/2+\theta_{out}\). Thus</p>
+
+  <div>
+    \[\label{eq:delta} \delta/2=\theta_{in}-\theta_{out}\]
+  </div>The angles \(\theta_{in}\) and \(\theta_{out}\) are connected by Snell’s Law, \(n_{in}\sin \theta_{in} \approx n_{out}\sin\theta_{out}\). Provided the angles are small, we can use the small-angle approximation, \(n_{in} \theta_{in} = n_{out}\theta_{out}\). Here, \(n_{in}=1\), and we will write \(n_{out}\) as just \(n\), the refractive index of the prism. Thus
+
+  <div>
+    \[\theta_{in}\approx n \theta_{out}\]
+  </div>Substituting this into Equation <a href="#eq:delta" data-reference-type="ref" data-reference="eq:delta">[eq:delta]</a> gives
+
+  <div>
+    \[\delta/2 = n\theta_{out}-\theta_{out}=(n-1)\theta_{out}\]
+  </div>In Figure <a href="#fig2" data-reference-type="ref" data-reference="fig2">[fig2]</a>, the angles \(\theta_{out}\) and \(x\) add up to \(90^o\), and \(2x+a\) is \(180^o\), because the triangle is isosceles. Thus \(\theta_{out}=a/2\), and so \(\delta/2=(n-1)a/2\). Thus the total deviation is
+
+  <div>
+    \[\delta=(n-1)a\]
+  </div>.
+
+  <figure id=Figure3>
+    <img src="media/figure3.svg"/>
+
+    <figcaption>
+      <span class="figno">Figure 3</span> The line \(N_1\) to \(N_2\) is the surface normal. The line \(R_1\) to \(R_2\) is the path the ray would take if not refracted. The amount the ray changes direction by is half the deviation, \(\delta/2\).
+    </figcaption>
+  </figure>
+
+  <h3 id="image-displacement">Image Displacement</h3>
+
+  <p>The deviation created by a prism causes objects, seen through a prism, to be displaced from their true position. This can be seen in Figure <a href="#fig1" data-reference-type="ref" data-reference="fig1">[fig1]</a>. A person looks at light from an object after it has passed through a prism. The apparent position of the object is found by tracing the light rays that leave the prism backwards. Note that while the ray is deviated towards the base of the prism, the object is apparently displaced towards the apex. The amount the object is displaced is related to the angular displacement \(\delta\) and the distance \(d\) from the object to the prism:</p>
+
+  <div>
+    \[\text{displacement} = d\tan \delta = d \tan a(n-1)\]
+  </div>
+
+  <p>In optometry, another measure of prism deviation is used, called the prism dioptre, whose symbol is \(^{\Delta}\). One prism dioptre (written \(1^{\Delta}\)) of displacement means that an object which is 1 metre from the prism appears displaced by 1 cm. One prism dioptre is also a displacement of 2cm for an object which is 2 metres from the prism, and in general</p>
+
+  <div>
+    \[\text{prism dioptres} = \dfrac{\text{displacement in cm}}{\text{distance in m}}\]
+  </div>
+
+  <p>The reason why this deviation is called <em>dioptres</em> comes from Prentice’s Rule. Figure <a href="#prentice" data-reference-type="ref" data-reference="prentice">[prentice]</a> shows an object placed at the focal point of a thin lens. One ray of light enters the lens at a distance \(h\) in metres above the optic axis. Since this ray of light comes from the focal point, it is bent to emerge parallel to the optic axis. By following the ray back, this ray of light then appears to come from a point which is \(h\) metres above the true object location. Expressed in prism dioptres, this object displacement is</p>
+
+  <div>
+    \[\text{prism dioptres} =100 h/f =100 hF\]
+  </div>where \(f\) is the focal length and \(F\) the focal power (The 100 is because we have to convert the height \(h\), which is in metres, to centimetres). If \(h\) is 1cm and \(F\) is 1D, then this is a displacement equal to one prism dioptre. Note that Prentice’s Rule is usually expressed with the distance \(h\) in millimetres, giving
+
+  <div>
+    \[\text{prism dioptres} = hF/10\]
+  </div>
+
+  <figure id=Figure4>
+    <img src="media/prentice.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 4</span> When you look through any part of the lens apart from the centre, objects appear to be displaced
+    </figcaption>
+  </figure>
+
+  <h2 id="prismatic-effect-of-lenses">Prismatic Effect of Lenses</h2>
+
+  <p>Any lens is, very roughly, the same as a pair of prisms. A positive lens is roughly like two prisms stuck base-to-base, while a negative lens is roughly like two prisms stuck apex-to-apex (Figure <a href="#specsandprisms" data-reference-type="ref" data-reference="specsandprisms">[specsandprisms]</a>). Because lenses are like prisms, they deviate light as it passes through them. Some of that deviation is useful - it’s what lenses do when they change the vergence of light - but some is not.</p>
+
+  <p>When a patient views an object through the centre of their spectacles, the objects is not displaced. But when they view an object through points other than the centre, the object appears to be displaced because the lens is acting rather like a prism. Prentice’s Rule tells us how much the object appears displaced. For example, suppose a patient wears spectacles with power \(-6D\). They view an object through a point 5mm above the lens centre. By Prentice’s rule, the object position is deviated by \(5\times -6/10 = -3\) prism dioptres.</p>
+
+  <figure id=Figure5>
+    <img src="media/specsandprisms.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 5</span> Lenses can be approximated by prisms. A biconvex lens is roughly the same as a pair of prisms stuck together at their base. A biconcave lens is roughly the same as a pair of prisms stuck together at their apex. If a patient looks through the lens anywhere except the centre, they experience prismatic effects, as shown on the right, for someone looking through the bottom of the negative lens; in this case, the object is displaced towards the middle of the lens.
+    </figcaption>
+  </figure>
+
+  <p>The minus sign in the displacement is usually ignored. The displacement is always towards the apex of the prism, so instead of fiddling about with signs we just say which way around the prism is. The convention is to say whether the base of the prism is up or down. In the above example, the prism is Base-Up (BU). As another example, the prismatic effect shown on the right hand side of Figure<a href="#baseinout" data-reference-type="ref" data-reference="baseinout">[baseinout]</a> would be described as Base Down (BD).</p>
+
+  <h3 id="unwanted-prism-effects">Unwanted Prism Effects</h3>
+
+  <p>When the pupil distance of the prescribed lenses is not correct, this induces an unwanted prism effect. Consider a myopic patient with a pd of 68mm, who is given spectacles with a pd of 71mm. In this case, when they look straight ahead, they are not looking through the centres of the lenses, but 1.5mm from the centres (assuming the error in the pd is equally distributed between the two lenses). If the prescription in the left eye is \(-5.5D\), then by Prentice’s rule, their left eye gets a prismatic effect of \(0.825\) prism dioptres, written \(0.825^{\Delta}\). This is called Base In (BI) since the part of the lens they look through acts like a prism with the base pointing inwards (i.e. nasally). If the prescription in the right eye is \(-4D\), then the prismatic effect is \(0.675^{\Delta}\). Again this is Base In, but the base is pointing in the opposite direction. These prismatic effects are pointing in opposite directions, so the total prismatic effect (which is the difference in displacement between the two eyes) is the sum of these two, or \(1.5^{\Delta}\). This would be unacceptable in spectacles; for prescriptions up to \(10D\), no more than \(0.33^{\Delta}\) is allowed.</p>
+
+  <figure id=Figure6>
+    <img src="media/baseinout.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 6</span> Prismatic effects caused by incorrect pupil distance. The top image shows a pair of negative spectacles at the correct pupil distance. Prism have been superimposed on the spectacles. The middle figure shows a pair of negative spectacles whose pupil distance is too large. This leads to Base In prism in both eyes. If the pupil distance was too small, the effect would be Base Out. The bottom figure shows a pair of positive spectacles whose pupil distance is also too large. This yields Base Out prisms in both eyes. In all cases, the solid line is the3 path of light through the spectacles, and th3e dashed line the apparent position of the object.
+    </figcaption>
+  </figure>
+</body>
+</html>

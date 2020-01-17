@@ -1,0 +1,1 @@
+pandoc -s -o body.html body.tex --mathjax

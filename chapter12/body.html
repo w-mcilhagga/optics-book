@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+</script>
+  <script src='../scripts/p5/p5.js'>
+</script>
+  <script src='../scripts/p5/p5.dom.js'>
+</script>
+  <script src='../scripts/p5/p5.util.js'>
+</script>
+  <script src='../scripts/p5/p5.yup.js'>
+</script>
+  <script src='../scripts/vec2d.js'>
+</script>
+  <script src='../scripts/raytracing-2/optical_simulation.js'>
+</script>
+  <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'>
+</script>
+  <script src='../scripts/raytracing-2/makeArc.js'>
+</script>
+  <script src='../scripts/popouts.js'>
+</script>
+  <script src='../scripts/slides.js'>
+</script>
+
+  <title>Chapter 12: Magnifiers and Telescopes</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 12
+  </div>
+
+  <h1 id="magnifiers-and-telescopes">Magnifiers and Telescopes</h1>
+
+  <p>Magnifying glasses and telescopes are used to make things look bigger. In this chapter we will work out how much bigger an object looks when viewed through magnifiers or telescopes.</p>
+
+  <h2 id="defining-magnification">Magnification</h2>
+
+  <p>The apparent size of any object is related to the size of the retinal image it produces. All things being equal<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, an object whose retinal image is twice as big as the retinal image of another object will look twice as big as the other object. However, because the retinal image size is difficult to measure, we use the <em>visual angle</em> of an object as a surrogate for the size of the retinal image. The visual angle of an object is the angle between two imaginary lines drawn from the eye to the top and bottom of the object (<a href="#Figure1" >Figure 1</a>). The retinal image size is proportional to the visual angle.</p>
+    
+  <figure id='Figure1'>
+  <img src="media/figure1.svg" />
+  <figcaption>
+  <span class="figno">Figure 1.</span> The visual angle of an object is the angle between two imaginary lines drawn fron the centre of the cornea to the opposite sides of an object.</figcaption>
+  </figure>
+
+  <p>A magnifier or telescope makes an object look bigger by increasing its visual angle. The <em>angular magnification</em> produced by an optical device (like a telescope) says how much the visual angle is increased by the device,</p>
+
+  <div>
+    \[\text{magnification} =\frac{\text{visual angle with device}}{\text{visual angle without device}}\]
+  </div>
+  
+  <p>(This is different from <em>linear</em> magnification, which is the ratio of image height to object height.) When the visual angles are small (which is often the case), the mathematics can be made a bit simpler by using the tangent of the angle instead of the angle itself. (For small angles, the tangent of an angle and the angle are proportional. The tangent of a visual angle is the height of the object divided by its distance from the eye.) Thus, for small angles, angular magnification can be defined as</p>
+
+  <div>
+    \[\text{magnification} =\frac{\tan(\text{visual angle with device})}{\tan(\text{visual angle without device})}\]
+  </div>
+
+  <h2 id="magnifying-glasses">Magnifying Lenses</h2>
+
+  <p>A magnifying lens, or magnifier, is just a strong positive lens. If an object is closer than the focal length of a positive lens, the lens creates a virtual image which is both larger and further away than the object. Because the virtual image is larger, this leads to magnification (<a href="#Figure2" >Figure 2</a>).</p>
+  <figure id='Figure2'>
+  	<span class='slideshow-container'>
+	<span>
+    <img src="media/figure2a.svg" />
+  <figcaption>
+  <span class="figno">Figure 2(a).</span> This figure and the next two (which you can see by clicking the arrows) shows how a magnifier works. Here, an eye looks at an object. The object's visual angle is the angle between the two rays going to the eye from the top and bottom of the object.
+  </figcaption>
+	</span>
+	<span>
+    <img src="media/figure2b1.svg" />
+  <figcaption>
+  <span class="figno">Figure 2(b).</span>A magnifying glass (a positive lens) is placed between the eye and the object. The only way the ray going from the top of the object can reach the eye is to be bent (converged) by the lens on the way.
+  </figcaption>	
+  </span>
+	<span>	
+    <img src="media/figure2b2.svg" />
+  <figcaption>
+  <span class="figno">Figure 2(c).</span>The rays leaving the lens form a virtual image (orange arrow) which is bigger and further away than the object.
+  </figcaption>	
+  </span>
+	<span>
+    <img src="media/figure2c.svg" />
+  <figcaption>
+  <span class="figno">Figure 2(d).</span>When the eye looks through the lens, it only sees the virtual image, not the object. The visual angle of the virtual image is larger than the visual angle of the object, and so the lens has magnified the object.
+  </figcaption>
+  </span>
+    </span>
+  <!--img src="media/figure2_master.svg" /-->
+  </figure>
+
+  <p>To work out the amount of magnification that is produced, we first need to put in some distances. These are shown in <a href="#Figure3" >Figure 3(a)</a>. In this figure, \(d_{obj}\) is the distance from lens to object (negative), \(d_{img}\) is the distance from lens to virtual image (also negative) and \(h_{obj}\) and \(h_{img}\) are the height of the object and virtual image respectively. Finally, \(d\) is the distance from the lens to the eye (this is positive).</p>
+  
+  <figure id=Figure3>
+  <span class='slideshow-container'>
+  <span>
+	  <img src="media/figure3.svg" />
+	  <figcaption>
+	  <span class="figno">Figure 3(a).</span> Distances needed to work out the magnification of a lens.
+	  Click the arrow to see how to work out \(tan(\text{visual angle without magnifier})\).
+	  </figcaption>
+  </span>
+  <span>
+	  <img src="media/figure3a.svg" />
+	  <figcaption>
+	  <span class="figno">Figure 3(b).</span> Distances needed to work out \(tan(\text{visual angle without magnifier})\) Click the arrow to see the distances used to work out \(tan(\text{visual angle with magnifier})\)
+	  </figcaption>
+  </span>
+  <span>
+	  <img src="media/figure3b.svg" />
+	  <figcaption>
+	  <span class="figno">Figure 3(c).</span> Distances needed to work out \(tan(\text{visual angle with magnifier})\). 
+	  </figcaption>
+  </span>
+  </span>
+  </figure>
+
+  <p>The tangent of the visual angle without the magnifier (as in <a href="#Figure3" >Figure 3(b)</a>) is given by</p>
+
+  <div>
+    \[\tan(\text{angle without magnifier}) = \frac{\text{height of object}}{\text{distance from eye to object}} = \frac{h_{obj}}{d_{obj}-d}\]
+  </div>
+  
+  <p>(You have to subtract \(d\) because the distance from eye to object is measured in the opposite direction to the distance from lens to eye.) Next, the tangent of the visual angle with the magnifier (as in <a href="#Figure3" >Figure 3(c)</a>) is
+
+  <div>
+    \[\tan(\text{angle with magnifier}) = \frac{\text{height of image}}{\text{distance from eye to image}} = \frac{h_{img}}{d_{img}-d}\]
+  </div>
+  
+  <p>The angular magnification \(M\) is \(\tan(\text{angle with magnifier})/\tan(\text{angle without magnifier})\), which after some rearrangement is
+
+  <div>
+    \[M = \dfrac{h_{img}}{h_{obj}}\times\dfrac{d_{obj}-d}{d_{img}-d}\]
+  </div>
+  
+  <p>We can simplify this a little by getting rid of the heights, since in Chapter 5, it was shown that \(h_{img}/h_{obj} = d_{img}/d_{obj}\). Thus the angular magnification can be rewritten as
+
+  <div>
+    \[M = \dfrac{d_{img}}{d_{obj}}\times\dfrac{d_{obj}-d}{d_{img}-d}\]
+  </div>
+
+  <p>This equation can be simplified further if the object distance \(d_{obj}\) is equal to the focal length \(f_{obj}\) of the lens<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>. If the object is near the focal point, the image distance \(d_{img}\) gets so large that the distance from the eye to the image, which is \(d_{img}-d\), is approximately equal to \(d_{img}\). The magnification becomes</p>
+
+  <div>
+    \[\begin{aligned} M &amp;\approx \dfrac{d_{img}}{f_{obj}}\times\dfrac{f_{obj}-d}{d_{img}} \\ 
+	&amp;= \dfrac{f_{obj}-d}{f_{obj}} \\ 
+	&amp;= 1-\dfrac{d}{f_{obj}}\end{aligned}\]
+  </div>
+  
+  <p>Since \(F=-1/f_{obj}\), the magnification is thus
+
+  <div>
+    \[M\approx 1+dF\]
+  </div>
+
+  <p>This formula suggests that you can get a very large magnification by holding the magnifying glass a long way from their eye i.e. by making \(d\) large. This is true, but not very useful in practice. If the distance from eye to magnifier \(d\) is large, you are also a long way from the object. If you're a long way from the object, the visual angle of the object without the magnifier is quite small, and so magnifying it a lot leaves you pretty much back where you started. In fact, as we will see in a later chapter, the visual angle after magnification is unaffected by the distance \(d\) between the magnifier and the eye. </p>
+  
+  <p>Still, people like to know how much magnification they will get from a magnifier. Since people tend to hold magnifiers reasonably close, a typical distance is \(d=0.25\text{m}\), which leads to the “nominal” magnification of</p>
+
+  <div>
+    \[M = 1+F/4\]
+  </div>
+  
+  <p>This will give a patient an idea of how much magnification they can expect from a magnifier of power \(F\), under normal usage. An even simpler magnification is to just use \(F/4\), which is perfectly fine for most purposes.</p>
+
+  <h2 id="the-astronomical-telescope">The Astronomical Telescope</h2>
+
+  <p>Magnifying glasses are used to look at near objects, because the object has to be closer than the focal length of the lens. To magnify distant objects, we need a telescope. To build a telescope, let’s begin with a single positive lens, which is called the <em>objective lens</em> of the telescope - because it's the end of the telescope that points at the distant object. This objective lens forms an image of the distant object, as is shown in <a href="#Figure4" >Figure 4</a>. Because the object is very far away, the floating image formed by the lens is exactly one focal length from the lens.</p>
+
+  <figure id='Figure4'>
+  <img src="media/figure4.svg" />
+  <figcaption>
+  <span class="figno">Figure 4.</span> The design of an astronomical telescope. Parallel light from a single point on a distant object enters the objective lens and forms an image at the image focal point (dashed line). The image is &ldquo;floating&rdquo; in air, because we don't put in any image screen to catch it. The floating image is magnified by the eyepiece lens, which is placed one focal length from the image.</figcaption>
+  </figure>
+  
+
+  <p>The floating image formed by the objective lens will not be especially large. We can make it bigger by looking at it through a magnifier. The magnifier glass is placed so that the image from the first lens is at the focal point of the magnifier. The magnifier is called the <em>eyepiece</em> because it is close to the eye of the person using the telescope.</p>
+
+  <p>This sort of telescope is called an astronomical telescope. In <a href="#Figure4" >Figure 4</a>, the distance from the objective to the eyepiece (the telescope length) must be the sum of the focal lengths of the objective and eyepiece:</p>
+
+  <div>
+    \[\text{telescope length} = \frac{1}{F_{objective}}+\frac{1}{F_{eyepiece}}\]
+  </div>This is because, for a distant object, the objective will form an image at a distance of one focal length (\(1/F_{objective}\)) from the lens, and the eyepiece has been placed at one focal length (\(1/F_{eyepiece}\)) from that image.
+
+  <p>One other feature of this telescope is that if a bundle of parallel rays enters the objective lens, the bundle is still parallel when it leaves the eyepiece. This is because parallel light entering the objective will be focussed to a point inside the telescope, and that point is one focal length from the eyepiece, so the light from that point will leave the eyepiece in parallel. This is useful because it means that someone using the telescope does not have to accommodate. It also means that, in a sense, the telescope has a power of \(0\text{D}\), because the vergence of the light isn’t changed as it passes through the telescope.</p>
+
+  <h3 id="telescope-magnification">Telescope Magnification</h3>
+  <p><a href="#Figure5" >Figure 5</a> shows how to work out the magnification of an astronomical telescope. In <a href="#Figure5" >Figure 5(a)</a> two parallel beams of light coming from a distant object have been picked out, one from the top of the object (reddish) and one from the bottom of the object (yellowish).The angle between the beams when they leave the telescope is greater than the angle between the beams when they enter the telescope, so the telescope has magnified the object.</p>
+  
+  <p>Notice that the beam which was travelling downwards when it hit the objective is travelling up when it leaves the telescope, and the beam that was travelling up when it hit the objective is now travelling down. This crossover of the beams means that when we look through an astronomical telescope, the image we see is upside down.</p> 
+  
+  <p>In <a href="#Figure5" >Figure 5(b)</a> (obtained by clicking Figure 5) only two rays from the beams have been picked out, to make it easier to define the visual angles with and without the telescope. In <a href="#Figure5" >Figure 5(c)</a> the two angles have been marked out. Angle \(a\) is the visual angle of the object before being magnified by the telescope, and angle \(b\) is the visual angle of the object after magnification. 
+  </p>
+  <p>To work out the magnification, we need some dimensions. These are shown in In <a href="#Figure5" >Figure 5(d)</a>, which you should keep visible while working through the maths below.
+
+  <figure id='Figure5'>
+  <span class='slideshow-container'>
+  <span>
+  <img src="media/figure5.svg" />
+  <figcaption>
+  <span class="figno">Figure 5(a). </span> Telescope magnification. The picture shows two parallel beams of light, one coming from the top of a distant object, and one coming from the bottom. This diagram contains more rays than we need to work out magnification, so we can throw most of them away.
+  </figcaption>
+  </span>
+  <span>
+  <img src="media/figure5a.svg" />
+  <figcaption>
+  <span class="figno">Figure 5(b). </span>Here, only the middle ray from each beam is shown. Because the rays hit the optic centre of the objective lens, they aren't deviated (according to ray-tracing rule 3). These two rays leave the middle of the objective and diverge towards the eyepiece. When they hit the eyepiece, it converges them. Note that the angle between the rays hitting the objective is less than the angle between the rays when they leave the objective. 
+  </figcaption>
+  </span>
+  <span>
+  <img src="media/figure5b.svg" />
+  <figcaption>
+  <span class="figno">Figure 5(c). </span>Two angles have been marked here. Angle \(a\) is the angle between the rays when they hit the objective. This is the visual angle of the object before it goes through the telescope: if you put your eye where the objective is, that's the visual angle you'd experience. Angle \(b\) is the visual angle of the object after it's been magnified. If you place your eye where the rays cross, this is the visual angle you'd experience. 
+  </figcaption>
+  </span>
+  <span>
+  <img src="media/figure5c.svg" />
+  <figcaption>
+  <span class="figno">Figure 5(d). </span> The tangent of \(a\) depends on the telescope length \(d\) and the gap \(h\) between the rays when they hit the eyepiece. (angle \(a\) to the right of the telescope objective is the same as the angle to the left of the objective.) The tangent of \(b\) depends on the gap \(h\) and the distance \(e\) from the eyepiece to where the rays cross. 
+  </figcaption>
+  </span>
+  </span>
+  </figure> 
+
+  <p>In the calculation that follows, the sign convention matters, so all distances will be measured from the eyepiece. The tangent of the visual angle \(a\) is</p>
+
+  <div>
+    \[\tan(a)=\dfrac{h}{-d}\]
+  </div>
+  
+  <p>(The negative sign is because we are measuring from the eyepiece to the centre of the objective, i.e. from right to left.) The visual angle between the two rays leaving the telescope is \(b\). The tangent of this angle is</p>
+
+  <div>
+    \[\tan(b)=\dfrac{h}{e}\]
+  </div>
+  
+  <p>The magnification is approximately the ratio of these two tangents, which is
+
+  <div>
+    \[M = \dfrac{\tan(b)}{\tan(a)}=\dfrac{h}{e}\times\dfrac{-d}{h} = \dfrac{1}{e}\times -d\]
+  </div>
+  
+  <p>The value of \(1/e\) can be worked out from the thin lens equation. The two rays leaving the centre of the objective lens in <a href="#Figure5" >Figure 5(d)</a> have a vergence between them equal to \(V_{in}=1/(-d)\) when they reach the eyepiece. These two rays leave the eyepiece with a vergence of \(V_{out} = 1/(-d)+F_{eyepiece}\). But \(V_{out}=1/e\), so the magnification is</p>
+
+  <div>
+    \[\begin{aligned} 
+	M &amp;= -d\times\dfrac{1}{e} = -d\times V_{out} \\ &amp;= -d\times\left(\dfrac{1}{-d}+F_{eyepiece}\right) \\ &amp;= 1 -d\times F_{eyepiece}
+	\end{aligned}\]
+  </div>
+  
+  <p>Substituting the telescope length \(d=1/F_{objective}+1/F_{eyepiece}\) and simplifying gives the magnification as</p>
+
+  <div>
+    \[M = -\left(\dfrac{F_{eyepiece}}{F_{objective}}\right)\]
+  </div>
+
+  <p>(Note the minus sign in front of the fraction here.) For example, a telescope with a \(+2\text{D}\) objective lens and a \(+6\text{D}\) eyepiece has a magnification of \(-(6/2)=-3\). That means objects appear three times larger with the telescope than without. The minus sign means they are inverted by the telescope, and look upside down.</p>
+
+  <p>The magnification of a telescope is increased when the eyepiece power is large or when the objective power is small. For example, the largest existing astronomical telescope using lenses (rather than mirrors) is the Yerkes telescope in the USA. The power of the objective in the Yerkes telescope is only \(+0.05\text{D}\) (which means that the telescope is over 20 metres long).</p>
+
+  <h2 id="the-galilean-telescope.">The Galilean Telescope.</h2>
+
+  <p>The astronomical telescope has two disadvantages: it tends to be long, and it inverts the image. The second disadvantage isn’t an issue if looking at objects in space, because there is no up or down there. This is why the telescope is called an <em>astronomical</em> telescope. However, the inversion is an issue when looking at objects on earth. The inversion can be fixed by inserting an extra lens to give the light rays one more flip, but this makes the telescope even longer. The 17th century astronomer Galileo invented a different telescope design which is shorter than the astronomical telescope, and which does not invert the image.</p>
+
+  <p>The idea behind it is this. The magnification formula for a telescope is \(M=-F_{eyepiece}/F_{objective}\). If we used a <em>negative</em> lens for the eyepiece, then the magnification would be positive, and that means the image won’t be upside down. For example, a \(+2\text{D}\) objective and a \(-10\text{D}\) eyepiece should give a magnification of \(M=-(-10)/(+2) = +5\).</p>
+
+  <p>This is the basis of the Galilean telescope, shown in <a href='#Figure6'>Figure 6</a>, which has a positive objective and a negative eyepiece. Just as with the astronomical telescope, the distance between the two lenses is the sum of their focal lengths. Since one of the focal lengths is negative, this makes the telescope shorter. As with the astronomical telescope, when parallel light enters the objective, parallel light leaves the eyepiece. But unlike the astronomical telescope, the image is not inverted.</p>
+
+  <figure id='Figure6'>
+  <img src="media/figure6.svg" />
+  <figcaption>
+  <span class="figno">Figure 6.</span> The design of a Galilean telescope. Parallel light from a point on a distant object strikes the positive objective lens and is converged. Before it converges all the way to a point (dotted lines) the light is intercepted by a negative lens and diverged. Since the convergence of the light entering the eyepiece is the opposite of the eyepiece power, the light leaving the lens is in parallel (see Chapter 2).</figcaption>
+  </figure>
+
+  <p>The way the Galilean telescope magnifies is a little less obvious than the astronomical telescope. Look at <a href='#Figure7'>Figure 7(a)</a>. As in <a href='#Figure5'>Figure 5</a>, two parallel beams of light are coming from the distant object, one from the top of the object and one from the bottom. We can selcted just two rays to look at <a href='#Figure7'>Figure 7(b)</a>, both of which pass through the optic centre of the objective lens. The two (divergent) rays then continue down the telescope until they hit the eyepiece. The eyepiece diverges them even more. The two rays leaving the eyepiece don’t cross, but we can extend them back as “virtual” rays until they do cross (<a href='#Figure7'>Figure 7(c)</a>). The visual angle through the telescope \(b\) is the angle between the two virtual rays where they cross, and the visual angle without the telescope \(a\) is the angle when they hit the objective. Note that the ray which was travelling downwards when it entered the telescope is still travelling down when it leaves the telescope, and the ray which was travelling upwards is still travelling up. The rays aren’t crossed over inside the telescope, and so the image isn’t inverted.</p>
+
+  <figure id='Figure7'>
+  <span class='slideshow-container'>
+  <span>
+  <img src="media/figure7.svg" />
+  <figcaption>
+  <span class="figno">Figure 7(a).</span> How a Galilean telescope magnifies. Two parallel beams of light enter the objective from the top and bottom of an object. They are diverged by the eyepiece and leave the telescope with a larger angle between them.</figcaption>
+  </span>
+  <span>
+  <img src="media/figure7a.svg" />
+  <figcaption>
+  <span class="figno">Figure 7(b).</span>  Here, only the middle ray from each beam is shown. Because the rays hit the optic centre of the objective lens, they aren't deviated (according to ray-tracing rule 3). These two rays leave the middle of the objective and diverge towards the eyepiece. When they hit the eyepiece, it diverges them even more. Note that the angle between the rays hitting the objective is less than the angle between the rays when they leave the objective. Click to see the angles</figcaption>
+  </span>
+  <span>
+  <img src="media/figure7b.svg" />
+  <figcaption>
+  <span class="figno">Figure 7(c).</span> The angle between the rays entering the telescope is \(a\).
+  The angle between the rays leaving the eyepiece can be worked out by following them backwards until they meet (doted lines). This angle is \(b\), which is larger than \(a\)</figcaption>
+  </span>
+  </span>
+  </figure>
+
+
+  <h2 id="telescopes-as-low-vision-aids.">Telescopes as Low Vision Aids.</h2>
+
+  <p>While telescopes were originally designed to magnify distant objects, they can be modified to magnify near objects. These modified telescopes are useful for low vision patients who require more magnification than is possible with magnifying glasses.</p>
+
+  <p>The problem with using telescopes on very near objects is that light from a very near object is divergent when it hits the objective lens. Telescopes are designed under the assumption that the light entering the telescope is parallel. When divergent light from a near object enters the telescope, divergent light leaves the telescope (see top of <a href='#Figure8'>Figure 8</a>). An eye which has some accommodation may be able to focus this divergent light, but maybe not, so the divergent light leaving the telescope is a potential problem.</p>
+  
+  <p>Fortunately, it's an easy to fix problem. If the telescope works best with parallel light, we need to turn the divergent light from the near object into parallel light <em>before</em> it enters the telescope. This can be done with an extra lens. For example, suppose we want to use a telescope to view an object at a distance of \(8cm\). When we put the the telescope this far from the object, the light striking the objective lens has a divergence of \(-12.5\text{D}\). We can change this to parallel light by simply inserting a \(+12.5\text{D}\) lens in front of the telescope. The light leaving the extra lens is now parallel, and so the telescope works as expected. (see <a href='#Figure8'>Figure 8</a>, bottom). The magnification is calculated from the usual telescope magnification equation, ignoring the extra lens. </p>
+
+  <p>In a real low-vision telescope, one does not add an extra lens. Instead, one just changes the power of the objective, because powers of lenses add when they are put close together. For example, suppose we have a Galilean telescope with an objective power of \(+2\text{D}\) and an eyepiece power of \(-10\text{D}\). If we want to use this at a distance of \(5\text{cm}\), we can do so by putting an extra lens with power \(+20\text{D}\) in front of the objective. However, if the extra lens is very close, the \(+20\text{D}\) lens and the \(+2\text{D}\) objective act the same as a single \(+22\text{D}\) lens. The magnification, however, remains \(-10/2 = 5\), since the magnification is determined by the unaltered telescope.</p>
+
+  <figure id='Figure8'>
+  <img src="media/figure8.svg" />
+  <figcaption>
+  <span class="figno">Figure 8.</span> The design of a low-vision telescope for near work. In the top image, an object is placed close to a standard Galilean telescope. Because the light from the object is divergent, the Galilean telescope cannot focus on the object, and the light leaving the eyepiece is diverging, rather than parallel. In the bottom image, an extra lens has been inserted to make the light from the object parallel before it enters the telescope. The distance from the macro lens to the object is the macro lenses object focal length.</figcaption>
+  </figure>
+
+
+  <div class="footnotes">
+    <hr />
+
+    <ol>
+      <li id="fn1">
+        <p>Size constancy is something that ruins this simple idea. Size constancy refers to the fact that objects appear the same size no matter how big their retinal image is. Binocular vision also adjust our impression of the size of an object. <a href="#fnref1">↩</a></p>
+      </li>
+      <li id="fn2">
+        <p>This has the further advantage that the light from every point on the virtual image comes out of the lens in parallel, so the person using the magnifier does not need to accommodate<a href="#fnref2">↩</a></p>
+      </li>
+    </ol>
+  </div>
+</body>
+<script>slideshow()</script>
+</html>

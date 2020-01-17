@@ -20,33 +20,76 @@ data-slideshow-id (which is the id of the slideshow to control) and data-slidesh
 
 function slideshow() {
 	
-	let S = document.getElementsByClassName('slideshow-container'),
-		R = document.getElementsByClassName('slideshow-remote')
+	let S = document.getElementsByClassName('slideshow-container'), // all the container elems
+		R = document.getElementsByClassName('slideshow-remote') // all the remote-control elems
 	
-	function moveSlide(container, slides, step) {
+	function moveSlide(container, step) {
 			let vis = +container.dataset.slideNumber
+				slides = container.children
 			slides[vis].style.display = 'none'
-			vis = (vis + step + slides.length) % slides.length
+			vis += step
+			if (vis<0) vis = 0
+			if (vis>=slides.length) vis=slides.length-1
 			slides[vis].style.display = 'block'
 			container.dataset.slideNumber = vis		
 	}
 	
+	function wrapImage(elem, prev, next) {
+		if (elem.tagName=='IMG') {
+			let p = elem.parentNode,
+				d = document.createElement('div')
+			d.style.position = 'relative'
+			p.replaceChild(d, elem)
+			d.appendChild(elem)
+			let arrow = document.createElement('div')
+			arrow.style.position='absolute'
+			arrow.style.left='5px'
+			arrow.style.bottom='12px'
+			arrow.style.color = 'white'
+			arrow.style.fontSize = '25px'
+			arrow.innerHTML = '&#10094;'
+			arrow.style.cursor = 'pointer'
+			arrow.onclick = prev
+			d.appendChild(arrow)
+			arrow = document.createElement('div')
+			arrow.style.position='absolute'
+			arrow.style.right='5px'
+			arrow.style.bottom='12px'
+			arrow.style.color = 'white'
+			arrow.style.fontSize = '25px'
+			arrow.innerHTML = '&#10095;'
+			arrow.style.cursor = 'pointer'
+			arrow.onclick = next
+			d.appendChild(arrow)
+		} else {
+			for (let j=0; j<elem.children.length; j++) {
+				wrapImage(elem.children[j], prev, next)
+			}
+		}
+	}
+	
 	for (let i=0; i<S.length; i++) {
-		
+		// enable slideshow on all children of the containers
 		let container = S.item(i),
 			slides = container.children
+			nextSlide = () => moveSlide(container, 1),
+			prevSlide = () => moveSlide(container, -1)
 			
+		// adjust the children so the images are wrapped in their own div
+		// and receive the onclick handlers
+		for (let j=0; j<slides.length; j++) {
+			wrapImage(slides[j], prevSlide, nextSlide)
+		}
+		slides = container.children // because this might have changed from wrapping
+		
 		// initialize each slideshow
 		for (let j=0; j<slides.length; j++) {
-			slides[j].style.display = 'none'
+			slides[j].style.display = 'none'			
 		}
 		container.dataset.slideNumber = 0
 		slides[0].style.display = 'block'
 		
-		// add the event handler to the slideshow container
-		let nextSlide = () => moveSlide(container, slides, 1),
-			prevSlide = () => moveSlide(container, slides, -1)
-		container.addEventListener('click', nextSlide)
+		//container.addEventListener('click', nextSlide)
 		
 		// add the event handler to any remote controllers
 		for (let j=0; j<R.length; j++) if (R.item(j).dataset.slideshowId == container.id) {

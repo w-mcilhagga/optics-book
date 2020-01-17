@@ -1,3 +1,5 @@
+var fig1p5
+
 (function(data) {
 
 let state = {
@@ -184,14 +186,21 @@ let state = {
 }
 
 	state = Object.assign(state, data)
-
+    
 	let actions = {
 		toggle(s) {
 			s.decorate = s.decorate=='ui'?false:'ui'
-		}		
+		},
+        anim(s) {
+			let L = findObject(s,'light#1')
+			if (L.position[0]<-0.5) {
+				L.position[0] += 0.005
+				setTimeout(()=>actions.anim(s), 0.01)
+			}
+        }			
 	}
 
-	new p5(makeP5App(state, actions), 'figure1image')
+	fig1p5 = new p5(makeP5App(state, actions), 'figure1image')
 	popout.openButton('Figure1')
 	popout.addhelp('Figure1', actions.toggle)
 
