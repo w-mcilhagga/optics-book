@@ -167,7 +167,7 @@ plugins.group = {
 
 plugins.surface = plugins.setproto(plugins.base, { // a paraxial surface
 
-	optics(ray, n_in, n_out) {
+	optics(ray, n_in, n_out, stopwatch) {
 		// the ray has intersected the surface at ray.points[-1] in direction
 		// ray.direction, & return direction of refracted ray or false if none
 		let axis = this.axis,
@@ -198,7 +198,7 @@ plugins.surface = plugins.setproto(plugins.base, { // a paraxial surface
 		}
 
 		// is ray.from on the compute list?
-		this.temp.watchers && this.temp.watchers.forEach(x=>x.watch(ray, direction))
+		!stopwatch && this.temp.watchers && this.temp.watchers.forEach(x=>x.watch(ray, direction))
 
 		return direction
 	}
@@ -217,11 +217,15 @@ plugins.thinlens = plugins.setproto(plugins.surface, {
 plugins.mirror = plugins.setproto(plugins.surface, {
 	optics(ray) {
 		// work out the ray as if it was a lens:
-		let direction = plugins.surface.optics.call(this, ray, 1, 1),
+		let direction = plugins.surface.optics.call(this, ray, 1, 1, true),
 			axis = this.axis,
 			[run, rise] = v2.coords(ray.direction, axis)
 		// reverse the direction wrt axis
-		return v2.add(v2.scale(-run, axis), v2.scale(rise, v2.rot90(axis)))
+		direction = v2.add(v2.scale(-run, axis), v2.scale(rise, v2.rot90(axis)))
+		// fix watchers
+		this.temp.watchers && this.temp.watchers.forEach(x=>x.watch(ray, direction))
+		// return the direction as expected
+		return direction
 	}
 })
 

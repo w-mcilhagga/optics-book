@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+</script>
+  <script src='../scripts/p5/p5.js'>
+</script>
+  <script src='../scripts/p5/p5.dom.js'>
+</script>
+  <script src='../scripts/p5/p5.util.js'>
+</script>
+  <script src='../scripts/p5/p5.yup.js'>
+</script>
+  <script src='../scripts/vec2d.js'>
+</script>
+  <script src='../scripts/raytracing-2/optical_simulation.js'>
+</script>
+  <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'>
+</script>
+  <script src='../scripts/popouts.js'>
+</script>
+  <script src='../scripts/slides.js'>
+</script>
+
+  <title>Chapter 7: Mirrors &amp; Reflection</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 7
+  </div>
+
+  <h1 id="reflection">Mirrors & Reflection</h1>
+
+  <p>When light hits an object, it does one of three things: it passes through it, it gets absorbed, or it gets reflected - that is, the light ray &ldquo;bounces off&rdquo; the object. There are two ways light can be reflected. One is diffuse reflection, which means the reflected photons bounce off the object in random directions. The other is specular reflection, which means all the light rays bounce of in a particular direction.</p>
+  
+  <figure id=Figure1>
+  <img src="media/figure1.svg" />
+	<figcaption>
+		<span class="figno">Figure 1.</span> The two sorts of reflection are diffuse and specular. On the left, a beam of parallel rays hits a diffusely reflecting surface. Each ray is reflected in a different, essentially random, direction. On the right, a beam of parallel rays hits a specular surface. Each ray is reflected in the same direction.
+	</figcaption>
+  </figure>
+  
+  <p>When specular reflection occurs, the light bounces off the surface with exactly the same angle as it hit the surface, much like a ball bouncing off a hard floor. Specular reflection obeys a simple law: the angle of reflection is equal to the angle of incidence. The angles of reflection and incidence are usually measured from the surface normal (just like refraction), but for flat surfaces they can also be measured from the surface (see <a href="#Figure2">Figure 2</a>).</p>
+
+  <figure id=Figure2>
+    <img src="media/reflection.svg" />
+
+    <figcaption>
+	<span class="figno">Figure 2.</span> The law of reflection at a mirror states that the angle of incidence \(\theta\) equals the angle of reflection \(\theta&#39;\) are equal. Here the angles of incidence and reflection are measured from the surface normal. However, they could also be measured from the mirror surface if it is flat (giving angles \(\alpha\) and \(\alpha&#39;\), which are also equal). Note that a mirror is often drawn as a straight line with cross-hatching on the nonreflective side, as here.
+	</figcaption>
+  </figure>
+
+
+  <p>The fact that the most specular reflective substances are metals is no coincidence. Metals have plenty of “free” electrons; that is, electrons that are free to move around in the metal. When photons of light are absorbed by a smooth metal surface, their energy causes the free electrons in the surface to move. The moving electrons generate an electrical field which creates new photons. These photons have the same velocity parallel to the metal surface as the original absorbed photons, but a reversed velocity perpendicular to it.</p>
+
+  <h2 id="virtual-images-in-plane-mirrors.">Virtual images in Plane (flat) Mirrors.</h2>
+
+  <p>When we see a reflection in a mirror, what we’re really looking at is a virtual image. The virtual image is the same size as the object, and is as far behind the mirror as the object is in front of it. (<a href="#Figure3">Figure 3</a>)</p>
+  
+  <figure id=Figure3>
+    <div class='canvas-div' id='figure3image'></div>
+
+    <figcaption>
+      <span class='figno' id='fig1handle'>Figure 3. </span> On the left a divergent point source sends rays towards a mirror (the vertical white line in the middle). The rays are reflected according to the law of reflection. We can create virtual rays from the reflected rays (click the checkbox to see them). The point where the virtual rays <em>seem</em> to come from is a virtual image of the point source - a reflection.
+    </figcaption>
+  </figure>
+  <script>
+  //popout.openButton=()=>true
+  </script>
+  <script src='scripts/figure3.js'></script>
+  
+  <p>Here we will prove that the virtual image is the same distance from the mirror as the object, using simple geometry. Consider a single ray from the point object, and its virtual ray (<a href="#Figure4">Figure 4(a)</a>). The law of reflection says that \(\alpha = \alpha'\). These angles are shown as yellowish arcs. The mirror (white line) and the line from A to B are both straight, so \(\alpha\) and \(\alpha''\) are alternating angles, and so \(\alpha' = \alpha''\). Thus \(\alpha = \alpha' = \alpha''\).</p>
+  
+  <figure id=Figure4>
+  	<span class='slideshow-container'>
+	<span>
+    <img src="media/figure4a.svg" />
+    <figcaption>
+	<span class="figno">Figure 4(a).</span> Steps to prove that the virtual image poiunt B is the same distance from the mirror as the point P. The three angles \(\alpha, \alpha'\) and \(\alpha''\) are all equal, so in particuylar \(\alpha=\alpha''\).
+	</figcaption>
+	</span>
+	<span>
+    <img src="media/figure4b.svg" />
+    <figcaption>
+	<span class="figno">Figure 4(b).</span> Similarly, the two angles \(\beta\) and \(\beta''\) are the same.
+	</figcaption>
+	</span>	
+	<span>
+    <img src="media/figure4c.svg" />
+    <figcaption>
+	<span class="figno">Figure 4(c).</span> That means the angles \(\gamma\) and \(\gamma''\) are also the same.
+	</figcaption>
+	</span>	
+	<span>
+    <img src="media/figure4d.svg" />
+    <figcaption>
+	<span class="figno">Figure 4(d).</span> Finally, that means the two triangles shown in orange are similar, because they have two interior angles (\(\alpha, \gamma\) and \(\alpha'', \gamma''\)) the same. Furthermore, they share one side - the side that is on the mirror. That means that they are not just similar, but actually the same size. From that, it follows that B must be the same distance from the mirror as P.
+	</figcaption>
+	</span>
+
+	</span>
+  </figure>
+
+<p><a href="#Figure4">Figure 4(b)</a> shows two more angles \(\beta\) and \(\beta''\). A similar line of reasoning allows us to prove that \(\beta=\beta''\). In <a href="#Figure4">Figure 4(c)</a> the angles \(\beta\) and \(\gamma\) add up to \(180^o\), as do the angles \(\beta''\) and \(\gamma''\). So \(\gamma=\gamma''\). </p>
+<p>The last step is shown in  <a href="#Figure4">Figure 4(d)</a>. There are two orange triangles, one to the left and one to the right of the mirror. The left hand triangle has interior angles \(\alpha, \gamma\) and the unmarked angle at P is \(180-\alpha-\gamma\).  The right hand triangle has interior angles \(\alpha'', \gamma''\) and the unmarked angle at B is \(180-\alpha''-\gamma''\). But since \(\alpha' = \alpha''\) and \(\gamma' = \gamma''\), the to triangles have the same angles and so they are similar. However, they also share a side: the part of the triangle that touches the mirror. This makes the two triangles exactly the same size. Thus, the distance from P to the mirror and the distance from B to the mirror must be the same. </p>
+
+  <h2 id="curved-mirrors">Curved mirrors</h2>
+
+  <p>Curved mirrors can be used to focus light in much the same way as a lens does. In fact, for some applications such as astronomical telescopes, curved mirrors are far better than lenses. Unlike lenses, curved mirrors do not suffer from chromatic aberration, because all wavelengths are reflected in exactly the same way. Curved mirrors can also be made extremely large, as they can be supported on one side, whereas lenses must be self-supporting.</p>
+
+  <figure id=Figure4>
+    <img src="media/convexconcave.svg" />
+
+    <figcaption>
+	<span class="figno">Figure 4.</span> Curved mirrors can be either concave (left image) or convex (right image). Concave mirrors converge the light and usually form an inverted real image in front of the mirror. Convex mirrors diverge the light and form an upright virtual image behind the mirror.
+	</figcaption>
+  </figure>
+
+  <p>Spherical curved mirrors have a surface which is a small slice of a sphere. There are two types of spherical mirrors: convex, where the centre of the mirror pushes outwards, and concave, where it is pushed inwards. Convex mirrors diverge light and create a virtual image. Concave mirrors converge light and usually create real images (<a href="#Figure4">Figure 4</a>).</p>
+
+  <h3 id="focal-length-of-spherical-mirrors">Focal Length of Spherical Mirrors</h3>
+
+  <p>Recall that the focal length of a lens is the distance from the lens to the image when parallel light enters the lens. A similar definition applies to mirrors: the focal length of a mirror is the distance from mirror to image when parallel light is reflected from the mirror. There is a very simple relationship between the focal length of a spherical mirror and the radius of the spherical mirror, which we shall derive with the help of Figure [mirrorfocus].</p>
+
+  <p>This shows a ray of light, parallel to the optic axis (which is the line joining \(C\) and \(A\)), striking a concave mirror at point \(R\) and being reflected to the focal point \(F\). All such parallel rays get reflected to the same place \(F\) because, as we will see below, the height of the ray above the optic axis is irrelevant. The centre of the spherical mirror surface is \(C\). The dotted line from \(R\) to \(C\) is a radius of the spherical mirror, with length \(r\), and this is also the surface normal at the point \(R\), because radial lines are always at right angles to the circumference of a circle, or the surface of a sphere.</p>
+
+  <figure id=Figure5>
+    <img src="media/mirrorfocus.svg" />
+
+    <figcaption>
+	<span class="figno">Figure 5.</span> Diagram for working out the focal length of a spherical concave mirror. \(R\) is the point of reflection. \(A\) is the point directly below \(R\). \(F\) is the focal point, and \(C\) is the centre of the sphere. The radial line from \(R\) to \(C\) is the surface normal at point \(R\). The focal length \(f\) is the distance from the mirror surface to \(F\), and the radius \(r\) is the distance from the surface to \(C\)</figcaption>
+  </figure>
+
+  <p>The angle of incidence is called \(\theta\) in <a href="#Figure5">Figure 5</a>. There are a number of other angles \(a_1, a_2,\) and \(a_3\) marked on the diagram. Working out these angles, in terms of just \(\theta\) will let us work out the focal length of the mirror.</p>
+
+  <p>From the law of reflection, \(\theta=a_1\).</p>
+
+  <p>There are two parallel lines in the diagram: the ray of light hitting the mirror at \(R\) , and the optic axis running through points \(C\), \(F\), and \(A\). The line from \(C\) to \(R\) intersects these two parallel lines, so the alternate angles \(\theta\) and \(a_3\) must be equal. That is:</p>
+
+  <div>
+    \[\theta=a_3\]
+  </div>
+  
+  <p>The line from \(F\) to \(R\) also intersects these two parallel lines, so the alternate angles \((\theta+a_1)\) and \(a_2\) must also be equal. That is:
+
+  <div>
+    \[\theta+a_1=a_2\]
+  </div>
+  
+  <p>But since \(\theta=a_1\), this becomes
+
+  <div>
+    \[2\theta=a_2\]
+  </div>
+
+  <p>When the ray of light is very close to the optic axis (i.e. is paraxial), then then the distance from \(A\) to the surface of the mirror will be tiny, and so the distance from \(A\) to \(F\) is approximately the focal length \(f\) and the distance from \(A\) to \(C\) is approximately the radius \(r\). The distance from \(A\) to \(R\) will be called \(h\).</p>
+
+  <p>With these assumptions, we have</p>
+
+  <div>
+    \[\begin{aligned} \tan{a_3} &amp;\approx \frac{h}{r} \\ \tan{a_2} &amp;\approx \frac{h}{f} \\\end{aligned}\]
+  </div>
+
+  <p>When the incident ray of light is close to the optic axis, the angles \(a_2\) and \(a_3\) will be very small. For small angles \(\alpha\), \(\tan{\alpha}\approx \alpha\), when the angle is in radians. Thus</p>
+
+  <div>
+    \[\begin{aligned} a_3 &amp;\approx \frac{h}{r} \\ a_2 &amp;\approx \frac{h}{f} \\\end{aligned}\]
+  </div>Dividing \(a_3\) by \(a_2\) gives us
+
+  <div>
+    \[\frac{a_3}{a_2}=\frac{f}{r}\]
+  </div>Notice that the height \(h\) has disappeared, so the height of the ray doesn’t affect where it goes. Since \(a_2=2\theta\) and \(a_3=\theta\), \(a_3/a_2=1/2\). So finally, we get
+
+  <div>
+    \[\begin{aligned} \frac{f}{r}&amp;=\frac{1}{2} \\ \implies f&amp;=\frac{r}{2}\end{aligned}\]
+  </div>
+
+  <p>The focal length \(f\) is measured from the mirror surface to the mirror’s centre, which is a leftward direction. We often consider this a negative distance; but recall that the sign convention (from Chapter 1) says that positive distances are with the direction the light travels. The focal point of this mirror is created by light that has reflected off the mirror and is now travelling leftwards. So the focal length for the mirror in Figure [mirrorfocus], which is measured from the mirror to the focal point, is in the direction that the light travels and so it has to be positive. Since we have \(f=r/2\) and \(f\) positive, this means that \(r\) has to be positive too. The upshot of this is that the mirror has a positive power \(F\), which makes sense since it converges light.</p>
+
+  <p>The algebra for working out the focal length of a convex mirror is very similar to the above, and the power of a convex mirror is again \(f=r/2\). However, the power of a convex mirror is negative, because it diverges light.</p>
+
+  <h2 id="the-thin-lens-equation-for-mirrors">The “thin lens” equation for mirrors</h2>
+
+  <p>Curved mirrors create images in a similar way to lenses, by changing the vergence of the light hitting it. Unlike lenses, mirrors also reverse the direction of the light. This change in direction means that we can’t apply a single sign convention to the entire image calculation like we do when using lenses.</p>
+
+  <p>There <em>are</em> equations for curved mirrors that look like the thin lens equation, but because of the sign convention they are tricky to use, and you are prone to making mistakes about whether the image is to the left or right of the mirror.</p>
+
+  <p>When calculating the position of an image formed by a mirror, then, the best approach is as follows:</p>
+
+  <ul>
+    <li>
+      <p>Pretend the curved mirror is a lens with the same power, and use the thin lens equation \(V_{in}+F=V_{out}\).</p>
+    </li>
+
+    <li>
+      <p>Since the mirror reflects light, the image formed by the mirror is always on the opposite side of the image formed by the thin lens.</p>
+    </li>
+
+    <li>
+      <p>Don’t state the image distance as a signed number, because the sign convention is confusing for mirrors; instead, say whether the image is to the left or right of the mirror.</p>
+    </li>
+  </ul>
+
+  <p>A few examples should clarify this advice:</p>
+
+  <h3 id="example-1">Example 1</h3>
+
+  <p>An object is placed 75cm to the left of a concave mirror with power \(+5D\). Where does the image form?</p>
+
+  <h4 id="answer">Answer</h4>
+
+  <ul>
+    <li>
+      <p>The vergence of the light hitting the mirror is \(V_{in}=1/(-0.75)=-1.33\text{D}\). If we pretend the mirror is a thin lens, then the thin lens equation says that \(V_{out}=-1.333+5=+3.667\text{D}\). That means the image is \(1/3.667 = 0.273\text{m}\) to the <em>right</em> of the lens.</p>
+    </li>
+
+    <li>
+      <p>Since the mirror reflects, the image actually forms \(0.273\text{m}\) to the <em>left</em> of the mirror. This is in front of the mirror, and so it is a real image.</p>
+    </li>
+  </ul>
+
+  <h3 id="example-2">Example 2</h3>
+
+  <p>An object is placed 0.5m to the left of a convex mirror with power \(-4\text{D}\). Where does the image form?</p>
+
+  <h4 id="answer-1">Answer</h4>
+
+  <ul>
+    <li>
+      <p>The vergence of the light hitting the mirror is \(V_{in}=1/(-0.5)=-2\text{D}\). If we pretend the mirror is a thin lens, then the thin lens equation says that \(V_{out}=-2+-4 =-6\text{D}\). That means the image is \(1/(-6) = -0.167\text{mm}\) to the <em>left</em> of the lens.</p>
+    </li>
+
+    <li>
+      <p>Since the mirror reflects, the image actually forms \(0.167\text{m}\) to the <em>right</em> of the mirror. This is behind the mirror, and so it is a virtual image.</p>
+    </li>
+  </ul>
+</body>
+<script>slideshow()</script>
+</html>

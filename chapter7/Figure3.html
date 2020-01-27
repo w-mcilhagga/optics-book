@@ -1,0 +1,28 @@
+<link rel="stylesheet" type="text/css" href="../styles/popout.css" />
+<script src="../MathJax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/popouts.js'></script>
+
+<body>
+
+<body>
+  <figure id=Figure3>
+    <div class='canvas-div' style='width:100%' id='figure3image'></div>
+
+    <figcaption>
+      <span class='figno' id='fig1handle'>Figure 3. </span> On the left a divergent point source sends rays towards a mirror (the vertical white line in the middle). The rays are reflected according to the law of reflection. We can create virtual rays from the reflected rays (click the checkbox to see them). The point where the virtual rays <em>seem</em> to come from is a virtual image of the point source - a reflection.
+    </figcaption>
+  </figure>
+  <script>
+  popout.openButton=()=>true
+  </script>
+  <script src='scripts/figure3.js'></script>
+   <p class='closer'  onclick='window.close()'>Close this Window</p>
+ 
+</body>
