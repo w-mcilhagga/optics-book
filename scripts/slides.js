@@ -41,27 +41,32 @@ function slideshow() {
 			d.style.position = 'relative'
 			p.replaceChild(d, elem)
 			d.appendChild(elem)
-			let arrow = document.createElement('div')
-			arrow.style.position='absolute'
-			arrow.style.left='5px'
-			arrow.style.bottom='12px'
-			arrow.style.color = 'white'
-			arrow.style.fontSize = '25px'
-			arrow.innerHTML = '&#10094;'
-			arrow.style.cursor = 'pointer'
-			arrow.onclick = prev
-			d.appendChild(arrow)
-			arrow = document.createElement('div')
-			arrow.style.position='absolute'
-			arrow.style.right='5px'
-			arrow.style.bottom='12px'
-			arrow.style.color = 'white'
-			arrow.style.fontSize = '25px'
-			arrow.innerHTML = '&#10095;'
-			arrow.style.cursor = 'pointer'
-			arrow.onclick = next
-			d.appendChild(arrow)
+			if (prev) {
+				let arrow = document.createElement('div')
+				arrow.style.position='absolute'
+				arrow.style.left='5px'
+				arrow.style.bottom='12px'
+				arrow.style.color = 'white'
+				arrow.style.fontSize = '25px'
+				arrow.innerHTML = '&#10094;'
+				arrow.style.cursor = 'pointer'
+				arrow.onclick = prev
+				d.appendChild(arrow)
+			}
+			if (next) {
+				arrow = document.createElement('div')
+				arrow.style.position='absolute'
+				arrow.style.right='5px'
+				arrow.style.bottom='12px'
+				arrow.style.color = 'white'
+				arrow.style.fontSize = '25px'
+				arrow.innerHTML = '&#10095;'
+				arrow.style.cursor = 'pointer'
+				arrow.onclick = next
+				d.appendChild(arrow)
+			}
 		} else {
+			// look for the img tag
 			for (let j=0; j<elem.children.length; j++) {
 				wrapImage(elem.children[j], prev, next)
 			}
@@ -78,7 +83,7 @@ function slideshow() {
 		// adjust the children so the images are wrapped in their own div
 		// and receive the onclick handlers
 		for (let j=0; j<slides.length; j++) {
-			wrapImage(slides[j], prevSlide, nextSlide)
+			wrapImage(slides[j], j!=0 && prevSlide, j<(slides.length-1) && nextSlide)
 		}
 		slides = container.children // because this might have changed from wrapping
 		

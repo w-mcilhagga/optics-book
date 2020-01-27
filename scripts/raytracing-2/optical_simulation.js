@@ -167,7 +167,7 @@ plugins.group = {
 
 plugins.surface = plugins.setproto(plugins.base, { // a paraxial surface
 
-	optics(ray, n_in, n_out, stopwatch) {
+	optics(ray, n_in, n_out, dontwatch) {
 		// the ray has intersected the surface at ray.points[-1] in direction
 		// ray.direction, & return direction of refracted ray or false if none
 		let axis = this.axis,
@@ -198,7 +198,7 @@ plugins.surface = plugins.setproto(plugins.base, { // a paraxial surface
 		}
 
 		// is ray.from on the compute list?
-		!stopwatch && this.temp.watchers && this.temp.watchers.forEach(x=>x.watch(ray, direction))
+		!dontwatch && this.temp.watchers && this.temp.watchers.forEach(x=>x.watch(ray, direction))
 
 		return direction
 	}
@@ -592,6 +592,33 @@ plugins['snell arc'] = plugins.setproto(plugins.arc, {
 		    sin_theta_out = n_in*sin_theta_in/n_out,
 			direction = v2.rotate(normal, -Math.asin(sin_theta_out))
 			
+		// is ray.from on the compute list?
+		this.temp.watchers && this.temp.watchers.forEach(x=>x.watch(ray, direction))
+		
+		return direction
+	}
+})
+
+plugins['mirror arc'] = plugins.setproto(plugins['snell arc'], {
+	// n_in, n_out are indices inside & outside the arc
+	
+	optics(ray) {
+		let pt = v2.sub(ray.path[ray.path.length-1], this.position),
+			normal = v2.normalize([-pt[0]/this.r[0]**2, -pt[1]/this.r[1]**2]),
+			// normal always points towards the inside
+			{n_in, n_out} = this
+		
+		if (v2.dot(normal, ray.direction)<0) {
+			[n_in, n_out] = [n_out, n_in]
+			normal = v2.rot180(normal)
+		}
+		let sin_theta_in = v2.sin(ray.direction, normal),
+		    sin_theta_out = -sin_theta_in,
+			direction = v2.rotate(normal, -Math.asin(sin_theta_out))
+		
+		// reverse the direction of the ray
+		direction = v2.scale(-1, direction)
+		
 		// is ray.from on the compute list?
 		this.temp.watchers && this.temp.watchers.forEach(x=>x.watch(ray, direction))
 		

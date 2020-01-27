@@ -306,7 +306,6 @@ plugins.barrier.draw = function (p5, box, ppm) {
 plugins.arc.style = Object.assign({}, plugins.barrier.style)
 
 plugins.arc.draw = function(p5, box, ppm) {
-	
     let style = Object.assign({}, plugins.arc.style, this.style),
 		center = v2.scale(ppm, this.position),
 	    midangle = v2.angle(this.axis)
