@@ -105,6 +105,7 @@ plugins.base = {
     moveself(dx, dy) { // changes the position of the object
         let xlock = this.ui && this.ui.xlock, 
 			ylock = this.ui && this.ui.ylock
+		this.position = [...this.position]
 		if (!xlock) {
 			this.position[0] += dx
 		} else if (Array.isArray(xlock)) {
@@ -119,7 +120,12 @@ plugins.base = {
 			this.position[1] = Math.max(ylock[0], this.position[1])
 			this.position[1] = Math.min(ylock[1], this.position[1])
 		}
-    }
+    },
+	
+	fliplr(x0) { // reflects about line x=x0
+		this.position = [...this.position]
+		this.position[0] = x0+(x0-this.position[0])
+	}
 }
 
 // a group of objects that moves together. Has nothing else in common
@@ -421,6 +427,7 @@ plugins.barrier = plugins.setproto(plugins.base, {
         let xlock = this.ui && this.ui.xlock, 
 			ylock = this.ui && this.ui.ylock,
 			c = this.center()
+		this.position = [...this.position]
 		if (!xlock) {
 			this.position[0] += dx
 			this.position[2] += dx
@@ -437,6 +444,12 @@ plugins.barrier = plugins.setproto(plugins.base, {
 			this.position[1] += dy
 			this.position[3] += dy
 		}
+	},
+	
+	fliplr(x0) {
+		this.position = [...this.position]
+		this.position[0] = 2*x0-this.position[0]
+		this.position[2] = 2*x0-this.position[2]
 	},
 
 	optics(ray) {
@@ -501,6 +514,12 @@ plugins.arc = plugins.setproto(plugins.base, {
 		return [this.position[0]-this.r[0], this.position[0]+this.r[0],
 			this.position[1]-this.r[1], this.position[1]+this.r[1]]
     },
+	
+	fliplr(x0) {
+		plugins.base.fliplr.call(this,x0)
+		this.axis = [...this.axis]
+		this.axis[0] = -this.axis[0]
+	},
 	
 	ends() {
 		// returns the two chord points
@@ -700,7 +719,7 @@ function makeArc(...args) {
 		a_delta = (v2.angle(v2.sub(c2,c1)) + circ)%circ,
 		a = Math.max(...pts.map(v2.angle))*180/Math.PI // because one is always +, one -
 	
-	let arc = { // the acr caused by 'inter'
+	let arc = { // the arc caused by 'inter'
 		type: 'arc',
 		position: [...c1], 
 		r: [args[0], args[1]], 

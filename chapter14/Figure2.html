@@ -1,0 +1,121 @@
+<link rel="stylesheet" type="text/css" href="../styles/popout.css" />
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../../scripts/p5/p5.svg.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/raytracing-2/makeArc.js'></script>
+<script src='../chapter8/scripts/eyes.js'></script>
+
+<body>
+</body>
+<script>
+
+let EYE0 = Gullstrand([0,0], 0),
+    pupil = makePupil(EYE0, 3),
+	pupil2 = makePupil(EYE0, 3)
+	
+EYE = [...EYE0, ...pupil]
+
+let mode='out'
+
+EYE2 = [...EYE0,...pupil2].map(x=>plugins.create(x))
+EYE2.forEach(x=>{x.ui={}; x.id += '(2)'})
+EYE2.forEach(x=>x.move(-0.04,0))
+EYE2.forEach(x=>x.fliplr&&x.fliplr(-0.025))
+EYE2.forEach(x=>x.move(-0.005,0))
+//EYE2.forEach(x=>x.move(0.012,0))
+
+let c=[-0.2,0],
+    state = {
+	w: 650,
+	h: 300,
+	ppm: 10000,
+	origin: [400, 150],
+	background: [0, 61, 93],
+	renderer: 'svg',
+	items: [
+		...EYE,
+		...EYE2,
+		{
+			type: 'parallel light',
+			position: [-10/1000,0],
+			id: 'L0',
+			target: [0+7.8/1000,0],
+			raycount: 3,
+			spread: 0.002,
+			ui: {xlock: true},
+			style: {
+				stroke: [100,255,100],
+				arrows: [-0.007,''],
+				visible: mode=='in'
+			}
+		},
+		{
+			type: 'divergent light',
+			position: [0.0238, 0],
+			id: 'L1',
+			target: [0.0078,0],
+			raycount: 3*10-1,
+			spread: 5.2*15,
+			ui: {xlock: true},
+			style: {
+				stroke: [255,200,0],//[100,255,100],
+				arrows: [0.015,'','','',0.007,''],
+				visible: mode=='out'
+			}
+		},
+		/*{
+			type: 'real image',
+			id: 'shell',
+			light: 'L3',
+			lens: 'back lens',
+			shell: [],
+			draw(p5, vbox, ppm) {
+				// positions are:
+				// L1: [0.02410327310274386, 0]
+				// L2: [0.023941186804882376, -0.0018467135356172832]
+				// L3: [0.023895511709945833, 0.0018407423061329773]
+				console.log(this.position)
+			},
+			style: {
+				visible: true
+			}
+		},*/
+		{
+			type: 'divergent light',
+			position: [0.0237, -0.0018467135356172832],
+			id: 'L2',
+			target: [0.0078,0],
+			raycount: 3,
+			spread: 5.2,
+			ui: {xlock: true},
+			style: {
+				stroke: [255,200,0],
+				arrows: ['','','','',0.012,''],
+				visible: false,
+			}
+		},
+		{
+			type: 'divergent light',
+			position: [0.0237, 0.0018467135356172832],
+			id: 'L3',
+			target: [0.0078,0],
+			raycount: 3,
+			spread: 5.2,
+			ui: {xlock: true},
+			style: {
+				stroke: [0,255,255],
+				arrows: ['','','','',0.012,''],
+				visible: false,
+			}
+		},
+	]
+}
+
+makeP5App(state)(window)
+
+</script>

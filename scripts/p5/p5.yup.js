@@ -83,8 +83,8 @@ p5.prototype.yup_image = function(img, x, y, w, h) {
 	// needed for image blitting
 	this.push()
 	this.translate(x,y)
-	this.scale(1,-1)
-	this.image(img,0,0, w, h)
+	this.scale(w<0?-1:1,-1)
+	this.image(img,0,0, Math.abs(w), h)
 	this.pop()
 }
 

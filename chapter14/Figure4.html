@@ -1,0 +1,117 @@
+<link rel="stylesheet" type="text/css" href="../styles/popout.css" />
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../../scripts/p5/p5.svg.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/raytracing-2/makeArc.js'></script>
+<script src='../chapter8/scripts/eyes.js'></script>
+
+<body>
+</body>
+<script>
+
+let EYE0 = Gullstrand([0,0], 0),
+    pupil = makePupil(EYE0, 3)
+	
+EYE = [...EYE0, ...pupil]
+
+let mode='out'
+
+
+let c=[-0.2,0],
+    state = {
+	w: 650,
+	h: 300,
+	ppm: 2000,
+	origin: [580, 150],
+	background: [0, 61, 93],
+	renderer: 'svg',
+	items: [
+		...EYE,
+		{
+			type: 'parallel light',
+			position: [-10/1000,0],
+			id: 'L0',
+			target: [0+7.8/1000,0],
+			raycount: 3,
+			spread: 0.002,
+			ui: {xlock: true},
+			style: {
+				stroke: [100,255,100],
+				arrows: [-0.007,''],
+				visible: mode=='in'
+			}
+		},
+		{
+			type: 'divergent light',
+			position: [0.0238, 0],
+			id: 'L1',
+			target: [0.0078,0],
+			raycount: 2,
+			spread: 5.2,
+			ui: {xlock: true},
+			style: {
+				stroke: [100,255,100],
+				arrows: ['','','','',0.006,''],
+				visible: mode=='out'
+			}
+		},
+		{
+			type: 'divergent light',
+			position: [0.0237-0.0011, -0.00184-0.0035],
+			id: 'L2',
+			target: [0.0078,-0.0011],
+			raycount: 2,
+			spread: 5.2,
+			ui: {xlock: true},
+			style: {
+				stroke: [255,200,0],
+				arrows: ['','','','',0.006,''],
+				visible: mode=='out',
+			}
+		},
+		{
+			type: 'divergent light',
+			position: [0.0237, -0.00184],
+			id: 'L2a',
+			target: [0.0078,-0.0007],
+			raycount: 2,
+			spread: 5.2,
+			ui: {xlock: true},
+			style: {
+				stroke: [255,200,0],
+				arrows: [''],
+				visible: false,
+			}
+		},
+		{
+			type: 'divergent light',
+			position: [0.0237-0.0011, 0.00184+0.0035],
+			id: 'L3',
+			target: [0.0078,0.0011],
+			raycount: 2,
+			spread: 5.2,
+			ui: {xlock: true},
+			style: {
+				stroke: [0,255,255],
+				arrows: ['','','','',0.006,''],
+				visible: mode=='out',
+			}
+		},
+		{
+			type:'thinlens',
+			position:[-0.01,0],
+			power:60,
+			axis:[1,0],
+			aperture:0.02
+		}
+	]
+}
+
+makeP5App(state)(window)
+
+</script>

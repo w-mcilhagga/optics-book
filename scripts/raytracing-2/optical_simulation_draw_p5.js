@@ -61,6 +61,12 @@ plugins.image = {
 		return this.centerpos
 	},
 	
+	fliplr(x0) {
+		this.position = [...this.position]
+		this.position[0] = 2*x0-this.position[0]
+		this.position[2] = -this.position[2]
+	},
+	
     draw(p5, vbox, ppm) {
         let img = p5.imgCache[this.image] = p5.imgCache[this.image] || p5.loadImage(this.image, redraw),
 			topleft = [],

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+</script>
+  <script src='../scripts/p5/p5.js'>
+</script>
+  <script src='../scripts/p5/p5.dom.js'>
+</script>
+  <script src='../scripts/p5/p5.util.js'>
+</script>
+  <script src='../scripts/p5/p5.yup.js'>
+</script>
+  <script src='../scripts/vec2d.js'>
+</script>
+  <script src='../scripts/raytracing-2/optical_simulation.js'>
+</script>
+  <script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'>
+</script>
+  <script src='../scripts/popouts.js'>
+</script>
+  <script src='../scripts/slides.js'>
+</script>
+
+  <title>Chapter 14: Viewing the Retina.</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 14
+  </div>
+
+  <h1>Viewing the Retina.</h1>
+  
+  <p>In this chapter, we will be looking at various methods for viewing the retina of a patient. This matters because the retina can be affected by disease which reduces its ability to pick up the image formed by the cornea and lens; and it's much harder to treat than optical problems.</p>
+
+  <h2>Ophthalmoscopy</h2>
+  
+  <p>It might look like it would be quite difficult to clearly see someone else's retina, but in fact it is optically no harder than simply looking straight into their eye. The problem is that the inside of the eye is quite dark - only a small amount of light passes into it through the pupil - and the main technical problem to be solved is how to get enough light into the eye to see the retina clearly. We'll address that problem later.</p>
+  
+  <p>If, somehow, we do get light into a patient's eye, the optics of seeing their retina are fairly  straightforward. If the patient's retina is illuminated somehow, then the retina will diffusely reflect the illuminating light, and so bundles of divergent rays will come off all points on the patient's retina. If the patient is emmetropic, their retina - or at least, the foveal part of it - is at the focal point of their lens and cornea. The divergent (reflected) light coming from a point on the fovea, when it passes through the lens and cornea, emerges from the eye as a parallel beam of light.</p>
+  
+  <p>This is easiest understood by reversing the direction of light. Under normal circumstances, when an emmetrope views a distant object, parallel bundles of rays from each point of the object are converged onto single points on the retina (<a href='#Figure1'>Figure 1(a)</a>). The path a ray takes is the same whether the ray is travelling forwards or backwards along that path. Thus, if we illuminate the retina, each illuimnated point creates divergent light which is like light travelling in the opposite direction from the convergent light in  <a href='#Figure1'>Figure 1(a)</a>. This light then emerges in parallel from the eye (<a href='#Figure1'>Figure 1(b)</a>)
+  
+  <figure id="Figure1">
+  <span class='slideshow-container'>
+  <span>
+    <img src="media/figure1a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 1(a).</span> An emmetrope views a bundle of parallel rays from a distant point object. The rays converge to a point on the retina.
+    </figcaption>
+  </span>
+  <span>
+    <img src="media/figure1b.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 1(b).</span> The light that isn't absorbed by the retina is diffusely reflected. The reflected rays that hit the lens and cornea leave the eye as a parallel bundle. These rays are essentially the incoming rays in reverse.
+    </figcaption>
+  </span>
+  <span>
+    <img src="media/figure1c.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 1(c).</span> If another emmetropic eye views the parallel light leaving the first eye, they can focus the parallel rays to form a sharp image of the point on the retina reflecting that light.
+    </figcaption>
+  </span>
+  </span>
+  </figure>
+  
+  <p>Parallel light thus emerges from an illuminated retina (if the patient is emmetropic). If you place your own eye in the path of this parallel beam of light, you can (if you're also emmetropic) focus it and form an image of the patient's retina on your own retina. (<a href='#Figure1'>Figure 1(c)</a>)</p>
+
+  
+  <h3>Field of View</h3>
+  <p>If we looked at a landscape through a small hole in a wall, our field of view - how much we can see - is limited. Two things would increase how much of the landscape we could see. One is to make the hole bigger. The other is to move closer to the hole. Ophthalmoscopy is similar: we are viewing the patient's retina through a tiny hole - their pupil. We can improve our field of view - in this case, how much of their retina we can see - by moving closer to the pupil, or by making the pupil wider, by using drugs which dilate it. What's not obvious, however, is that the field of view is also limited by our <em>own</em> pupil size. The various factors influencing the field of view are shown in <a href='#Figure2'>Figure2(a)-(d)</a></p>
+
+  <figure id="Figure2">
+  <span class='slideshow-container'>
+  
+  <span>
+    <img src="media/figure2a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 2(a).</span> Reflected light from from three points on an illuminated retina emerges from the right hand eye in parallel. The eye on the left can only see the light from the middle point. There are a few ways the observer can see more of the retina.
+    </figcaption>
+  </span>
+  
+  <span>
+    <img src="media/figure2b.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 2(b).</span> First, if they move closer, the bundles of rays from the top and bottom points on the right hand eye haven't moved so far away, and so they can be caught and focused.
+	  Notice that the distance between the points on the patient's retina is the same as the distance between the points on the observer's retina. 
+    </figcaption>
+  </span>
+  
+  <span>
+    <img src="media/figure2c.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 2(c).</span> Second, if the pupil of the right hand eye is dilated, the beams leaving the eye are wider, and so some of the beams are captured by the left hand eye. Note that the distance between the image points on the observer's retina is the same as in Figure 2(b), so moving away hasn't affected the image size.
+    </figcaption>
+  </span>
+  
+  <span>
+    <img src="media/figure2d.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 2(d).</span> Third, if the pupil of the left hand eye is dilated, it can capture the beams from the right hand eye.
+    </figcaption>
+  </span>
+  
+  
+  </span>
+  </figure>
+  
+  <p>We can work out how these factors influence the field of view by analyzing a simple case. <a href='#Figure3'>Figure 3(a)</a> shows a simplified optical picture of ophthamoscopy. Here, the patient's eye has been reduced to a retina and a positive lens, and the observer's eye has been reduced to another positive lens.</p>
+  
+  <figure id="Figure3">
+  <span class='slideshow-container'>
+  <span>
+    <img src="media/figure3a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 3(a).</span> The patient's eye has been reduced to a thin lens and a flat retina on the right of this figure. Rays diverging from \(x\) emerge parallel. The point \(x\) is the highest part of the retina that can be seen by the observer, because the (green) ray from \(x\) that hits the top of the patient's lens is refracted to just hit the bottom of the observer's lens. If \(x\) were any higher, this ray would miss. Half the field of view is given by the angle \(\alpha\).
+    </figcaption>
+  </span>
+  
+  <span>
+    <img src="media/figure3b.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 3(b).</span> The angle \(\alpha\) is also the angle between the yellow ray and the dotted line joining the patient and observer.
+    </figcaption>
+  </span>
+  
+  <span>
+    <img src="media/figure3c.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 3(c).</span> The aperture of the patient's eye is \(h\) and of the observer's eye \(p\). The tangent of \(\alpha\) is given by the triangle with base \(d\) and height \(h/2+p/2\).
+    </figcaption>
+  </span>
+  
+  
+  </span>
+  </figure>
+  
+  <p>The furthest point of the patient's retina that can be seen by the observer is \(x\) in <a href='#Figure3'>Figure 3(a)</a>. Two rays have been drawn from \(x\): one goes through the centre of the patient's lens, and so is not deviated. The other hits the top of the lens and is refracted to come out parallel to the first ray. If \(x\) were any higher, the rays would be slanted down more, and miss the observer's lens. The field of view that the observer has is twice the angle \(\alpha\). In <a href='#Figure3'>Figure 3(b)</a>, the angle \(\alpha\) is also the angle between the yellow middle ray and the imaginary horizontal line running through the centres of the two eyes. </p>
+  
+  <p>In <a href='#Figure3'>Figure 3(c)</a>, the angle \(\alpha\) is the angle inside a triangle. The triangle has a base equal to \(d\), the distance between the eyes. If \(p\) is the aperture of the observer's eye, and \(h\) is the aperture of the patient's eye, then the height of the triangle is \(p/2+h/2\). Thus
+  </p>
+  
+  <div>\[\tan{(\alpha)}=\dfrac{p/2+h/2}{d}\]</div>
+  
+  <p>When \(\alpha\) is quite small (which it is in ophthalmoscopy), then we have \(\alpha\approx(p/2+h/2)/d\), for \(\alpha\) measured in in radians. Remembering that \(\alpha\) is only half the field of view, doubling it gives the full field of view:</p>
+  
+   <div>\[\text{field of view (radians)}=\dfrac{p+h}{d}\]</div>
+   
+   <p>For example, if the patient and observer's pupils are both \(3\text{mm}\), and their eyes are \(15\text{cm}\) apart, then the field of view is \(6/150 = 0.04\) radians, or about \(2.3\) degrees (\(1\) radian \(\approx 57\) degrees). However, the above formula defines the field of view as any point on the patient's retina where even a <em>single</em> ray makes it into the observer's eye. This is quite a bit larger than the <em>useful</em> field of view, which may be worked out by subtracting one to two mm from both patient and observer pupil sizes. Thus the useful field of view is (very roughly) \(3/150 = 0.02\) radians, or \(1.2\) degrees. </p>
+   
+   <p>How big does a \(1^o\) field of view look in ophthalmoscopy? The central \(1\) degree of the retina is about \(0.25\text{mm}\) wide. A field of view of \(1\) degree will also look about twice as wide as the full moon, which has a visual angle of \(0.5\) degrees. So ophthalmoscopy will enlarge the central \(1/4\text{mm}\) of the retina to something looking twice as tall as the moon.</p>
+   
+   <p>It's often said that the magnification produced by ophthalmoscopy is about \(15\times\). This isn't a very useful figure however; if you look at <a href='#Figure2'>Figures 2(b)</a> and <a href='#Figure2'>2(c)</a> you can see that the size of the image formed in the observer's eye is the same regardless of how close or far from the patient they stand, although this affects the magnification produced (since it affects the original size of the retina before viewing it through the patient's optics).</p>
+   
+   <p>From the equation for the field of view, there are three ways of improving it:</p>
+   <ul>
+   <li>Reduce the distance \(d\) as much as possible.</li>
+   <li>Dilate the patient's pupil i.e. increase \(h\).</li>
+   <li>Dilate the observer's pupil i.e. increase \(p\). </li>
+   </ul>
+   
+   <p>The first two are commonly used in ophthalmoscopy. While the third option is not really practical, it is the motivation behind <em>indirect</em> ophthalmoscopy.</p>
+   
+  <h3>Illuminating the Retina</h3>
+  
+  <p>All the above discussion assumes the patient's retina can be brightly illuminated, so light reflecting off it leaves their eye in sufficient quantity to be seen by an observer. However, the only way we can get light into the patient's eye is through their pupil, which presents a few problems:</p>
+
+<ul>
+<li>The pupil is small, so the quantity of light making it into the eye is limited.</li>
+<li>The ligh going into the eye has the same field-of-view probelm as the light leaving the eye: only a small spot of the retina can be illuminated.</li>
+<li>The patient's cornea acts a bit like a convex mirror, and reflects the light, forming a virtual image of the light source in front of the patient's retina, thus obscuring part of it.</li>
+</ul>  
+
+<p>The first problem can be solved by using a bright light, although this is uncomfortable for the patient and tends to make the third problem worse. We can  however do some clever things with the light beam to minimize the reflections and to maximize the area of the retina that is illuminated. <a href='#Figure4'>Figure 4</a> shows some of the things that can be done to get light into the patient's eye.</p>
+  
+    <figure id=Figure4>
+  <span class='slideshow-container'>
+  
+  <span>
+      <img src="media/figure4a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 4(a).</span> One way to introduce light into the patient's eye is to shine a light into it. Because of the limited space, the light is usually directed into the eye by a mirror between the patient and observer. There are three problems with this approach: First, the mirror blocks the observer's view of the eye. This can be fixed by cutting a hole in the middle of the mirror or by using a half-silvered mirror which both reflects and transmist light. Second, there is a strong reflection right in the middle of the cornea, obscuring the view of the retina. Third, the parallel beam of light is focused to a point by the patient, so it doesn't illuminate much of the retina at all.
+    </figcaption>
+	</span>
+
+  <span>
+      <img src="media/figure4b.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 4(b).</span> We can solve some of these problems by moving the mirror and tilting it. Here the light beam is sent upwards into the patient's eye. This moves the reflection of the light downwards, allowing a beter view of the retina. But the light is still focused to a point, so it doesn't cover much of the retina at all.
+    </figcaption>
+	</span>
+	
+  <span>
+      <img src="media/figure4c.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 4(b).</span> The problem with the light beam focussing can be overcome by introducing a positive lens. This lens causes the light beam to converge strongly within the patient's eye. The convergence of the light is so much that the patient's cornea and lens hardly change it at all. The light then spreads out over a larger area of the retina.
+    </figcaption>
+	</span>
+</span>
+  </figure>
+  
+  
+  <h3>Correcting Ametropia during Ophthalmoscopy</h3>
+  
+  <p>In the figures above, the assumption was that the patient is emmetropic. Thus, light leaving the patient's eye is parallel, and can be easily focused by an emmetropic observer. This simple situation becomes more complicated if the patient or observer (or both) are not emmetropic. However, this problem is easily solved by putting an extra lens between the patient and the observer, whose purpose is to adjust the vergence of the light to suit the observer's eye. </p>
+  
+  <p>For example, if the patient is myopic, then light reflected off their retina will leave the eye converging rather than parallel. In this case, a negative lens of the appropriate power (in fact, the power used to correct their vision) will make the light parallel.</p>
+  
+  <h2>Indirect Ophthalmoscopy</h2>
+  
+  <p>The field-of-view equation shows that if the viewing eye aperture \(p\) is large, the field of view is increased. This is the main idea behind indirect ophthalmoscopy (opthalmoscopy using only our own eye is called direct ophthalmoscopy). We can use a large positive lens instead of our own eye to image the retina. This large lens will create an image of the patient's retina floating in space (what's called an aerial image). Because the lens can be made much larger than our own pupil, the field of view is greatly increased compared to direct ophthalmoscopy (<a href='#Figure5'>Figure 5(a)</a>).</p>
+  
+  <figure id=Figure5>
+   <span class='slideshow-container'>
+<span> 
+      <img src="media/figure5a.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 5(a).</span> The principle behind indirect ophthalmoscopy. Instead of using their eye, the observer uses a strong positive lens to form an aerial image of the patient's retina. Comparing this to <a href='#Figure2'>Figure 2</a>, the field of view is greatly increased. However, the light rays leaving the three points shown in the aerial image don't overlap here, so it isn't possible to see the three points simultaneously.
+    </figcaption>
+</span>
+<span> 
+      <img src="media/figure5b.svg" />
+
+    <figcaption>
+      <span class="figno">Figure 5(b).</span> The solution is to view the aerial image at some distance. If you put your eye at point (a), you get light from both the top and middle of the aerial image (and all points in between) and so can see that entire stretch of the image. At (b) you can see the entire bottom of the aerial image. By moving even further back, you can see even more. Of course, moving back makes the aerial image appear smaller, which is a disadvantage compared to direct ophthalmoscopy.
+    </figcaption>
+</span>
+</span>
+
+  </figure>
+  
+  <p>However, this creates a new proiblem with the field of view. In <a href='#Figure5'>Figure 5(a)</a>, the diverging rays leaving each point in the aerial image form a narrow cone of rays. In <a href='#Figure5'>Figure 5(a)</a>, they don't overlap. That means you can't see both the top point in the aerial image and the bottom one simultaneously. However, they do spread out a bit, so if you move further away from the positive image (<a href='#Figure5'>Figure 5(b)</a>) there are areas where the light cones from different points in the aerial image <em>do</em> overlap. In the places where the cones overlap, it is possible to see both points in the aerial image at the same time.</p>
+  
+  <p>That is why, when doing indirect ophthalmoscopy, the observer cannot view the aerial image up close, but needs some distance between themself and the image to see most of it.</p>
+  
+  <h2>Fundus Photography</h2>
+  
+  <p>A fundus camera is a device for taking photographs of a patient's fundus (the central area of the retina), or viewing the retina on a monitor. The basic principle behind the fundus camera is simple: since the observer's eye acts a bit like a camera, we can substitute an actual camera in place of the observer in either direct or indirect ophthalmoscopy, and take pictures.
+  </p>
+  
+  <p>However, it is much easier to design a fundus camera around indirect ophthalmoscopy. In fact, a mobile phone can be used with an indirect ophthalmoscopy lens to take fundus photographs cheaply, if not with the best quality. The difference between using your mobile and the expensive fundus cameras that are better suited to the task is mostly a lot of clever engineering designed to overcome the various difficulties noted above with direct and indirect ophthalmoscopy. 
+  </p>
+
+</body>
+<script>slideshow()</script>
+</html>

@@ -2,7 +2,7 @@
 (function() {
 let EYE = Gullstrand([0,0], 0),
     pupil = makePupil(EYE, 3)
-
+console.log('x')
 let c=[-0.2,0],
     state = {
 	w: 520,

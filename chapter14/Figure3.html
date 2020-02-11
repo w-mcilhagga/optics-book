@@ -1,0 +1,86 @@
+<link rel="stylesheet" type="text/css" href="../styles/popout.css" />
+<script src='../scripts/p5/p5.js'></script>
+<script src='../scripts/p5/p5.dom.js'></script>
+<script src='../scripts/p5/p5.svg.js'></script>
+<script src='../scripts/p5/p5.util.js'></script>
+<script src='../scripts/p5/p5.yup.js'></script>
+<script src='../scripts/vec2d.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+<script src='../scripts/raytracing-2/makeArc.js'></script>
+
+<body>
+</body>
+<script>
+
+let dl_pos = [0.45, 0.15],
+    p_pos = [0.2,0],
+	p_aper = 0.2,
+	o_pos = [-0.2,0],
+	o_aper = (dl_pos[1]/(p_pos[0]-dl_pos[0]))*(p_pos[0]-o_pos[0])+p_aper/2
+	
+	
+let state = {
+	w: 600,
+	h: 300,
+	ppm: 600,
+	origin: [300, 150],
+	background: [0, 61, 93],
+	renderer: 'svg',
+	items: [
+		{
+			type: 'divergent light',
+			position: dl_pos,
+			id: 'L1',
+			target: p_pos,
+			raycount: 1,
+			spread: 1,
+			style: {
+				stroke: [255,255,180],//[100,255,100],
+				strokeWeight: 2,
+				arrows: ['',0.2],
+			}
+		},
+		{
+			type: 'divergent light',
+			position: dl_pos,
+			id: 'L2',
+			target: [p_pos[0],p_pos[1]+p_aper/2],
+			raycount: 1,
+			spread: 1,
+			style: {
+				stroke: [255,255,180],//[100,255,100],
+				strokeWeight: 2,
+				arrows: ['',0.2],
+			}
+		},
+		{
+			type: 'thinlens',
+			id: 'patient',
+			position: p_pos,
+			aperture: p_aper,
+			axis: [1,0],
+			power: 1/(dl_pos[0]-p_pos[0]),
+			style: {
+				strokeWeight: 3,
+				stroke: [210,210,255]
+			}
+		},
+		{
+			type: 'thinlens',
+			id: 'obs',
+			position: o_pos,
+			aperture: 2*Math.abs(o_aper),
+			axis: [1,0],
+			power: 1/0.25,
+			style: {
+				strokeWeight: 3,
+				stroke: [210,210,255]
+			}
+		}
+	]
+}
+
+makeP5App(state)(window)
+
+</script>
