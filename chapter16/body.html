@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<script type="text/x-mathjax-config">
+  MathJax.Ajax.config.path["Mine"] = "http://127.0.0.1:8887/chapter16";
+  
+  MathJax.Hub.Config({
+    extensions: ['[Mine]/forminput.js']
+  });
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript">
+</script>
+<script src='../scripts/slides.js'>
+</script>
+<style>
+
+input[type=text] {
+  border: 0;
+  background: rgb(250,220,220);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+input[type=text]:focus {
+  outline: none;
+  border-bottom: 1px solid rgb(180,180,180);
+}
+
+</style>
+</script>
+  <script src='../scripts/slides.js'>
+</script>
+
+  <title>Chapter 16: Introduction to Matrices.</title>
+  <link rel="stylesheet" type="text/css" href="../styles/pandoc.css" />
+</head>
+
+<body>
+  <div class='chapterno'>
+    Chapter 16
+  </div>
+
+  <h1>Introduction to Matrices.</h1>
+  
+  <p>Matrix methods are a powerful tool in analyzing complex optical systems. Remarkably, <em>any</em> optical system, no matter how complicated, can be fully described by just four numbers, arranged in a two-by-two grid. These four numbers let us calculate where any paraxial ray will end up after it has passed through the system.</p>
+  
+  <h2>Linear Equations & Matrices</h2>
+  <p>A matrix (plural: matrices) is a way of writing a set of linear equations. For example, if we have two linear equations,</p>
+  
+  <div>\[
+  \begin{array}{c}
+x &=& A \alpha &+& B \beta \\
+y &=& C \alpha &+& D \beta
+  \end{array}
+  \]</div>
+  
+  <p>these can be written in matrix form as:</p>
+  
+  <div>\[
+  \begin{bmatrix}
+  x \\
+  y
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  A & B \\
+  C & D
+  \end{bmatrix}
+  \begin{bmatrix}
+  \alpha \\
+  \beta
+  \end{bmatrix}
+  \]</div>
+  
+  <p>It might seem a bit odd to write two equations this way, but matrix notation turns out to be very useful. In particular, matrices can be used to describe <em>transformations</em> of things (like rays) which is how they are used in optics.</p>
+  
+  <h3>How Matrix Notation Came About (maybe).</h3>
+  
+  <p>One thing that mathematicians are famed for is laziness. Why write something twice, when once will do. And why write something at all, when you can leave it out completely. The development of matrix notation can be understood as a drive to write as little as possible.</p>
+  
+  <p>In the set of linear equations</p>
+  
+  <div>\[
+  \begin{array}{c}
+x &=& A \alpha &+& B \beta \\
+y &=& C \alpha &+& D \beta
+  \end{array}
+  \]</div>
+  
+  <p>the symbols \(\alpha\) and \(\beta\) are written twice. We could rewrite the linear equations so that we only write \(\alpha\) and \(\beta\) once, like so:</p>
+  
+  <div>\[
+  \begin{array}{c}
+  & & \alpha & & \beta \\
+x &=& A  &+& B  \\
+y &=& C  &+& D 
+  \end{array}
+  \]</div> 
+  
+  <p>If we do this, we have to understand that writing the \(\alpha\) and \(\beta\) above the columns means that we should, when we have to, multiply every number in the column by the number floating at the top of it.</p>
+
+<p>The \(+\) symbols are also repeated, but really are they even necessary? If we are dealing with sets of equations, we ought to just know that we add together the \(A\alpha\) and the \(B\beta\) and so on. So we could simply get rid of the \(+\) symbols, like so:</p>
+
+  <div>\[
+  \begin{array}{c}
+  & & \alpha & & \beta \\
+x &=& A  & & B  \\
+y &=& C  & & D 
+  \end{array}
+  \]</div> 
+  <p>With this notation, it's understood that after you have multiplied the first column of numbers by \(\alpha\), and multiplied the second column of numbers by \(\beta\), that you add the results across the rows.</p>
+
+  <p>The next step, it turns out, is crucial to making this notation actually useful (although we won't see this until later in the chapter). Sets of equations are most commonly presented, at least in school, as a puzzle: you are given the values of \(x\) and  \(y\) on the left hand side, and \(A, B, C, D\), and you have to work out the values of \(\alpha\) and \(\beta\). However, this is not how equations are always used. Often, a set of equations is describing a <em>transformation</em>, where we start with \(\alpha\) and \(\beta\) on the right hand side, and then work out the values of \(x\) and \(y\) from them.</p>
+  
+  <p>The annoyance with the notation we have made so far is that \(x\) and \(y\) are written in a column, but \(\alpha\) and \(\beta\) are written in a row, even though they are sort of the same: that is, they are both pairs of numbers. While this might not deeply trouble most people, it did annoy the developers of matrix notation, so they decided to make one more change, and write the \(\alpha\) and \(\beta\) in a column, like \(x\) and \(y\) are:</p>
+  
+  <div>\[
+  \begin{array}{c}
+x &=& A  & & B  & \alpha\\
+y &=& C  & & D  & \beta
+  \end{array}
+  \]</div> 
+  
+  <p>Finally, just to keep everything tidy, they visually grouped the numbers \(A, B, C, D\) by putting brackets around them, did the same with \(x, y\) and \(\alpha, \beta\), and got rid of one of the \(=\) signs, to get:
+  
+  <div>\[
+  \begin{bmatrix}
+  x \\
+  y
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  A & B \\
+  C & D
+  \end{bmatrix}
+  \begin{bmatrix}
+  \alpha \\
+  \beta
+  \end{bmatrix}
+  \]</div>
+  
+  <p>The box of numbers \(A, B, C, D\) is called a matrix. The columns of numbers \(x, y\) and \(\alpha, \beta\) are called vectors. The way the equations are written now, it looks a tiny bit like the vector \(\alpha, \beta\) is being multiplied by the matrix \(A, B, C, D\) to produce a new vector \(x, y\). In a very real sense that's actually what's happening, although because the multiplication process is quite complicated it doesn't act the same as, say, just multiplying together two numbers. </p>
+  
+  <h3>A Matrix Calculator.</h3>
+  <p>If you need to get used to the idea of multiplying matrices and vectors, the box below contains a simple matrix-vector calculator. If you type in values for the matrix and vector and hit the calculate button, you'll get a new vector of values.</p>
+  
+  <div>
+  
+  <div>\[
+\begin{bmatrix}
+  \cssId{id_x}{x} \\
+  \cssId{id_y}{y}
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  \FormInput{A1} & \FormInput{B1} \\
+  \FormInput{C1} & \FormInput{D1}
+  \end{bmatrix}
+  \begin{bmatrix}
+  \FormInput{alpha} \\
+  \FormInput{beta}
+  \end{bmatrix}
+  \]</div>
+  <div style='width:90%'>
+  <button id='matcalc1' style='float:right'>Calculate</button>
+  </div>
+  <script>
+  let b = document.getElementById('matcalc1')
+  b.onclick = function() {
+	let vars = {},
+		elems = {},
+		varnames = ['A1','B1','C1','D1','alpha','beta'],
+		resultnames = ['id_x','id_y']
+	varnames.forEach(function(n) {
+		elems[n] = document.getElementById(n)
+		vars[n] = elems[n].value || 0
+		elems[n].value = vars[n]
+	})
+	resultnames.forEach(function(n) {
+		elems[n] = document.getElementById(n)
+	})
+	elems['id_x'].innerHTML = vars['A1']*vars['alpha']+vars['B1']*vars['beta']
+	elems['id_y'].innerHTML = vars['C1']*vars['alpha']+vars['D1']*vars['beta']
+  }
+  </script>
+  </div>
+  
+  <h2>Matrices, Vectors, and Transformations.</h2>
+  
+  <p>To see how matrices can be used to describe transforms, we'll take a little detour. Imagine a car driving along a straight road at a constant speed. At any time, we can describe the car by its position \(p\) and its speed \(s\). And if we know the position and speed of the car at any one time, we can easily work out its position and speed at a later time.</p>
+  
+  <p>For example, suppose that at 12 o'clock, the car has a position of \(p=0\)km and a speed of \(s=30\)kph. A position equal to zero means the car is just starting out. After 1 hour, the position of the car is \(p=30\)km, and the speed is (still) \(s=30\)kph. After 2 hours, the position is \(p=60\)km, and the speed is (still) \(s=30\)kph.</p>
+  
+  <p>We're going to put all these facts into matrix notation now. Let's write \(p_0\) and \(s_0\) for the position and speed of the car at the start of the journey (<a href='#Figure1'>Figure 1(a)</a>). Let's write \(p_1\) and \(s_1\) for the position and speed of the car after 1 hour (<a href='#Figure1'>Figure 1(b)</a>), and \(p_2\) and \(s_2\) for the position and speed of the car after 2 hours (<a href='#Figure1'>Figure 1(c)</a>). (If the car travels at the same speed, \(s_0=s_1=s_2\)). </p>
+
+<figure id="Figure1">
+  <span class='slideshow-container'>
+  <span>
+    <img src="media/figure1a.png" />
+
+    <figcaption>
+      <span class="figno">Figure 1(a).</span> A car is travelling along a road. At the start of the journey, it has position \(p_0\) and speed \(s_0\). These can be put into a vector \([p_0,s_0]\).
+    </figcaption>
+  </span>
+  <span>
+    <img src="media/figure1b.png" />
+
+    <figcaption>
+      <span class="figno">Figure 1(b).</span> After an hour of travel, it has position \(p_1\) and speed \(s_1\). These can be put into a vector \([p_1,s_1]\).
+    </figcaption>
+  </span>
+  <span>
+    <img src="media/figure1c.png" width='100%'/>
+
+    <figcaption>
+      <span class="figno">Figure 1(c).</span> After another hour of travel, it has position \(p_2\) and speed \(s_2\). These can be put into a vector \([p_2,s_2]\).
+    </figcaption>
+  </span>
+  </span>
+  </figure>
+  
+  <p>The position and speed at the start of the journey and after one hour can be related by a simple pair of equations, namely:</p>
+  
+  <div>\[
+  \begin{array}{c}
+p_1 &=& p_0 &+& s_0 \\
+s_1 &=&  & & s_0
+  \end{array}
+  \]</div>
+  
+  <p>The first equation says that you calculate \(p_1\) by starting with \(p_0\) and then adding 1 hours worth of speed. The second equation just says the speed doesn't change. You can write this as a matrix equation (<a href='#Figure2'>Figure 2(a)</a>):</p>
+  
+  <div>\[
+  \begin{bmatrix}
+  p_1 \\
+  s_1
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  1 & 1 \\
+  0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  p_0 \\
+  s_0
+  \end{bmatrix}
+  \tag{1}
+  \]</div>
+  
+  <p>Maybe from this you can see why the inventors of matrix notation wanted to write the pairs of numbers (the vectors) in exactly the same way. In this matrix equation, \([p_0,s_0]\) and \([p_1, s_1]\) really are the same kind of thing, namely a description of the position and speed of the car at different times, so it's good that they actually <em>look</em> the same in the equation.</p>
+  
+  <p>The position and speed after 1 hour and after two hours can also be related by a simple pair of equations, namely:</p>
+  
+  <div>\[
+  \begin{array}{c}
+p_2 &=& p_1 &+& s_1 \\
+s_2 &=&  & & s_1
+  \end{array}
+  \]</div>
+  
+  <p>Again, the first equation says that you calculate \(p_2\) by starting with \(p_1\) and then adding 1 hours worth of speed. The second equation just says the speed doesn't change. You can write this as a matrix equation (<a href='#Figure2'>Figure 2(a)</a>):</p>
+  
+  <div>\[
+  \begin{bmatrix}
+  p_2 \\
+  s_2
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  1 & 1 \\
+  0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  p_1 \\
+  s_1
+  \end{bmatrix}
+  \tag{2}
+  \]</div>
+
+<figure id="Figure2">
+  <span class='slideshow-container'>
+  <span>
+    <img src="media/figure2a.png" />
+
+    <figcaption>
+      <span class="figno">Figure 2(a).</span> The way the car's position and speed change over time can be written in a matrix. When the original position and speed \([p_0,s_0]\) are multiplied by this matrix, you get the car's position and speed after 1 hour, \([p_1,s_1]\).
+    </figcaption>
+  </span>
+  <span>
+    <img src="media/figure2b.png" />
+
+    <figcaption>
+      <span class="figno">Figure 2(b).</span> When the position and speed after 1 hour \([p_1,s_1]\) are multiplied by the same matrix, you get the car's position and speed after 2 hours, \([p_2,s_2]\).
+    </figcaption>
+  </span>
+  <span>
+    <img src="media/figure2c.png" />
+
+    <figcaption>
+      <span class="figno">Figure 2(c).</span> When the original position and speed \([p_0,s_0]\) are multiplied by this slightly different matrix, you immediately get the car's position and speed after 2 hours, \([p_2,s_2]\), without having to work out \([p_1,s_1]\).
+    </figcaption>
+  </span>
+  </span>
+  </figure>
+  
+  <p>Notice that in the matrix equations (1) and (2), the matrix is the same. That matrix tells us how to transform the position and speed of the car at some time, into the position and speed of the car one hour later.</p>
+  
+  <p>The position and speed at the start of the journey and after <em>two</em> hours can be related by a simple pair of equations, namely:</p>
+  
+  <div>\[
+  \begin{array}{c}
+p_2 &=& p_0 &+& 2 s_0 \\
+s_2 &=&  & & s_0
+  \end{array}
+  \]</div>
+  
+  <p>The first equation says that you calculate \(p_1\) by starting with \(p_0\) and then adding 2 hours worth of speed. The second equation just says the speed doesn't change. You can write this as a matrix equation (<a href='#Figure2'>Figure 2(c)</a>):</p>
+  
+  <div>\[
+  \begin{bmatrix}
+  p_2 \\
+  s_2
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  1 & 2 \\
+  0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  p_0 \\
+  s_0
+  \end{bmatrix}
+  \tag{3}
+  \]</div>
+  
+  <p>Now, this tells us that we can get the position and speed after two hours in two different ways: either by using Equation (3), or by using Equation (1) to work out the position and speed after 1 hour, and then use Equation (2) to get the speed after another hour (<a href='#Figure3'>Figure 3</a>). These two ways ought to give the same answer, and of course they do. But more interestingly, they suggest that we can not just multiply a matrix and a vector together to get another vector (which is what we've been doing so far) but we can also multiply together two matrices to get another matrix.</p>
+
+<figure id="Figure3">
+  <span class='slideshow-container'>
+  <span>
+    <img src="media/figure3b.png" />
+
+    <figcaption>
+      <span class="figno">Figure 3(a).</span> One way to get the position and speed of the car after two hours is to multiply \([p_0,s_0]\) by the matrix, and then multiply the result \([p_1,s_1]\)by the matrix again, to get \([p_2,s_2]\)
+    </figcaption>
+  </span>
+  <span>
+    <img src="media/figure2c.png" />
+
+    <figcaption>
+      <span class="figno">Figure 3(b).</span> The other way is to do it with a single matrix. This ought to give the same result as the first method, and it does.
+    </figcaption>
+  </span>
+
+  </span>
+  </figure>
+  
+  <p>Look at Equation (1). It tells us that \([p_1,s_1]\) is exactly the same as a matrix multiplied by \([p_0,s_0]\). So we could substitute the right hand side of Equation (1) into Equation (2) to give us:</p>
+  
+  <div>\[
+  \begin{bmatrix}
+  p_2 \\
+  s_2
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  1 & 1 \\
+  0 & 1
+  \end{bmatrix}
+  \left(
+  \begin{bmatrix}
+  1 & 1 \\
+  0 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  p_0 \\
+  s_0
+  \end{bmatrix}
+  \right)
+  \]</div>
+  
+  <p>Let's now assume that we can multiply matrices together and that it is commutative, so we can rebracket this equation to give</p>
+  
+  <div>\[
+  \begin{bmatrix}
+  p_2 \\
+  s_2
+  \end{bmatrix}
+  =
+  \left(  
+  \begin{bmatrix}
+  1 & 1 \\
+  0 & 1
+  \end{bmatrix}
+
+  \begin{bmatrix}
+  1 & 1 \\
+  0 & 1
+  \end{bmatrix}
+  \right)  
+  \begin{bmatrix}
+  p_0 \\
+  s_0
+  \end{bmatrix}
+  \tag{4}
+  \]</div>
+
+<p>If you compare this Equation (4) with Equation (3), you have to conclude that</p>
+
+  <div>\[
+  \begin{bmatrix}
+  1 & 2 \\
+  0 & 1
+  \end{bmatrix}
+  =
+  \left(  
+  \begin{bmatrix}
+  1 & 1 \\
+  0 & 1
+  \end{bmatrix}
+
+  \begin{bmatrix}
+  1 & 1 \\
+  0 & 1
+  \end{bmatrix}
+  \right)  
+  \]</div>
+
+<p>So if we're using matrices to represent changes in the position and speed of a car, we have to be able to multiply them together to be consistent. </p>
+
+<h2>Matrix Multiplication.</h2>
+<p>Luckily, if we know how to multiply a matrix and a vector, we know how to multiply two matrices. Here's how. Suppose we have to multiply together two matrices, like this:</p>
+
+  <div>\[ 
+  \begin{bmatrix}
+  A & B \\
+  C & D
+  \end{bmatrix}
+
+  \begin{bmatrix}
+  E & F \\
+  G & H
+  \end{bmatrix}
+  \]</div>
+  
+  <p>The first step is to think of the second matrix as two vectors, side by side:</p>
+  
+  <div>\[ 
+  \begin{bmatrix}
+  A & B \\
+  C & D
+  \end{bmatrix}
+  
+\left(
+  \begin{bmatrix}
+  E \\
+  G
+  \end{bmatrix}
+  
+  \begin{bmatrix}
+  F \\
+  H
+  \end{bmatrix}
+\right)
+  \]</div>
+   
+<p>Next, because we know how to multiply a matrix and a vector, we take the two vectors of the second matrix, and write them out as separate multiplications:</p>
+
+<table width='100%' style='border:0px'>
+<tr>
+<td width='50%' style='border:0px'>
+  \[ 
+  \begin{bmatrix}
+  A & B \\
+  C & D
+  \end{bmatrix}
+  \begin{bmatrix}
+  E \\
+  G
+  \end{bmatrix}
+  \]
+</td>
+<td width='50%' style='border:0px'>
+\[
+  \begin{bmatrix}
+  A & B \\
+  C & D
+  \end{bmatrix}
+  \begin{bmatrix}
+  F \\
+  H
+  \end{bmatrix}
+  \]
+</td>
+</tr>
+</table>
+
+<p>Suppose the result of the multiplication on the left is:</p>
+<div>  \[ 
+  \begin{bmatrix}
+  W \\
+  X
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  A & B \\
+  C & D
+  \end{bmatrix}
+  \begin{bmatrix}
+  E \\
+  G
+  \end{bmatrix}
+  \]</div>
+
+<p>We will write the result of the multiplication on the left:</p>
+
+<table width='100%' style='border:0px'>
+<tr>
+<td width='50%' style='border:0px'>
+  \[ 
+  \begin{bmatrix}
+  W \\
+  X
+  \end{bmatrix}
+  \]
+</td>
+<td width='50%' style='border:0px'>
+\[
+  \begin{bmatrix}
+  A & B \\
+  C & D
+  \end{bmatrix}
+  \begin{bmatrix}
+  F \\
+  H
+  \end{bmatrix}
+  \]
+</td>
+</tr>
+</table>
+
+  
+<p>Suppose the result of the multiplication on the right is \([Y Z]\). Again, we write the result of the multiplication:</p>
+
+<table width='100%' style='border:0px'>
+<tr>
+<td width='50%' style='border:0px'>
+  \[ 
+  \begin{bmatrix}
+  W \\
+  X
+  \end{bmatrix}
+  \]
+</td>
+<td width='50%' style='border:0px'>
+\[
+  \begin{bmatrix}
+  Y \\
+  Z
+  \end{bmatrix}
+  \]
+</td>
+</tr>
+</table>
+  
+ <p>Now we bring the two vectors back together:</p>
+ 
+  <div>\[ 
+  \left(
+  \begin{bmatrix}
+  W \\
+  X
+  \end{bmatrix}
+  \begin{bmatrix}
+  Y \\
+  Z
+  \end{bmatrix}
+\right)
+  \]</div> 
+  
+<p>and finally we write the two vectors as a single matrix by unsplitting them:</p>
+
+  <div>\[ 
+  \begin{bmatrix}
+  W & Y\\
+  X & Z
+  \end{bmatrix}
+
+  \]</div>
+  
+  <p>That is how you multiply matrices.</p>
+  
+  
+  <h3>Another Matrix Calculator.</h3>
+  <p>If you need to get used to the idea of multiplying matrices together, the box below contains a simple matrix-matrix calculator. If you type in values for the two matrices on the right and hit the calculate button, you'll get a new matrix which is the product of the ones on the right.</p>
+  
+  <div>
+  
+  <div>\[
+  \begin{bmatrix}
+  \cssId{W}{W} & \cssId{X}{X} \\
+  \cssId{Y}{Y} & \cssId{Z}{Z}
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  \FormInput{A} & \FormInput{B} \\
+  \FormInput{C} & \FormInput{D}
+  \end{bmatrix}
+  \begin{bmatrix}
+  \FormInput{E} & \FormInput{F} \\
+  \FormInput{G} & \FormInput{H}
+  \end{bmatrix}
+  \]</div>
+  
+  <div style='width:90%;height:20pt;'>
+  <button id='matcalc2' style='float:right;'>Calculate</button>
+  </div>
+  <script>
+  let b2 = document.getElementById('matcalc2')
+  b2.onclick = function() {
+	let vars = {},
+		elems = {},
+		varnames = ['A','B','C','D','E','F','G','H'],
+		resultnames = ['W','X','Y','Z']
+	varnames.forEach(function(n) {
+		elems[n] = document.getElementById(n)
+		vars[n] = elems[n].value || 0
+		elems[n].value = vars[n]
+	})
+	resultnames.forEach(function(n) {
+		elems[n] = document.getElementById(n)
+	})
+	elems['W'].innerHTML = vars['A']*vars['E']+vars['B']*vars['G']
+	elems['Y'].innerHTML = vars['C']*vars['E']+vars['D']*vars['G']
+	
+	elems['X'].innerHTML = vars['A']*vars['F']+vars['B']*vars['H']
+	elems['Z'].innerHTML = vars['C']*vars['F']+vars['D']*vars['H']
+  }
+  </script>
+  </div>
+  
+  <p>Note that matrices can be much bigger than a grid of four numbers, but this is the size that we use in optics (mostly).</p>
+  
+  <h3>Some Rules for Matrix Multiplication</h3>
+  
+  <p>The procedure we have worked out for multiplying two matrices is quite a lot more complicated than the procedure for multiplying two numbers. So you shouldn't be surprised that it doesn't act completely like regular multiplication. Regular multiplication is both associative and commutative. That is, for any three numbers, \(a(b c)=(a b)c\), and \(a b = b a\).</p>
+  
+  <p>Matrix multiplication is only associative. That is, if \(\mathbf{A}\), \(\mathbf{B}\), and \(\mathbf{C}\) are all matrices, then</p>
+  
+  <ul>
+  <li>\( (\mathbf{A} \mathbf{B} ) \mathbf{C} = \mathbf{A} (\mathbf{B}  \mathbf{C})\), so it's associative.</li>
+  <li>\( \mathbf{A} \mathbf{B} \ne \mathbf{B} \mathbf{A} \) usually, although sometimes it is.</li>
+  </ul>
+  
+  <p>The lack of commutativity makes it really crucial to write matrices in the right order when you multiply them.</p>
+  
+  <p>There are a couple more things about matrix multiplication. First off, if you multiply a matrix by an ordinary number (which is called a <em>scalar</em> when there are matrices around), you just multiply all of its elements:</p>
+  
+  <div>\[
+  s
+  \begin{bmatrix}
+  A & B \\
+  C & D
+  \end{bmatrix}
+	=
+  \begin{bmatrix}
+  s A & s B \\
+  s C & s D
+  \end{bmatrix}
+  \]</div>
+  
+  <p>In ordinary multiplcation, if you multiply anything by \(1\), it doesn't change it. There is a matrix which acts like \(1\) does, called the identity matrix:</p>
+  
+<div>\[
+  \mathbf{I}
+	=
+  \begin{bmatrix}
+  1 & 0 \\
+  0 & 1
+  \end{bmatrix}
+  \]</div>
+  
+  <p>For any other matrix \(\mathbf{A}\), \(\mathbf{I} \mathbf{A} = \mathbf{A} \mathbf{I} = \mathbf{A}\). So, in this one instance, multiplication is commutative.</p>
+  
+  <h3>The Inverse of a Matrix.</h3>
+  <p>We finish up our introduction to matrices with the inverse matrix. In ordinary multiplication, every number \(n\) has an <em>inverse</em> \(1/n\) so that when they are multiplied together, you get \(1\). For example, the inverse of \(4\) is \(0.25\). Only one number is missing an inverse, and that number is \(0\).</p>
+  
+  <p>Matrices also have inverses. We define the inverse of a matrix \(\mathbf{X}\) as another matrix \(\mathbf{X}^{-1}\) which, when they are multiplied together, gives us the identity matrix \(\mathbf{I}\). That is,</p>
+  
+  <div>\[\mathbf{X} \mathbf{X}^{-1} = \mathbf{I}\]</div>
+  
+  <p>Also, the inverse commutes:</p>
+  
+   <div>\[\mathbf{X} \mathbf{X}^{-1} = \mathbf{X}^{-1} \mathbf{X}\]</div>
+ 
+  <p>It turns out that the inverse of a matrix with 2 rows and columns, like we use here, is really simple to define. If a matrix has elements \(A, B, C\) and \(D\), like this:</p>
+  
+  <div>\[
+  \begin{bmatrix}
+  A & B \\
+  C & D
+  \end{bmatrix}
+  \]</div>
+  
+  <p>then it's inverse is simply</p>
+  
+  <div>\[
+  \dfrac{1}{AD-BC}
+  \begin{bmatrix}
+  D & -B \\
+  -C & A
+  \end{bmatrix}
+  \]</div>
+  
+  <p>The number in front, \(1/(AD-BC)\), is just a scalar, so we use the scalar multiplication rule above to work out the matrix. Not all matrices will have an inverse; if the term \(AD-BC\), called the <em>determinant</em>,  is zero no inverse exists, because you can't divide by zero.</p>
+</body>
+<script>slideshow()</script>
+</html>

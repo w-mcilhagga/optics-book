@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>Add \Input to MathJax</title>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["http://cs.jsu.edu/mathjax-ext/github/forminput/forminput.js"],
+  styles: {
+    ".MathJax_Input": { "margin": "0 2px" },
+    ".red_background": { "background-color": "#F88" }
+  }
+});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+
+</head>
+<body>
+
+<p>
+Here is an equation with form elements: 
+\(\FormInput{a}x+\FormInput[][red_background]{b}\).
+</p>
+
+<p>
+Here is another:
+\[
+\int_{\FormInput[][][2]{lowlim}}^{\FormInput{highlim}} x^3\,dx = 
+\left.\frac{x^{\FormInput[2]{n}}}{\FormInput{m}}\right]_2^7
+\]
+</p>
+
+</body>
+</html>
