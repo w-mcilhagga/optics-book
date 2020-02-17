@@ -47,7 +47,7 @@ input[type=text]:focus {
 
   <h1>Introduction to Matrices.</h1>
   
-  <p>Matrix methods are a powerful tool in analyzing complex optical systems. Remarkably, <em>any</em> optical system, no matter how complicated, can be fully described by just four numbers, arranged in a two-by-two grid. These four numbers let us calculate where any paraxial ray will end up after it has passed through the system.</p>
+  <p>Matrix methods are a powerful tool in analyzing complex optical systems. Remarkably, <em>any</em> optical system, no matter how complicated, can be fully described by just four numbers, arranged in a two-by-two grid, which is called a matrix. This matrix of numbers lets us calculate where any paraxial ray will end up after it has passed through the system.</p>
   
   <h2>Linear Equations & Matrices</h2>
   <p>A matrix (plural: matrices) is a way of writing a set of linear equations. For example, if we have two linear equations,</p>
@@ -204,21 +204,21 @@ y &=& C  & & D  & \beta
     <img src="media/figure1a.png" />
 
     <figcaption>
-      <span class="figno">Figure 1(a).</span> A car is travelling along a road. At the start of the journey, it has position \(p_0\) and speed \(s_0\). These can be put into a vector \([p_0,s_0]\).
+      <span class="figno">Figure 1(a).</span> A car is travelling along a road. At the start of the journey, it has position \(p_0\) and speed \(s_0\). These can be put into a vector \(\begin{bmatrix}p_0 \\ s_0\end{bmatrix}\).
     </figcaption>
   </span>
   <span>
     <img src="media/figure1b.png" />
 
     <figcaption>
-      <span class="figno">Figure 1(b).</span> After an hour of travel, it has position \(p_1\) and speed \(s_1\). These can be put into a vector \([p_1,s_1]\).
+      <span class="figno">Figure 1(b).</span> After an hour of travel, it has position \(p_1\) and speed \(s_1\). These can be put into a vector \(\begin{bmatrix}p_1 \\ s_1\end{bmatrix}\).
     </figcaption>
   </span>
   <span>
     <img src="media/figure1c.png" width='100%'/>
 
     <figcaption>
-      <span class="figno">Figure 1(c).</span> After another hour of travel, it has position \(p_2\) and speed \(s_2\). These can be put into a vector \([p_2,s_2]\).
+      <span class="figno">Figure 1(c).</span> After another hour of travel, it has position \(p_2\) and speed \(s_2\). These can be put into a vector \(\begin{bmatrix}p_2 \\ s_2\end{bmatrix}\).
     </figcaption>
   </span>
   </span>
@@ -252,7 +252,7 @@ s_1 &=&  & & s_0
   \tag{1}
   \]</div>
   
-  <p>Maybe from this you can see why the inventors of matrix notation wanted to write the pairs of numbers (the vectors) in exactly the same way. In this matrix equation, \([p_0,s_0]\) and \([p_1, s_1]\) really are the same kind of thing, namely a description of the position and speed of the car at different times, so it's good that they actually <em>look</em> the same in the equation.</p>
+  <p>Maybe from this you can see why the inventors of matrix notation wanted to write the pairs of numbers (the vectors) in exactly the same way. In this matrix equation, \(\begin{bmatrix}p_0 \\ s_0\end{bmatrix}\) and \(\begin{bmatrix}p_1 \\ s_1\end{bmatrix}\) really are the same kind of thing, namely a description of the position and speed of the car at different times, so it's good that they actually <em>look</em> the same in the equation.</p>
   
   <p>The position and speed after 1 hour and after two hours can also be related by a simple pair of equations, namely:</p>
   
@@ -288,21 +288,21 @@ s_2 &=&  & & s_1
     <img src="media/figure2a.png" />
 
     <figcaption>
-      <span class="figno">Figure 2(a).</span> The way the car's position and speed change over time can be written in a matrix. When the original position and speed \([p_0,s_0]\) are multiplied by this matrix, you get the car's position and speed after 1 hour, \([p_1,s_1]\).
+      <span class="figno">Figure 2(a).</span> The way the car's position and speed change over time can be written in a matrix. When the original position and speed \(\begin{bmatrix}p_0 \\ s_0\end{bmatrix}\) are multiplied by this matrix, you get the car's position and speed after 1 hour, \(\begin{bmatrix}p_1 \\ s_1\end{bmatrix}\).
     </figcaption>
   </span>
   <span>
     <img src="media/figure2b.png" />
 
     <figcaption>
-      <span class="figno">Figure 2(b).</span> When the position and speed after 1 hour \([p_1,s_1]\) are multiplied by the same matrix, you get the car's position and speed after 2 hours, \([p_2,s_2]\).
+      <span class="figno">Figure 2(b).</span> When the position and speed after 1 hour \(\begin{bmatrix}p_1 \\ s_1\end{bmatrix}\) are multiplied by the same matrix, you get the car's position and speed after 2 hours, \(\begin{bmatrix}p_2 \\ s_2\end{bmatrix}\).
     </figcaption>
   </span>
   <span>
     <img src="media/figure2c.png" />
 
     <figcaption>
-      <span class="figno">Figure 2(c).</span> When the original position and speed \([p_0,s_0]\) are multiplied by this slightly different matrix, you immediately get the car's position and speed after 2 hours, \([p_2,s_2]\), without having to work out \([p_1,s_1]\).
+      <span class="figno">Figure 2(c).</span> When the original position and speed \(\begin{bmatrix}p_0 \\ s_0\end{bmatrix}\) are multiplied by this slightly different matrix, you immediately get the car's position and speed after 2 hours, \(\begin{bmatrix}p_2 \\ s_2\end{bmatrix}\), without having to work out \(\begin{bmatrix}p_1 \\ s_1\end{bmatrix}\).
     </figcaption>
   </span>
   </span>
@@ -346,7 +346,7 @@ s_2 &=&  & & s_0
     <img src="media/figure3b.png" />
 
     <figcaption>
-      <span class="figno">Figure 3(a).</span> One way to get the position and speed of the car after two hours is to multiply \([p_0,s_0]\) by the matrix, and then multiply the result \([p_1,s_1]\)by the matrix again, to get \([p_2,s_2]\)
+      <span class="figno">Figure 3(a).</span> One way to get the position and speed of the car after two hours is to multiply \(\begin{bmatrix}p_0 \\ s_0\end{bmatrix}\) by the matrix, and then multiply the result \(\begin{bmatrix}p_1 \\ s_1\end{bmatrix}\) by the matrix again, to get \(\begin{bmatrix}p_2 \\ s_2\end{bmatrix}\)
     </figcaption>
   </span>
   <span>
@@ -360,7 +360,7 @@ s_2 &=&  & & s_0
   </span>
   </figure>
   
-  <p>Look at Equation (1). It tells us that \([p_1,s_1]\) is exactly the same as a matrix multiplied by \([p_0,s_0]\). So we could substitute the right hand side of Equation (1) into Equation (2) to give us:</p>
+  <p>Look at Equation (1). It tells us that \(\begin{bmatrix}p_1 \\ s_1\end{bmatrix}\) is exactly the same as a matrix multiplied by \(\begin{bmatrix}p_0 \\ s_0\end{bmatrix}\). So we could substitute the right hand side of Equation (1) into Equation (2) to give us:</p>
   
   <div>\[
   \begin{bmatrix}
@@ -545,7 +545,7 @@ s_2 &=&  & & s_0
 </table>
 
   
-<p>Suppose the result of the multiplication on the right is \([Y Z]\). Again, we write the result of the multiplication:</p>
+<p>Suppose the result of the multiplication on the right is \(\begin{bmatrix}Y \\ Z\end{bmatrix}\). Again, we write the result of the multiplication:</p>
 
 <table width='100%' style='border:0px'>
 <tr>
@@ -718,6 +718,37 @@ s_2 &=&  & & s_0
   \]</div>
   
   <p>The number in front, \(1/(AD-BC)\), is just a scalar, so we use the scalar multiplication rule above to work out the matrix. Not all matrices will have an inverse; if the term \(AD-BC\), called the <em>determinant</em>,  is zero no inverse exists, because you can't divide by zero.</p>
+  
+  <h4>The Inverse of a Product.</h4>
+  
+  <p>If a matrix \(\mathbf{C}\) is the product of two matrices \(\mathbf{A}\) and \(\mathbf{B}\), \(\mathbf{C}=\mathbf{A B}\), then the inverse \(\mathbf{C}^{-1}\) is given by \(\mathbf{C}^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}\). This is easy enough to show:</p>
+  
+  <table>
+  <tr>
+  <td>Begin with: </td>
+  <td>\(\mathbf{C}\mathbf{C}^{-1}\)</td>
+  </tr>
+  <tr>
+  <td>Put in the definition of \(\mathbf{C}\) and the inverse: </td>
+  <td>\((\mathbf{A B})(\mathbf{B}^{-1}\mathbf{A}^{-1})\)</td>
+  </tr>
+  <tr>
+  <td>Use the associative law to change the brackets: </td>
+  <td>\(\mathbf{A} (\mathbf{B}\mathbf{B}^{-1}) \mathbf{A}^{-1}\)</td>
+  </tr>
+  <tr>
+  <td>Replace \(\mathbf{B} \mathbf{B}^{-1}\) with \(\mathbf{I}\)</td>
+  <td>\(\mathbf{A} \mathbf{I} \mathbf{A}^{-1}\)</td>
+  </tr>
+  <tr>
+  <td>\(\mathbf{A} \mathbf{I} = \mathbf{A}\)</td>
+  <td>\(\mathbf{A} \mathbf{A}^{-1}\)</td>
+  </tr>
+  <tr>
+  <td>Replace \(\mathbf{A}\mathbf{A}^{-1}\) with \(mathbf{I}\)</td>
+  <td>\(\mathbf{I}\)</td>
+  </tr>
+  </table>
 </body>
 <script>slideshow()</script>
 </html>
