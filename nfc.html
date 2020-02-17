@@ -1,0 +1,37 @@
+<p>
+  <button onclick="readTag()">Test NFC Read</button>
+</p>
+<pre id="log">
+</pre>
+
+
+<script>
+
+async function readTag() {
+  if ("NDEFReader" in window) {
+    const reader = new NDEFReader();
+    try {
+      await reader.scan();
+      reader.onreading = event => {
+        const decoder = new TextDecoder();
+        for (const record of event.message.records) {
+          consoleLog("Record type:  " + record.recordType);
+          consoleLog("MIME type:    " + record.mediaType);
+          consoleLog("=== data ===\n" + decoder.decode(record.data));
+        }
+      }
+    } catch(error) {
+      consoleLog(error);
+    }
+  } else {
+    consoleLog("Web NFC is not supported.");
+  }
+}
+
+
+function consoleLog(data) {
+  var logElement = document.getElementById('log');
+  logElement.innerHTML += data + '\n';
+};
+
+</script>
