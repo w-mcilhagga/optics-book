@@ -53,15 +53,17 @@ input[type=text]:focus {
 </head>
 
 <body>
+<span style='display:none'>
   \(\def\bmatrix#1{\begin{bmatrix}#1\end{bmatrix}}\)
-  
+</span>
+
   <div class='chapterno'>
     Chapter 18
   </div>
 
   <h1>More Optical Matrices.</h1>
   
-  <p>We laid out the basics of optical matrices in Chapter 17, and worked out the optical matrices for a gap, a thin lens, and a refracting surface. Here we will put these matrices to use in analyzing various systems.</p>
+  <p>In Chapter 17, the basics of using matrices in optics were laid out, and the matrices for a gap, a thin lens, and a refracting surface were worked out. Here we will put these matrices to use in analyzing various systems.</p>
   
   <h2>A Lens and a Gap.</h2>
   
@@ -133,7 +135,13 @@ input[type=text]:focus {
   \bmatrix{h_2\\s_2} = \bmatrix{1 & 1/F\\0 & 1}\bmatrix{1&0\\-F&1}\bmatrix{h_1\\s_1}
   \]</div>
   
-  <p>Note that the lens and gap matrices are written in order from right-to-left. This equation can be simplified by multiplying the two matrices together to get a single matrix for the whole system. The result is:</p>
+  <p>Note that the lens and gap matrices are written in order from right-to-left. This equation can be simplified by multiplying the two matrices together to get a single matrix for the whole system:
+  
+  <div>\[
+  \bmatrix{1 & 1/F\\0 & 1}\bmatrix{1&0\\-F&1} = \bmatrix{0&1/F\\-F&1}
+  \]</div>
+  
+  <p>Thus the lens followed by gap system can be described by a single matrix:</p>
   
   <div>
   \[
@@ -141,19 +149,19 @@ input[type=text]:focus {
   \]
   </div>
   
-  <p>The matrix for the whole system has a zero in the top left corner. That means that the height \(h_2\) of the ray at the end of the system depends only on the slope \(s_1\) of the ray at the start; that is:</p>
+  <p>The single matrix for the whole system has a zero in the top left corner. That means that the height \(h_2\) of the ray at the end of the system depends only on the slope \(s_1\) of the ray at the start:</p>
   
   <div>\[
   h_2 = (1/F)s_1
   \]</div>
   
-  <p>That is, all rays with the same slope at the start of this optical system end up having the same height at the end of the system. This is shown in Figure 1(b). A set of rays which all have the same slope \(s_1\) form a bundle of parallel rays (with a vergence of zero). They all end up at the same point, with height \(h_2\), at the end of the system.</p>
+  <p>What this equation says is that all rays with the same slope at the start of this optical system \(s_1\), regardless of height \(h_1\), end up having the same height \(h_2\) at the end of the system. This is shown in Figure 1(b) and Figure 1(c). A set of rays which all have the same slope \(s_1\) is a bundle of parallel rays (with a vergence of zero). They all end up at the same point, with height \(h_2\), at the end of the system.</p>
   
-  <p>Thus, we can say</p>
+  <p>We can conclude</p>
   
   <p class='rule'>Any optical matrix with a zero in the top left corner is describing a system where parallel rays of light are converged to the same point, forming an image.</p>
   
-  <p>If we look at the slopes from this matrix, we can see that</p>
+  <p>What about the slopes? From the matrix equation above, we can see that</p>
   
   <div>\[
   s_2 = -F h_1 + s_1
@@ -268,19 +276,49 @@ input[type=text]:focus {
   </div>
 
   
-  <p>Note zero in bottom right corner.</p>
+  <p>This matrix has a zero in bottom right corner. That means the slope \(s_2\) of the ray leaving the system depends only on the height \(h_1\) of the ray at the start:</p>
   
-  <p>This isn't quite the inverse of a lens and a gap, which is \(\bmatrix{1&-1/F\\F&0}\). Instead, it is the <em>reverse</em>, given by:</p>
+  <div>\[
+  s_2 = -F h_1
+  \]</div>
+  
+  That is, all rays with the same height \(h_1\), no matter what slope they have, end up with the same slope \(s_2\). A bundle of rays with the same slope is a bundle of parallel rays, so this matrix tells us that all rays from a single point emerege from the system in parallel. This is shown in Figure 2(b) and Figure 2(c). </p>
+  
+    <p>We can conclude</p>
+  
+  <p class='rule'>Any optical matrix with a zero in the bottom right corner is describing a system where all light rays from a single point at the start of the system emerge in parallel.</p>
+  
+  <h3>Inverses and Reverses</h3>
+  
+  <p>The matrix for a lens of power \(F\) followed by a gap of length \(1/F\) is</p>
+  
+    <div>
+  \[
+  \bmatrix{0&1/F\\-F&1}
+  \]
+  </div>
+  
+  <p>The matrix for a gap of length \(1/F\) followed by a lens with power \(F\) is </p>
+  
+  <div>
+  \[
+  \bmatrix{1& 1/F\\-F& 0}
+  \]
+  </div>
+
+  <p>The second matrix isn't quite the <em>inverse</em> of the first. Instead, it is the <em>reverse</em>, given by:</p>
   
   <div>
   \[
   reverse\left(\bmatrix{A&B\\C&D}\right) = \dfrac{1}{AD-BC}\bmatrix{D&B\\C&A}
   \]
   </div>
+  
+  <p>The reverse of a matrix is an optical system where all the parts are in the reversed order.</p>
 
   <h2>A Telescope</h2>
   
-  <p>A telescope is an objective lens, a gap, and an eyepiece. The gap is the sum of the focal lengths.</p>
+  <p>A telescope consists of an objective lens with power \(F_o\), a gap, and an eyepiece with power \(F_e\). The gap is the sum of the focal lengths \(1/F_o+1/F_e\) of the objective and eyepiece (Figure 3(a)). The matrices for these three parts are given in the table below.</p>
   
   <table class=mid>
   <tr>
@@ -324,7 +362,14 @@ input[type=text]:focus {
   </tr>  
   </table>
 
-  <p>The result is</p>
+  <p>The matrix equation for the telescope is thus</p>
+  
+  <div>\[
+  \bmatrix{h_2 \\ s_2} = \bmatrix{1 & 0 \\-F_e & 1}\bmatrix{1 & 1/F_o+1/F_e \\0 & 1}\bmatrix{1 & 0 \\-F_o & 1}
+  \bmatrix{h_1 \\ s_1}
+  \]</div>
+  
+  <p>Note that, as usual, the matrices are written from right to left in the order that the light ray hits them. We can reduce this to a simpler matrix equation by multiplying together the three matrices to get a single matrix:</p>
   
   <div>
   \[
@@ -348,11 +393,62 @@ input[type=text]:focus {
   \]
   </div>
   
-  <p>Note the zero in the lower left corner.</p>
+  <p>Then the matrix equation for a telescope looks like this:</p>
+  
+  <div>\[
+  \bmatrix{h_2 \\ s_2} = \bmatrix{-F_o/F_e & 1/F_o+1/F_e \\0 & -F_e/F_o}\bmatrix{h_1 \\ s_1}
+  \]</div>
+  
+  <p>If you recall, the magnification of the telescope is \(M=-F_e/F_o\), so the matrix equation really looks like this:</p>
+
+  <div>\[
+  \bmatrix{h_2 \\ s_2} = \bmatrix{1/M & \text{(length of scope)} \\0 & M}\bmatrix{h_1 \\ s_1}
+  \]</div>
+  
+  <p>Notice that this matrix has a zero in the lower left corner. That means that the slope \(s_2\) at the end of the system depends only on the slope \(s_1\) at the start, and not on the height \(h_1\). That is:</p>
+  
+  <div>\[
+  s_2 = M s_1
+  \]</div>
+  
+  <p>What this equation is saying is that a bundle or parallel rays (all with the same slope) come out of the telescope parallel, but with a different slope. This is shown in Figure 3(b) and Figure 3(c).</p>
+  
+  <figure id="Figure3">
+	<span class='slideshow-container'>
+		<span>
+			<img src="media/figure3a.svg" />
+
+			<figcaption>
+			  <span class="figno">Figure 3(a).</span> A telescope consists of an objective lens and an eyepiece separated by a gap. The gap is the sum of the focal lengths of the objective and eyepiece. Here, the eyepiece is a positive lens, so it is an astronomical telescope. 
+			</figcaption>
+		
+		</span>
+		<span>
+			<img src="media/figure3b.svg" />
+
+			<figcaption>
+			  <span class="figno">Figure 3(b).</span> A bundle of rays enters the telescope with the same slope \(s_1\). Since they all have the same slope, the rays are parallel. The slope at the end of the telescope \(s_2\) is just \(M s_1\), so the rays all leave the telescope with the same slope, juts \(M\) times bigger than the slope at the start. An astronomical telescope has a negative magnification. The rays enetring the telescope have a positive slope (going upwards) but leave with a negative slope (going downwards).
+			</figcaption>
+		
+		</span>
+		<span>
+			<img src="media/figure3c.svg" />
+
+			<figcaption>
+			  <span class="figno">Figure 3(c).</span> Another bundle of parallel rays with the same slope enters the telescope. They leave with the same slope, but it is again \(M\) times larger than the slope on entry.
+			</figcaption>
+		
+		</span>
+	</span>
+</figure>  
+
+  <p>We can conclude</p>
+  
+  <p class='rule'>Any optical matrix with a zero in the bottom left corner is describing a system where angular magnification takes place (like a telescope).</p>
   
   <h2>A Model Eye</h2>
   
-  <p>The LeGrand model eye is just a list of surfaces and gaps. As matrices, these are:</p>
+  <p>Every optical system can be boiled down to a single matrix with four numbers. We have so far done this with relatively simple optical systems, but now we will use matrix methods to analyze a very complicated optical system: the LeGrand Model eye (introduced in Chapter 8). The LeGrand Model eye is a simplified version of the human eye, useful for optical calculations. It consists of a (very long) series of surfaces and gaps. These surfaces and gaps, written as matrices, are given in the table below (to a large number of decimal places).</p>
 
   <table class=mid>
   <tr>
@@ -445,21 +541,28 @@ input[type=text]:focus {
 
   </table>
   
-<p>If we multiply all of these together, we get:</p>
+<p>The matrix describing the entire eye can be obtained by multiplying all these matrices together in the right order. Obviously you wouldn't want to do this by hand, but luckily there are computer programs that can multiply matrices for us (for example <a href="https://www.symbolab.com/solver/matrix-calculator" target=blank>here</a> or <a href="https://www.desmos.com/matrix" target=blank>here</a>). If we use a computer program to multiply all of these matrices together, we get:</p>
 
 <div>
 \[
-\text{Le Grand} = \bmatrix{0&0.01668322968617049\\ 44.86559305914517&0.6769610354231488 }
+\text{Le Grand} = \bmatrix{0 & 0.01668\\ 44.86559 & 0.67696 }
 \]
 </div>
 
-  
-<p>Although this looks like a surface followed by a gap, there is no refractive index and surface power that will fit.It is interesting though that if we know the slope of the incoming ray, we can work out the height at which it is imaged. For example, a slope of 0.0875 (which is an angle of 5 degrees), gives a height on the retina of 0.0875x0.01668 = 0.00146m, or about 1.5mm</p>
+<p>This is a remarkably simple equation, given how many optical components went into it. The matrix for the LeGrand eye has a zero in the upper left corner, so it focuses parallel light to a single point, like a lens followed by a gap, or a surface followed by a gap.</p>
 
-  <h2>A Magnifying Lens</h2>
+<p>One of the most useful things about this equation is it makes it very easy to work out the size of the retinal image from the slant of the rays hitting the eye. The zero in the upper left means that the height \(h_2\) of the ray at the end (i.e. on the retina, because that's where the system ends) depends only on the slant of the ray \(s_1\) when it enters the eye</p>
+
+<div>\[
+	h_2 = 0.01668 s_1
+\]</div>
+
+<p>For example, if a ray (or bundle of rays) enters the eye with a slope of \(s_1=0.0875\) (which is an angle of 5 degrees), this equation says that the height on the retina (above or below the centre of the retina) is 
+\(h_2 = 0.0875x0.01668 = 0.00146\text{m}\), or about \(1.5\)mm. From that, we can say that a visual angle of \(1\) degree gives an image height of \(0.3\)mm. </p>
+
+  <h2>A Magnifying Lens and an Eye</h2>
   
-<p>
-We can use the LeGrand eye matrix to work out the size of an image formed by a magnifier. Suppose we hold a magnifying glass of power F at 1/F from the thing being magnified, and we have a gap of length d between the magnifier and the eye. The matrices involved are:
+<p>We can use the LeGrand eye matrix to work out the size of an image formed by a magnifier. Suppose we hold a magnifying glass of power \(F\) at \(1/F\) from the thing we want to magnify, and we have a gap of length \(d\) between the magnifier and the eye. We'll use the LeGrand matrix to represent the eye. The matrices involved are:
 </p>
   
 <table class=mid>
@@ -493,19 +596,39 @@ We can use the LeGrand eye matrix to work out the size of an image formed by a m
 
 </table>
 
-<p>If we multiply these together, we get:</p>
+<p>If we multiply these together in the right order, we get:</p>
 
 <div>\[
 \bmatrix{0&0.01668\\ 44.86559&0.67696 }\bmatrix{1 & d \\ 0 & 1}\bmatrix{1 & 1/F \\ -F & 0} =
 \bmatrix{-0.01668F & 0 \\ -44.86559(1-d F)-0.67696 F & -44.86559/F}
 \]</div>
 
-<p>Discuss the zero in the top right corner & implications for the viewing distance \(d\)</p>
+<p>and so, the equation for a ray \(\bmatrix{h_1\\s_1}\) which starts on the object being magnified, goes through the magnifier, across the gap, and into the eye, ending up on the eye's retina, is:</p>
 
+<div>\[
+\bmatrix{h_2\\s_2} =
+\bmatrix{-0.01668F & 0 \\ -44.86559(1-d F)-0.67696 F & -44.86559/F}\bmatrix{h_1\\s_1}
+\]</div>
+
+<p>This is the most complex matrix equation we have come across so far, but the interesting thing is the zero in the top right corner of the matrix. This says that the height of the ray at the end of the system (which is the height of the ray on the retina) only depends on the height of the ray at the start (which is the height of the object) according to the equation</p>
+
+<div>\[
+h_2 = -0.01668F\; h_1
+\]</div>
+
+<p>
+The gap \(d\) doesn't come into this at all, so the size of the magnified image on the retina doesn't depend on the gap.
+</p>
 
   <h2>Ophthalmoscopy</h2>
   
-  <p>In ophthalmoscopy, we have a reversed eye (projector) followed by a gap, followed by an eye.</p>
+  <p>We'll finish our tour of some interesting optical systems by analyzing direct ophthalmoscopy. The simplest way of thinking about this is to imagine a ray starting from the patient's retina, coming out of their eye, crossing a gap of width \(d\) between the patient and practitioner, and then entering the practioner's eye and ending up on their retina. The matrix for the gap is just the standard one for a gap, and we can use the LeGrand eye matrix to describe the practitioner. But what about the patient? The LeGrand eye matrix above is for a ray entering the eye and ending on the retina, but in ophthalmoscopy, the ray starts on the retuna and exits the eye. That is, it follows the reverse path. So the patient's eye should be the reverse of the LeGrand eye, namely</p>
+  
+  <div>\[
+  \text{patient eye} = reverse\left( \bmatrix{0 & 0.01668\\ 44.86559 & 0.67696 } \right) = \bmatrix{0.90442 & 0.022289\\-59.9404 & 0}
+  \]</div>
+  
+  <p>Thus the matrices involved in analyzing direct ophthalmoscopy are:</p>
   
   <table class=mid>
   <tr>
@@ -534,758 +657,91 @@ We can use the LeGrand eye matrix to work out the size of an image formed by a m
   
   </table>
   
-  <p>Multiplying together gives:</p>
+  <p>Multiplying these together gives:</p>
   <div>
   \[
   \bmatrix{-1 & 0 \\ 2689d-81.15 & -1}
   \]
   </div>
+  
+  <p>and so the matrix equation describing direct ophthalmoscopy is</p>
+  
+  <div>
+  \[
+  \bmatrix{h_2\\s_2}=\bmatrix{-1 & 0 \\ 2689d-81.15 & -1}\bmatrix{h_1\\s_1}
+  \]
+  </div>  
 
+  <p>The top row is really interesting here; it says</p>
+  
+  <div>\[h_2 = -h_1\]</div>
+  
+  <p>That is, the ray that starts at height \(h_1\) on the patient's retina ends up at height \(h_2=-h_1\) on the practitioner's retina. So if the ray starts above the centre of the patient's eye (positive \(h\)) it ends up below the centre of the practitioner's eye. Apart from the negative sign, though, the height is the same, and it doesn't depend on the slope of the ray or the distance between the two eyes.</p>
+  
+  
   <h2>Full Circle.</h2>
   
-  <p>Relate matrices to vergence.</p>
+  <p>We started in Chapter 1 by defining the vergence of a bundle of rays, and how that vergence is changed by a lens. In the matrix approach, we don't usually care about vergences, since we are following individual rays as they pass through the system. But we can think of the matrix approach in terms of vergences, and we will do so here.</p>
   
+  <p>Imaging a bundle of rays diverging from a point on the optic axis, as in Figure 4. If we put a reference plane a distance \(u\) from the rays, then the vergence of the rays hitting the plane is</p>
+  
+  <div>\[V = \frac{1}{-u}\]</div>
+  
+  <p>Looking at one ray with height \(h\), the slope of the ray is \(s=h/u\). Since \(V=1/(-u)\), the slope is then \(s = -h V\). Thus, the vergence of the ray is</p>
+  
+  <div>\[V = \frac{-s}{h}\]</div>
+  
+  <p>So we have two different ways of thinking about a ray</p>
+  
+  <table class=mid>
+  <tr>
+  <th>Vergence approach</th>
+  <th>Matrix approach</th>
+  </tr>
+  <tr>
+  <td>Ray with height \(h\) and vergence \(V\)</td>
+  <td>
+  \[\bmatrix{h \\-h V}\]
+  </td>
+  </tr>
+  </table>
+  
+  <p>Next, <em>any</em> optical system can be written as a 2-by-2 matrix \(\bmatrix{A & B \\ C & D}\), so if we think of a ray with vergence \(V_{in}\) hitting this system, the result is</p>
+  
+  <div>\[
+  \bmatrix{h_2\\s_2} = \bmatrix{A & B \\ C & D}\bmatrix{h_1 \\-h_1 V_{in}}
+  \]</div>
+  
+  <p>From this, we have two equations</p>
+  
+  <div>\[
+  \begin{align}
+  h_2 &= A h_1 -B h_1 V_{in} &=h_1(A-B V_{in})\\
+  s_2 &= C h_1 -D h_1 V_{in} &=h_1(C-D V_{in})
+  \end{align}
+  \]</div>
+  
+  <p>The vergence \(V_{out}\) of the ray at the end of the system \(\bmatrix{h_2\\s_2}\) is \(V_{out}=-s_2/h_2\). Thus </p>
+  
+  <div>\[
+  V_{out} = \frac{-s_2}{h_2} = \frac{-h_1(C-D V_{in})}{h_1(A-B V_{in})}=\frac{D V_{in}-C}{A - B V_{in}}
+  \]</div>
+  
+  <p>That's certainly more complicated than the thin lens equation in Chapter 1, because this equation can deal with any optical system, not just a thin lens. But what if the optical system is simply a thin lens? In that case the matrix is</p>
+  
+  <div>\[
+  \bmatrix{A & B \\ C & D} = \bmatrix{1 & 0 \\ -F & 1}
+  \]</div>
+  
+  <p>That is, \(A\) and \(D\) are both \(1\), \(C\) is \(-F\), and \(B\) is zero. Then the above vertgence equation becomes
+  
+   <div>\[
+  V_{out} = \frac{D V_{in}-C}{A - B V_{in}}=\frac{V_{in}-(-F)}{1 - 0} = V_{in}+F
+  \]</div>
+  
+  <p>which is just the thin lens equation.</p>
+ 
 </body>
 <script>slideshow()</script>
 </html>
-<!--
-  <p>There is a lot of maths here, because one aim of this chapter is to <em>prove</em> what has previously been <em>assumed</em> to be true. However, the maths is mainly difficult because of the number of steps needed to do anything. Each step is fairly simple.</p>
-  
-  <h2>Writing a Light Ray as a Vector</h2>
- 
-  <p>The basic setup is shown in Figure 1. A baseline (which will be called the optic axis) runs through the entire part of the world that we care about. A single ray of light has been drawn above it, travelling from left to right. As the ray passes through a vertical plane, called a reference plane, it can be described by two numbers. The first is the height of the ray above the baseline, which we will call \(h\) (Figure 1(b)). The second is how much the ray is sloping up or down, which we will call \(s\) (Figure 1(c)).</p>
 
-<figure id="Figure1">
-<span class='slideshow-container'>
-<span>
-    <img src="media/figure1a.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 1(a).</span> A light ray passes through a reference plane which is perpendicular to a baseline (or optic axis). The light ray is described by two numbers.
-    </figcaption>
-</span>
-<span>
-    <img src="media/figure1b.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 1(b).</span> The first number is the height \(h\) above or below the optic axis. If the ray hits the reference plane below the optic axis, the height is negative.
-    </figcaption>
-</span>
-
-<span>
-    <img src="media/figure1c.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 1(c).</span> The second number is the slope \(s\) of the ray. The slope is defined as the change in height divided by the distance travelled. If the ray is travelling upwards, the slope is positive. If travelling downwards, the slope is negative.
-    </figcaption>
-</span>
-
-</span>
-</figure>
-
-  <p>The slope says how quickly the ray increases (or decreases) it's height as it travels along. If the ray rises \(0.1\text{m}\) for every \(0.5\text{m}\) it travels, the slope of the ray is \(s=0.1/0.5 = 0.2\) If the ray falls \(0.2\text{m}\) for every \(3\text{m}\) it travels, the slope of the ray is \(-0.2/3 = -0.0667\). In general (Figure 3(c)),
-
-<div>\[\text{ray slope} = \dfrac{\text{change in height}}{\text{distance travelled}}\]</div>  
-
-<p>So any ray passing through the reference plane can be described by two numbers \(h\) and \(s\). We can put these two numbers into a vector \(\begin{bmatrix} h \\ s\end{bmatrix}\)
-  
-  <h2>The Matrix for a Gap</h2>
-  
-  <p>The simplest case we will look at - but a very useful one - is to look at what happens to a ray as it travels through a gap of width \(d\) (Figure 2). At the start of the gap, the ray (as it passes through the first reference plane) can be described by a vector \(\begin{bmatrix} h_1 \\ s_1\end{bmatrix}\). At the end of the gap, the ray (as it passes through the second reference plane) can be described by another vector \(\begin{bmatrix} h_2 \\ s_2\end{bmatrix}\). </p>
-  
-<figure id="Figure2">
-    <img src="media/figure2.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 2.</span> A light ray travelling through a gap. The gap is defined by two reference planes, separated by a distance \(d\). The height of the ray as it passes through the first plane is \(h_1\), and the height of the ray as it passes through the second plane is \(h_2\).
-    </figcaption>
-</figure>
-
-  <p>How are these two vectors related? First, it's pretty clear that the slope doesn't change as the ray travels through the gap, so</p>
-  
-  <div>\[s_2 = s_1\tag{1}\]</div>
-  
-  <p>However, the height of the ray does change, depending on the slope. The definition of slope can be rewritten to be</p>
-  
-<div>\[\text{change in height} = \text{distance travelled}\times\text{ray slope}\]</div>  
-
-  <p>That is, the <em>change</em> in height over a gap with width \(d\) is \(d\times s_1\). The final height \(h_2\) is the initial height \(h_1\) plus the change in height, or</p>
-  
-  <div>\[h_2 = h_1+d s_1\tag{2}\]</div>
-  
-  <p>Putting Equations (1) and (2) together, we have:</p>
-  
-  <div>\[
-  \begin{array}{c}
-  h_2 &=& h_1 &+& &d s_1 \\
-  s_2 &=&     & & &s_1
-  \end{array}
-  \]</div>
-  
-  <p>These equations can be put into matrix notation as:</p>
-
-  <div>\[
-  \begin{bmatrix}
-  h_2 \\
-  s_2
-  \end{bmatrix}
-  =
-  \begin{bmatrix}
-  1 & d \\
-  0 & 1
-  \end{bmatrix}
-  \begin{bmatrix}
-  h_1 \\
-  s_1
-  \end{bmatrix}
-  \]</div> 
-  
-  <p>If this looks a lot like the matrices describing how a car travels that we worked through in Chapter 16, that's no coincidence. The slope of a ray tells us how fast the ray changes its height, so it acts a lot like the speed of the car (which tells us how fast a car changes its position) in the examples given in Chapter 16.</p>
-  
-  <h3>Two Gaps</h3>
-  
-  <p>What happens to a ray of light if it passes through <em>two gaps</em>, one after the other? Suppose the first gap has width \(d_1\), and so the matrix describing that gap is</p>
-  
-  <div>\[
-  \begin{bmatrix}
-  1 & d_1 \\
-  0 & 1
-  \end{bmatrix}
-  \]</div>   
-  
-  <p>The second gap has width \(d_2\) and so the matrix describing that gap is</p>
-  
-   
-  <div>\[
-  \begin{bmatrix}
-  1 & d_2 \\
-  0 & 1
-  \end{bmatrix}
-  \]</div>   
-   
-  <p>The ray passes through the first gap, and then the second gap, so the matrix equation describing this is</p>
-  
-   <div>\[
-  \begin{bmatrix}
-  h_2 \\
-  s_2
-  \end{bmatrix}
-  =
-  \begin{bmatrix}
-  1 & d_2 \\
-  0 & 1
-  \end{bmatrix}
-  \left(
-  \begin{bmatrix}
-  1 & d_1 \\
-  0 & 1
-  \end{bmatrix}
-  \begin{bmatrix}
-  h_1 \\
-  s_1
-  \end{bmatrix}
-  \right)
-  \]</div>  
-  
-  <p>Notice that the ray is first multiplied by the first gap matrix (in brackets) and the result of this is then multiplied by the second gap matrix. This is because the ray hits the first gap first, and then the resulting ray hits the second gap. But it means the matrices are written from right to left, rather than the left to right order of the gaps.</p>
-  
-  <p>However, because matrix multiplication is associative, we can re-bracket the equation as follows:</p>
-  
-   <div>\[
-  \begin{bmatrix}
-  h_2 \\
-  s_2
-  \end{bmatrix}
-  =
-  \left(\begin{bmatrix}
-  1 & d_2 \\
-  0 & 1
-  \end{bmatrix}
-  \begin{bmatrix}
-  1 & d_1 \\
-  0 & 1
-  \end{bmatrix}
-  \right)
-  \begin{bmatrix}
-  h_1 \\
-  s_1
-  \end{bmatrix}
-  
-  \]</div>   
-  
-  <p>We can multiply together the two gap matrices in the brackets to give a matrix for the overall gap:</p>
-  
-   <div>\[
-  \begin{bmatrix}
-  h_2 \\
-  s_2
-  \end{bmatrix}
-  =
-  \begin{bmatrix}
-  1 & d_1+d_2 \\
-  0 & 1
-  \end{bmatrix}
-  \begin{bmatrix}
-  h_1 \\
-  s_1
-  \end{bmatrix}
-  \]</div>   
-  
-  <p>So the matrix for a gap of width \(d_1\) followed by another gap of width \(d_2\) is simply the matrix for a gap of width \(d_1+d_2\). This seems perfectly sensible, if not particularly amazing. </p>
-    
-  <h2>The Matrix for a Refracting Surface.</h2>
-  
-  <p>Almost all optical systems are composed of refracting surfaces and gaps. We already know the matrix for a gap, so if we know the matrix for a refracting surface, we basically know all the matrices we will ever need for optics.</p>
-  
-  <p>Figure 3(a) shows a light ray being refracted by a spherical surface. The centre of the spherical surface (a large white dot in the diagram) <em>must</em> be on the baseline, or optic axis. The refractive indices to the left and right of the surface are \(n_{in}\) and \(n_{out}\). We are interested in what happens to the ray as it passes through a reference plane that has been drawn through the point where the ray hits the surface.</p>
-  
-<figure id="Figure3">
-<span class='slideshow-container'>
-<span>
-    <img src="media/figure3a.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 3 (a).</span> A ray if light is refracted by a spherical surface. The centre of the sphere (large white dot) is placed on the horizontal baseline. A reference plane has bee drawn where the ray is refracted by the surface.
-    </figcaption>
-</span>
-<span>
-    <img src="media/figure3b.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 3 (b).</span> The height of the ray before refraction \(h_1\) and the height after \(h_2\) have been labelled here. Clearly, they don't change.
-    </figcaption>
-</span>
-<span>
-    <img src="media/figure3c.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 3 (c).</span> The slope of the ray before refraction \(s_1\) and the slope after \(s_2\) have been marked by shaded triangles. The slopes change as the ray is refracted.
-    </figcaption>
-</span>
-
-</figure>
-  
-  <p>
-  In Figure 3(b) the height of the ray before refraction and the height after have been labelled. Obviously, the heights aren't changed by refraction, so we can say
-  </p>
-  
-  <div>\[h_2 = h_1\tag{3}\]</div>
-  
-  <p>
-  If Figure 3(c) the slope of the ray before refraction and the slope after refraction have been marked out by shaded triangles. The slopes change - that is what refraction does. How the slope changes is complicated, and we will derive it at the end of this chapter; but for now, we will simply declare that the change in slope is:</p>
-  <div>
-  \[
-  s_2 = \dfrac{-F_{surface}}{n_{out}} h_1 +  \dfrac{n_{in}}{n_{out}} s_1 \tag{4}
-  \]
-  </div>
-  <p>
-  where \(F_{surface}\) is the surface power \((n_{out}-n_{in})/r\). Putting Equations (3) and (4) together into a matrix equation gives
-  
-  </p>
-  <div>
-  \[
-  \begin{bmatrix}
-  h_2 \\
-  \vphantom{\dfrac{-F_{surface}}{n_{out}}} s_2
-  \end{bmatrix}
-  =
-  \begin{bmatrix}
-  1 & 0 \\
-  \dfrac{-F_{surface}}{n_{out}} & \dfrac{n_{in}}{n_{out}}
-  \end{bmatrix}
-  
-  \begin{bmatrix}
-  h_1 \\
-  \vphantom{\dfrac{-F_{surface}}{n_{out}}} s_1
-  \end{bmatrix}
-  \]
-  </div>
- 
-  <p>The matrix in this equation is the matrix for a refracting surface.</p> 
-  
-  <h3>The Matrix for a Thick Lens.</h3>
-  
-  <p>A thick lens consists of two surfaces separated by a gap. Since we already know the matrix for a refracting surface, and the matrix for a gap, we can work out the matrix for a thick lens. The front and back (i.e. left and right) surfaces of the lens have power \(F_{front}\) and \(F_{back}\). The lens has refractive index \(n\) and the refractive index of air is \(1\). The gap between the front and back surfaces is \(d\). Thus, the lens can be described by three matrices:</p>
-  
-  <ol>
-  <li>The front surface matrix (\(n_{in}=1, n_{out}=n\)) 
-  <div>
-  \[
-  \begin{bmatrix}
-  1 & 0 \\
-  \dfrac{-F_{front}}{n} & \dfrac{1}{n}
-  \end{bmatrix}
-  \]
-  </div>
-  </li>
-  
-  <li>The gap matrix 
-  <div>
-  \[
-  \begin{bmatrix}
-  1 & d \\
-  0 & 1
-  \end{bmatrix}
-  \]
-  </div>
-  </li>
-
-  <li>The back surface matrix (\(n_{in}=n, n_{out}=1\))
-  <div>
-  \[
-  \begin{bmatrix}
-  1 & 0 \\
-  \dfrac{-F_{back}}{1} & \dfrac{n}{1}
-  \end{bmatrix}
-  \]
-  </div>
-  </li>
-  </ol>
-  
-  <p>A ray of light \(\begin{bmatrix}h_1 \\ s_1\end{bmatrix}\) travelling through the lens and emerging as \(\begin{bmatrix}h_2 \\ s_2\end{bmatrix}\) can be described by the following matrix equation:</p>
-  
-  <div>
-  \[
-  \begin{bmatrix}h_2 \\ \vphantom{\dfrac{-F_{back}}{1}} s_2\end{bmatrix}
-  = 
-
-  \begin{bmatrix}
-  1 & 0 \\
-  \dfrac{-F_{back}}{1} & \dfrac{n}{1}
-  \end{bmatrix}
-  \left(
-  \begin{bmatrix}
-  1 & d \\
-  \vphantom{\dfrac{-F_{back}}{1}} 0 & 1
-  \end{bmatrix}
-  \left(
-  \begin{bmatrix}
-  1 & 0 \\
-  \dfrac{-F_{front}}{n} & \dfrac{1}{n}
-  \end{bmatrix}
-  
-  \begin{bmatrix}h_1 \\ \vphantom{\dfrac{-F_{back}}{1}} s_1\end{bmatrix}
-  \right)
-  \right)
-  \]
-  </div>
-  
-<p>The brackets have been put in to show the order in which we'd naturally do the multiplication. First, we would multiply the ray vector by the front surface matrix to get another ray vector. We'd then multiply that by the gap matrix to get a second vector. Finally, we'd multiply <em>that</em> vector by the back surface matrix.</p>
-
-<p>However, thanks to the associative law, we can rebracket the above equation as:</p>
-
-  <div>
-  \[
-  \begin{bmatrix}h_2 \\ \vphantom{\dfrac{-F_{back}}{1}} s_2\end{bmatrix}
-  = 
-  \left(
-  \begin{bmatrix}
-  1 & 0 \\
-  \dfrac{-F_{back}}{1} & \dfrac{n}{1}
-  \end{bmatrix}
-
-  \begin{bmatrix}
-  1 & d \\
-  \vphantom{\dfrac{-F_{back}}{1}} 0 & 1
-  \end{bmatrix}
-  \begin{bmatrix}
-  1 & 0 \\
-  \dfrac{-F_{front}}{n} & \dfrac{1}{n}
-  \end{bmatrix}
-  \right)
-  \begin{bmatrix}h_1 \\ \vphantom{\dfrac{-F_{back}}{1}} s_1\end{bmatrix}
-
-  \]
-  </div>
-  
-<p>and then multiply all the matrices in brackets together to get a single matrix for a lens. If we do this, we get</p>
-
-  <div>
-  \[
-  \begin{bmatrix}
-  \vphantom{F_{front}}h_2 \\ \vphantom{\dfrac{d}{n} F_{front}}s_2\end{bmatrix}
-  = 
-  \begin{bmatrix}
-  1-d/n F_{front} & d/n \\
-  -\left(F_{front}+F_{back}-\dfrac{d}{n} F_{front} F_{back}\right) & 1-d/n F_{back}
-  \end{bmatrix}
-
-  \begin{bmatrix}
-  \vphantom{F_{front}}h_1 \\ \vphantom{\dfrac{d}{n} F_{front}}s_1\end{bmatrix}
-  \]
-  </div>  
-  
-  <p>The matrix doesn't look all that simple, but once the various values \(d\), \(n\), \(F_{front}\), and \(F_{back}\) are known, the elements of the matrix can be calculated quite simply, and then we could use the matrix to figure out what happens to any ray hitting it.</p>
-  
-  <p>The quantity in brackets in the lower left corner of the matrix, \(F_{front}+F_{back}-\dfrac{d}{n} F_{front} F_{back}\), is called the <em>equivalent power</em>, for reasons which will be made clear next.</p>
-  
-  <h3>The Matrix for a Thin Lens.</h3>
-  
-  <p>A <em>thin</em> lens is one where the thickness \(d\) is very small. At the extreme, \(d=0\). In this case, the matrix for a thin lens is given by setting \(d\) to zero in the above lens matrix, to give:</p>
-  
-  <div>
-  \[
-  \begin{bmatrix}
-  1 & 0\\
-  -\left(F_{front}+F_{back}\right) & 1
-  \end{bmatrix}
-
-  \]
-  </div> 
-
-<p>For a thin lens, the power \(F\) is just the sum of the front and back powers, so we can write the thin lens matrix even more simply as:</p>
-
-  <div>
-  \[
-  \text{thin lens matrix} =
-  \begin{bmatrix}
-  1 & 0\\
-  -F & 1
-  \end{bmatrix}
-
-  \]
-  </div> 
-  
-  <p>Notice that the power of the thin lens is in the lower left corner of the matrix, in the same place as the equivalent power of the thick lens matrix. That's why \(F_{front}+F_{back}-(d/n)F_{front}F_{back}\) is called the equivalent power.</p>
-  
-  <h2>The Thin Lens Equation \(V_{in}+F=V_{out}\)</h2>
-  
-  <p>Suppose that a an optical system can be described by the following matrix equation:</p>
-  
-   <div>
-  \[
-  \begin{bmatrix}h_2 \\ s_2\end{bmatrix}
-  = 
-  \begin{bmatrix}
-  A & 0 \\
-  C & D
-  \end{bmatrix}
-
-  \begin{bmatrix}h_1 \\ s_1\end{bmatrix}
-  \]
-  </div>   
-  
-  <p>Notice that here the final height \(h_2\) only depends on the height at the start \(h_1\), since \(h_2=A h_1\), and the slope doesn't enter into the calculation of height. What does that mean?</p>
-  
-  <p>There are two possibilities. The first (not very interesting) possibility is that the ray hasn't travelled any distance at all, like the ray in Figure 3(b). The second, more interesting situation is when the ray <em>has</em> travelled some distance. </p>
-  
-  <p>This situation is shown in Figure 4. All the rays of light at the start, with height \(h_1\), end up at the end with height \(h_2\), regardless of the slopes at the start and the end. This means that all the rays at the start that diverge from a single point are converged to a single point at the end. </p>
-  
-  <p>This is what happens when an object forms an image, so the matrix with a zero in the top right corner describes an image-forming optical system. The value of \(A\) in the matrix gives the linear magnification (i.e. how much bigger or smaller the image is compared to the object). To summarize,</p>
-  
-    <p class='rule'>Any optical matrix with a zero in the top right corner is describing a system where an object produces an image.</p>
-
-<figure id="Figure4">
-    <img src="media/figure4.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 4.</span> The two reference planes define the start and end of an optical system. At the first plane, a number of rays have been drawn with the same height \(h_1\) but different slopes. If the optical matrix describing this system \(\begin{bmatrix}A & 0 \\ C & D \end{bmatrix}\) has a zero in the top right corner, all the rays leaving the point \(h_1\) will end up at the same point \(h_2 = A h_1\) on the second plane, regardless of their slope. </p>
-	  <p>That is, rays diverging from the point \(h_1\) end up converging on the point \(h_2\).
-    </figcaption>
-</figure>
-	
-  <p>Suppose then that we have a thin lens set up so that an object produces an image. Let the distance from object to lens be \(u\), and the distance from lens to image be \(v\). (These are both <em>positive</em> distances, because we are measuring both from left to right in the direction of the light travel.) The distances \(u\) and \(v\) and the lens can all be described by matrices:  </p>
-
-  <ol>
-  <li>The gap \(u\) from object to lens 
-  <div>
-  \[
-  \begin{bmatrix}
-  1 & u \\
-  0 & 1
-  \end{bmatrix}
-  \]
-  </div>
-  </li>
-  
-  <li>The thin lens with power \(F\)
-  <div>
-  \[
-  \begin{bmatrix}
-  1 & 0 \\
-  -F & 1
-  \end{bmatrix}
-  \]
-  </div>
-  </li>
-
-  <li>The gap \(v\) from lens to image
-  <div>
-  \[
-  \begin{bmatrix}
-  1 & v \\
-  0 & 1
-  \end{bmatrix}
-  \]
-  </div>
-  </li>  
-  </ol>
-  
-  <p>Putting these together in a single matrix equation gives:</p>
-  
-   <div>
-  \[
-  \begin{bmatrix}h_2 \\ s_2\end{bmatrix}
-  = 
-  \begin{bmatrix}
-  1 & v \\
-  0 & 1
-  \end{bmatrix}
-  \begin{bmatrix}
-  1 & 0 \\
-  -F & 1
-  \end{bmatrix}
-  \begin{bmatrix}
-  1 & u \\
-  0 & 1
-  \end{bmatrix}  
-  \begin{bmatrix}h_1 \\ s_1\end{bmatrix}
-  \]
-  </div>    
-  
-  <p>As always, we can multiply the matrices together to give an equation with a single matrix:</p>
-  
-    <div>
-  \[
-  \begin{bmatrix}h_2 \\ s_2\end{bmatrix}
-  = 
-  \begin{bmatrix}
-  1-v F & u+v - u v F \\
-  -F & 1 - u F
-  \end{bmatrix}  
-  \begin{bmatrix}h_1 \\ s_1\end{bmatrix}
-  \]
-  </div>     
-  
-  <p>Although we are thinking of \(u\) and \(v\) as being object and image distances, this matrix is actually for system with <em>any</em> two gaps and a lens. To make sure that the gaps \(u\) and \(v\) are in fact the object and image distances, the top right corner of this matrix must be zero. That is, </p>
-  
-  <div>\[
-  u+v - u v F = 0
-  \]</div>
-  
-  <p>We can get to the thin lens equation by following these steps:</p>
-  
-  <table>
-  <tr>
-  <td>Begin with:</td><td>\[u+v - u v F = 0\]</td>
-  </tr>
-  <tr>
-  <td>Divide both sides by \(u\):</td><td>\[1+\frac{v}{u} - v F = 0\]</td>
-  </tr>
-  <tr>
-  <td>Divide both sides by \(v\):</td><td>\[\frac{1}{v}+\frac{1}{u} - F = 0\]</td>
-  </tr>
-  <tr>
-  <td>Multiply by \(-1\):</td><td>\[-\frac{1}{v} - \frac{1}{u} + F = 0\]</td>
-  </tr>
-  <tr>
-  <td>Add \(1/v\) to both sides:</td><td>\[- \frac{1}{u} + F = \frac{1}{v} \]</td>
-  </tr>
-  <tr>
-  <td>Tidy up the \(1/u\):</td><td>\[\frac{1}{-u} + F = \frac{1}{v} \]</td>
-  </tr>
-  <tr>
-  <td>Notice that \(1/v\) is the same as \(V_{out}\):</td><td>\[\frac{1}{-u} + F = V_{out} \]</td>
-  </tr>
-  <tr>
-  <td>Notice that \(1/(-u)\) is the same as \(V_{in}\):</td><td>\[V_{in} + F = V_{out} \]</td>
-  </tr>
-  </table>
-  
-  <p>So, here, we've actually proved the thin lens equation is correct.</p>
-  
-  <h2>Deriving the Matrix for a Refracting Surface.</h2>
-  
-  <p>The only thing we haven't proven so far is Equation (4), which says how the slope of the ray changes as it passes through a refracting surface. We will do that here. The strategy for proving Equation (4) is to first build up a set of facts about the slopes and angles of a ray that passes through a spherical surface, and then assemble them into the equation.</p>
-  
-  <p>The facts first. Figure 5(a) shows the slope of a ray passing through a spherical refracting surface (the same as Figure 3(c)). An extra horizontal line has been drawn where the ray intersects the surface, as this will be useful in working out some angles.</p>
-
-<figure id="Figure5">
-<span class='slideshow-container'>
-<span>
-    <img src="media/figure5a.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 5(a).</span> This repeats Figure 3(c) except a horizontal line (parallel to the optic axis) has been drawn where the ray hits the refracting surface.
-    </figcaption>
-</span>
-<span>
-    <img src="media/figure5b.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 5(b).</span> The angle \(a\) is the angle between the incident ray and the added horizontal line. It is also the angle inside the triangle whose height and length define the ray slope \(s_1\). From the diagram, \(\tan{a}=s_1\).
-    </figcaption>
-</span>
-<span>
-    <img src="media/figure5c.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 5(c).</span>The angle \(b\) is the angle between the refracted ray and the added horizontal line. It is also the angle inside the triangle whose height and length define the ray slope \(s_2\), because the long side of the triangle is also horizontal. From the diagram, \(\tan{b}=-s_2\). The minus sign is needed because we are treating all angles as positive (so their tan is positive), but \(s_2\) is negative in the diagram.
-    </figcaption>
-</span>
-</span>
-</figure>
-  
-  <p>From Figure 5(b), the angle \(a\) between the incoming ray and the horizontal line is the same as the angle \(a\) inside the triangle marking the slope of the ray. The change in height is opposite the angle, and the distance travelled is adjacent to the angle in the triangle, so</p>
-  
-  <div>\[
-  \tan{(a)}=s_1
-  \]</div>
-  
-  <p>From Figure 5(c), the angle \(b\) between the incoming ray and the horizontal line is the same as the angle \(b\) inside the triangle marking the slope of the ray. The change in height is opposite the angle, and the distance travelled is adjacent to the angle in the triangle, so</p>
-  
-  <div>\[
-  \tan{(b)}= -s_2
-  \]</div>
-
-  <p>(The negative sign here is because the slope \(s_2\) is negative, since the ray is travelling downwards, but we're treating all angles as positive.) Finally, to make the algebra coming up a little easier, we will use the small-angle approximation, which is \(\theta\approx \sin{(\theta)} \approx \tan{(\theta)}\), which is mostly true when the angle \(\theta\) is small, and measured in radians. using this approximation, the above two facts can be summarized as:</p>
-  
-  <div>\[
-  \begin{align}
-  a &\approx s_1 \\
-  b &\approx -s_2
-  \end{align}
-  \]</div>  
-
-  
-
- 
- <p>Our next set of facts uses Snell's Law, or the small-angle approximation to it. Figure 6(a) shows the angle of incidence \(\theta_{in}\) and the angle of refraction \(\theta_{out}\). The surface normal is the line passing from the centre of the sphere through the surface. Snell's Law says</p>
- 
- <div>
- \[
- n_{in}\sin{(\theta_{in})} = n_{out}\sin{(\theta_{out})}
- \]
- </div>
-
-<p>Using the small-angle approximation, this can be written as </p>
-
- <div>
- \[
- n_{in}\theta_{in} \approx n_{out}\theta_{out}
- \]
- </div>
- 
-
-  
-<figure id="Figure6">
-<span class='slideshow-container'>
-<span>
-    <img src="media/figure6a.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 6(a).</span> The red line from the centre of the sphere to the edge is at right angles to the sphere's surface; that is, it is a surface normal. The angles of incidence and refraction \(\theta_{in}\) and \(\theta_{out}\) between the rays and the normal have been marked.
-    </figcaption>
-</span>
-<span>
-    <img src="media/figure6b.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 6(b).</span> Here, the angles \(a\) and \(b\) from Figure 5 have been added in.
-    </figcaption>
-</span>
-<span>
-    <img src="media/figure6c.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 6(c).</span> We define a new angle \9\alpha\) between the optic axis and the red radial line. All the angles equal to \(\alpha\) have been drawn in.
-    </figcaption>
-</span>
-<span>
-    <img src="media/figure6d.svg" />
-
-    <figcaption>
-      <span class="figno">Figure 6(d).</span> Finally, we look at how \(\alpha\) relates to some distances in the diagram. The tangent of \(\alpha\) is the height of the shaded triangle divided by the base. The height of the triangle is \(h_1\). When \(\alpha\) is small (much smaller than here), the base of the triangle is approximately the same as the radius \(r\) of the sphere. Thus, when \(\alpha\) is small, \(\tan{(\alpha)}\approx h_1/r\).
-    </figcaption>
-</span>
-
-</span>
-</figure>
-  <p>We would like to connect \(\theta_{in}\) and \(\theta_{out}\) to the ray slopes \(a\) and \(b\). These have been added in Figure 6(b). In Figure 6(c), an angle \(\alpha\) has been added, which is the angle between the normal line and the optic axis. From Figure 6(c), we can say:</p>
- 
-  <div>\[
-  \begin{align}
-  \theta_{in} &= \alpha+a \\
-  \theta_{out} &= \alpha-b 
-  \end{align}
-  \]</div>   
- 
- <p>The last fact we need is shown in Figure 6(d): \(\tan{\alpha} \approx h_1/r\), because \(r\) is approximately the length of the adjacent side of the triangle shown. Using the small angle approximation again (\(\tan{\theta}\approx\theta\)), we have our last fact:</p>
- 
-  <div>\[
-  \alpha \approx \dfrac{h_1}{r}
-  \]</div>  
-  
-  <p>Actually, that's not quite true. The distance \(r\) is a <em>negative</em> distance by the sign convention, but \(h_1\) is positive, and we want the angle \(\alpha\) to be positive, like all the other angles. So to get the signs to work out, we need to write:</p>
-
-  <div>\[
-  \alpha \approx \dfrac{h_1}{(-r)}
-  \]</div> 
-  
-  <p>To summarize, from Figures 5 and 6, we have the following facts:</p>
-  
-  <div>\[
-  \begin{align}
-  a &\approx s_1 \\
-  b &\approx -s_2 \\
-  \theta_{in} &= \alpha+a \\
-  \theta_{out} &= \alpha -b \\
-  \alpha &\approx \dfrac{h_1}{(-r)} \\
-  \end{align}
-  \]</div>
-  
-  <p>And from Snell's law,</p>
-  
-  \[n_{in}\theta_{in} \approx n_{out}\theta_{out}\]
-  
-  <p>These facts involve \(s_1\), \(s_2\), and \(h_1\), but they also involve other quantities. We want to put them together so we can calculate \(s_2\) from \(s_1\) and \(h_1\), and nothing else. The following steps will do it:</p>
-  
-  <table>
-  <tr>
-  <td>Begin with</td><td>\[n_{in}\theta_{in} \approx n_{out}\theta_{out}\]</td>
-  </tr>  
-  <tr>
-  <td>Substitute \(\theta_{in} = \alpha+a\)</td><td>\[n_{in}(\alpha+a) \approx n_{out}\theta_{out}\]</td>
-  </tr>  
-  <tr>
-  <td>Substitute \(\theta_{out} = \alpha-b\)</td><td>\[n_{in}(\alpha+a) \approx n_{out}(\alpha-b)\]</td>
-  </tr> 
-<tr>
-<td colspan=2 style='text-align:center'>Notice that we've got rid of \(\theta_{in}\) and \(\theta_{out}\)
-</td>
-</tr>  
-  <tr>
-  <td>Substitute \(a\approx s_1\)</td><td>\[n_{in}(\alpha+s_1) \approx n_{out}(\alpha-b)\]</td>
-  </tr>  
-  <tr>
-  <td>Substitute \(b\approx -s_2\), or <br/>equivalently, \(-b\approx s_2\)</td><td>\[n_{in}(\alpha+s_1) \approx n_{out}(\alpha+s_2)\]</td>
-  </tr>  
-<tr>
-<td colspan=2 style='text-align:center'>Now we've also got rid of \(a\) and \(b\)</td>
-</tr>  
-  <tr>
-  <td>Expand</td><td>\[n_{in}\alpha+n_{in}s_1 \approx n_{out}\alpha+n_{out}s_2\]</td>
-  </tr>
-  <tr>
-  <td>Gather terms in \(\alpha\)</td><td>\[(n_{in}-n_{out})\alpha+n_{in}s_1 \approx n_{out}s_2\]</td>
-  </tr>
-  <tr>
-  <td>Divide both sides by \(n_{out}\)</td>
-  <td>\[\dfrac{n_{in}-n_{out}}{n_{out}}\alpha+\dfrac{n_{in}}{n_{out}}s_1 \approx s_2\]</td>
-  </tr>
-  <tr>
-  <td>Substitute \(\alpha=h_1/r\)</td>
-  <td>\[\dfrac{n_{in}-n_{out}}{n_{out}}\dfrac{h_1}{(-r)}+\dfrac{n_{in}}{n_{out}}s_1 \approx s_2\]</td>
-  </tr>
-<tr>
-<td colspan=2 style='text-align:center'>Now we've got rid of \(\alpha\)</td>
-</tr>  
-  <tr>
-  <td>Note that \((n_{in}-n_{out})/(-r)=-F_{surface}\)</td>
-  <td>\[\dfrac{-F_{surface}}{n_{out}}h_1+\dfrac{n_{in}}{n_{out}}s_1 \approx s_2\]</td>
-  </tr>
-  </table>
-<p>That is Equation (4).</p>
-
-
--->
