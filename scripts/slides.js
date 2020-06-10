@@ -44,9 +44,9 @@ function slideshow() {
 			if (prev) {
 				let arrow = document.createElement('div')
 				arrow.style.position='absolute'
-				arrow.style.left='5px'
+				arrow.style.left='-20px' //'5px'
 				arrow.style.bottom='12px'
-				arrow.style.color = 'white'
+				arrow.style.color = 'rgb(100,100,100)' //'white'
 				arrow.style.fontSize = '25px'
 				arrow.innerHTML = '&#10094;'
 				arrow.style.cursor = 'pointer'
@@ -56,9 +56,9 @@ function slideshow() {
 			if (next) {
 				arrow = document.createElement('div')
 				arrow.style.position='absolute'
-				arrow.style.right='5px'
+				arrow.style.right='-20px' //'5px'
 				arrow.style.bottom='12px'
-				arrow.style.color = 'white'
+				arrow.style.color = 'rgb(100,100,100)' //'white'
 				arrow.style.fontSize = '25px'
 				arrow.innerHTML = '&#10095;'
 				arrow.style.cursor = 'pointer'

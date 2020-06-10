@@ -136,7 +136,12 @@ Any semi-infinite rays ignore percentage arrow positions
 
 plugins.ray.draw = function (p5, vbox, ppm) {
 
-    let style = Object.assign({}, plugins.ray.style, this.style, this['from'].style)
+    let style = Object.assign({}, 
+		plugins.ray.style, 
+		this.style,
+		this['from'].style
+	)
+	
 	p5.style(style)
 
 	p5.beginShape()
@@ -360,11 +365,13 @@ plugins.control = {
 	},
 	
 	draw(p5, box, ppm) {
+		
 		let self = this,
 			w = box[1]-box[0],
 			h = box[3]-box[2],
 			ratio = ppm/this.state.ppm,
 			position = [...v2.scale(ratio, this.position)]
+			
 		switch (this.controlType) {
 			
 			case 'slider':
@@ -437,7 +444,7 @@ plugins.dimension = {
 	
 	init(state) {
 		this.state = state
-		if (typeof this.start=='string') {
+		if (typeof this.start=='string') {		
 			this.startpt = [...findObject(state, this.start).center()]
 		} else if (this.start) {
 			this.startpt = [...this.start]

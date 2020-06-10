@@ -1,0 +1,26 @@
+<script src='../../scripts/p5/p5.js'></script>
+<script src='../../scripts/p5/p5.svg.js'></script>
+<script src='../../scripts/p5/p5.dom.js'></script>
+<script src='../../scripts/p5/p5.util.js'></script>
+<script src='../../scripts/p5/p5.yup.js'></script>
+<script src='../../scripts/vec2d.js'></script>
+<script src='../../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+
+<body>
+</body>
+<script src='drawovallens.js'></script>
+<script src='figure2.js'></script>
+<script>
+let f2b = true
+if (f2b) {
+	let P = 0.5
+	findObject(state, 'lens#1').power = P
+	findObject(state, 'barrier#1').position = [1/P,-3,1/P,3]
+	findObject(state, 'label1').label = 'long distance'
+	findObject(state, 'label2').text = 'Low Convergence'
+}
+</script>
+<script>
+makeP5App(state)(window)
+</script>

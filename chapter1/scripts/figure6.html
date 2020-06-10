@@ -1,0 +1,125 @@
+<script src='../../scripts/p5/p5.js'></script>
+<script src='../../scripts/p5/p5.svg.js'></script>
+<script src='../../scripts/p5/p5.dom.js'></script>
+<script src='../../scripts/p5/p5.util.js'></script>
+<script src='../../scripts/p5/p5.yup.js'></script>
+<script src='../../scripts/vec2d.js'></script>
+<script src='../../scripts/raytracing-2/optical_simulation.js'></script>
+<script src='../../scripts/raytracing-2/optical_simulation_draw_p5.js'></script>
+
+<body>
+</body>
+
+<script>
+
+let P = 1
+
+state = {
+    dragtarget: false,
+    oldpt: [
+        -1.03,
+        0.13
+    ],
+    origin: [
+        90,
+        130
+    ],
+    w: 700,
+    h: 270,
+    origin: [
+        100,
+        135
+    ],
+    ppm: 470,
+    background: [0, 61, 92],
+	renderer: 'svg',
+	
+    items: [
+		{
+			type: 'js',
+			init(state) {
+				// place barrier at right location
+				let B = findObject(state, 'barrier#1')
+				//findObject(state, 'labels').value = 1/P
+				B.position[0] = B.position[2] = 1/P
+				B.position[1] = -1
+				B.position[3] = -B.position[1]
+			}
+		},
+		{
+			type: 'text',
+			id: 'label2',
+			position: [250/470, 130/470],
+			text: 'Power = '+P.toFixed(1)+' D',
+			style: {
+				textSize: 18
+			}
+		},
+		{
+			type: 'text',
+			id: 'label2',
+			position: [1/P+0.05, 0],
+			text: 'focal point',
+			style: {
+				textSize: 18,
+				textAlign: ['left', 'middle']
+			}
+		},
+		{
+			type: 'dimension',
+			id: 'label1',
+			start: 'lens#1',
+			end: 'barrier#1',
+			ycoord: -0.2,
+			label: (1/P).toFixed(3)+' m',
+			
+			style: {
+				textSize: 18,
+				stroke: [255,255,255]
+			}
+		},
+        {
+            type: 'parallel light',
+            id: 'light#1',
+            position: [-1, 0],
+            target: 'lens#1',
+            spread: 'fill*0.9',
+            raycount: 7,
+            ui: {ylock:true},
+            style: {
+                color: [255,255,255],
+				strokeWidth: 1,
+				arrows: [-0.1, '60%']
+            }
+        },
+		{
+			type: 'thinlens',
+			id: 'lens#1',
+			position: [0,0],
+			axis: [1,0],
+			aperture: 0.3,
+			power: P,
+			ui: {xlock:true, ylock:true},
+            style: {
+				color:[255,255,255],
+				strokeWeight:3,
+				z_order: 2
+			}
+		},
+		{
+			type: 'barrier',
+			id: 'barrier#1',
+			position: [1.5, -0.3, 1.5, 0.3],
+			barrieroff: false,
+			style: { 
+				stroke: [0,0,0,0]
+			}
+		}
+    ]
+}
+
+
+
+makeP5App(state,{})(window)
+
+</script>

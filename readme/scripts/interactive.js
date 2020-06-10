@@ -46,7 +46,7 @@ let fig3actions
 					spread: 0,
 					raycount: 1,
 					ui: {xlock:[-Infinity, -1/power]},
-					off: true,
+					off: false,
 					style: {
 						arrows: ['50%',''],
 						strokeWeight: 2,
@@ -76,7 +76,7 @@ let fig3actions
 					spread: 0,
 					raycount: 1,
 					ui: {xlock:[-Infinity, -1/power]},
-					off: true,
+					off: false,
 					style: {
 						stroke: [0,255,0],
 						strokeWeight: 2,
@@ -188,7 +188,7 @@ let fig3actions
 					type: 'control',
 					controlType: 'checkbox',
 					id: 'rule1check',
-					params: ['rule 1', false],
+					params: ['rule 1', true],
 					position: [10, -50],
 					style: {
 						color: 'rgb(255,50,50)'
@@ -199,7 +199,7 @@ let fig3actions
 					type: 'control',
 					controlType: 'checkbox',
 					id: 'rule2check',
-					params: ['rule 2', false],
+					params: ['rule 2', true],
 					position: [10, -30],
 					style: {
 						color: 'rgb(0,255,0)'

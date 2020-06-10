@@ -22,22 +22,30 @@
 })()
 */
 
+function mknode(s) {
+	let parent = document.createElement('div')
+	parent.innerHTML = s
+	return parent.children[0]
+}
+
 let popout = {
 	openButton(id, url) {
 		// opens new window
 		url = url || id+'.html'
 		let caption = document.getElementById(id).getElementsByTagName('figcaption')[0]
-		caption.innerHTML +=  `<a href="${url}" target="_blank" class="view">View Larger</a>`
+		caption.appendChild(mknode( `<a href="${url}" target="_blank" class="view">View Larger</a>`))
 	},
 	
 	addhelp(id, f) {
+		// if openbutton comes after addhep, it seems to wreck the actions, probably because innerHTML drops all
+		// the event handlers as it goes
 		let caption = document.getElementById(id).getElementsByTagName('figcaption')[0]
-		caption.innerHTML += '<div class="decorate"></div>'
+		caption.appendChild(mknode('<div class="decorate"></div>'))
 		let helpdiv = caption.getElementsByClassName('decorate')[0]
+		
 		helpdiv.onmousedown = ()=>f(true)
 		helpdiv.onmouseup   = ()=>f(false)
 		helpdiv.addEventListener("touchstart", ()=>f(true), false);
 		helpdiv.addEventListener("touchend", ()=>f(false), false);
-		
 	}
 }

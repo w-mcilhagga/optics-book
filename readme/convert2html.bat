@@ -1,0 +1,1 @@
+multimarkdown src/body.md > body.html
